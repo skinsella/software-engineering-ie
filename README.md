@@ -16,8 +16,8 @@ Work in progress.
       (full 33-logo partner wall), how-it-works, CTA, footer
 - [x] Real ISE·UL logo + genuine partner logos wired in
 - [x] Student & Company pillar hub pages
-- [ ] Remaining pages (Why ISE, Course, Apply, Careers, Fellowships, Partner,
-      EDI, FAQ, Schools, About)
+- [x] Core pages: Apply, Course, Why ISE, About, FAQ, Careers
+- [ ] Remaining pages: Fellowships, EDI scholarships, Schools, Partner sign-up, Privacy
 - [ ] Global header/footer via Elementor Pro Theme Builder
 - [ ] Export as an Elementor kit for the production host
 
