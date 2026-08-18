@@ -1,0 +1,98 @@
+"""Shared brand building blocks for every ISE page: asset base, nav + footer,
+band/card helpers, the partner-logo wall, and a page-assembly helper that wraps
+page-specific sections between the global nav and footer. Keeping these here
+ensures every page (home + hubs + secondary) stays visually consistent and
+lets the whole site export as one coherent Elementor kit."""
+import os, sys
+sys.path.insert(0, os.path.dirname(__file__))
+from elementor_lib import section, upsert_page
+
+ASSET = "/wp-content/themes/hello-elementor-child/assets"
+
+PARTNER_LOGOS = ["stripe","aws","intercom","mastercard","intel","dell","workday",
+    "fiserv","jj","bd","gm","jlr","first-derivatives","keeper-sloutions","tines",
+    "teckro","kneat","payslip","macmarts","viotas","mbryonics","deveire","equal1",
+    "provizio","manna","bsci","transact","shannonside","ida","enterprise-ireland",
+    "ulatwork","dogpatch","frontline"]
+
+# ---------- generic helpers ----------
+def band(inner_html, klass="", pad=True):
+    p = "padding-block:var(--section-y);" if pad else ""
+    return f'<div class="{klass}" style="{p}">{inner_html}</div>'
+
+def card(title, body, dark=False):
+    tcol = "#fff" if dark else "var(--ul-green-heritage)"
+    bcol = "#d7e8df" if dark else "var(--ink-70)"
+    bg   = "rgba(255,255,255,.06)" if dark else "#fff"
+    bd   = "rgba(255,255,255,.14)" if dark else "var(--line)"
+    return (f'<div class="ise-card" style="background:{bg};border-color:{bd};">'
+            f'<h3 style="color:{tcol};margin:0 0 .5rem;">{title}</h3>'
+            f'<p style="margin:0;color:{bcol};">{body}</p></div>')
+
+def stat(num, label, on_dark=False):
+    ncol = "#fff" if on_dark else "var(--ul-green)"
+    lcol = "#8fe3b0" if on_dark else "var(--ink-70)"
+    return (f'<div><div class="ise-stat__num" style="color:{ncol};">{num}</div>'
+            f'<div class="ise-stat__label" style="color:{lcol};">{label}</div></div>')
+
+def partner_wall():
+    cells = ''.join(f'<div class="ise-logo-cell"><img src="{ASSET}/partners/{n}.png" alt="{n} logo"></div>'
+                    for n in PARTNER_LOGOS)
+    return f'<div class="ise-logo-wall ise-logo-wall--mono" style="gap:1rem;margin-top:.5rem;">{cells}</div>'
+
+# ---------- global nav + footer ----------
+def nav(active=""):
+    def link(href, label):
+        cur = ' style="text-decoration:none;font-weight:700;"' if label == active else ' style="text-decoration:none;"'
+        return f'<a href="{href}"{cur}>{label}</a>'
+    inner = f'''
+<div class="ise-container" style="display:flex;align-items:center;justify-content:space-between;padding-block:1.1rem;gap:1rem;flex-wrap:wrap;">
+  <a href="/" style="display:inline-flex;align-items:center;"><img src="{ASSET}/ise-ul-logo.png" alt="Immersive Software Engineering · University of Limerick" style="height:40px;width:auto;"></a>
+  <nav style="display:flex;gap:1.6rem;align-items:center;font-weight:500;flex-wrap:wrap;">
+    {link("/students","The Students")}{link("/companies","The Companies")}{link("/course","Course")}{link("/about","About")}
+    <a class="ise-btn ise-btn--primary" href="/apply" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
+  </nav>
+</div>'''
+    return section(band(inner, "ise-nav", pad=False))
+
+def footer():
+    inner = f'''
+<div class="ise-container" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2rem;padding-block:3.5rem 2rem;">
+  <div>
+    <img src="{ASSET}/ise-ul-logo.png" alt="ISE · University of Limerick" style="height:40px;width:auto;margin-bottom:.35rem;">
+    <p style="max-width:34ch;margin:.75rem 0 0;color:#a9c9bb;">Immersive Software Engineering, University of Limerick. A radically practical computer science degree.</p>
+  </div>
+  <div><h3 style="color:#fff;font-size:1rem;">Explore</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/students">The Students</a><br><a href="/companies">The Companies</a><br><a href="/course">Course</a></p></div>
+  <div><h3 style="color:#fff;font-size:1rem;">Apply</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/apply">How to apply</a><br><a href="/why-ise">Why ISE</a><br><a href="/faq">FAQ</a></p></div>
+  <div><h3 style="color:#fff;font-size:1rem;">Connect</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/about">About us</a><br><a href="/companies">Partner with us</a><br><a href="/careers">Careers</a></p></div>
+</div>
+<div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2026 University of Limerick</span><span>CAO code LM173 · software-engineering.ie</span></div></div>'''
+    return section('<div class="ise-footer">' + inner + '</div>')
+
+def hero(eyebrow, title, lead, buttons_html, max_title="17ch"):
+    inner = f'''
+<div class="ise-container" style="min-height:clamp(440px,58vh,560px);display:flex;flex-direction:column;justify-content:center;padding-block:5rem 4rem;">
+  <p class="ise-eyebrow" style="color:#8fe3b0;">{eyebrow}</p>
+  <h1 style="color:#fff;font-size:var(--fs-h1);margin:.5rem 0 1.1rem;max-width:{max_title};">{title}</h1>
+  <p style="font-size:var(--fs-lead);color:#e7f2ec;max-width:60ch;">{lead}</p>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.75rem;">{buttons_html}</div>
+</div>'''
+    return section('<div class="ise-hero" style="background:#0a3f2c;padding-block:0;">' + inner + '</div>')
+
+BTN_APPLY = '<a class="ise-btn ise-btn--primary" href="/apply">Apply now — CAO LM173</a>'
+BTN_CALL  = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Book a call</a>'
+
+def cta(title, text, buttons_html):
+    inner = f'''
+<div class="ise-container" style="text-align:center;max-width:760px;">
+  <h2 style="color:#fff;">{title}</h2>
+  <p style="color:#e7f2ec;font-size:var(--fs-lead);">{text}</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">{buttons_html}</div>
+</div>'''
+    return band(inner, "ise-band--green")
+
+def assemble(page_id, title, slug, content_sections, menu_order=0, front=False):
+    """Wrap page-specific sections between the global nav and footer, then upsert."""
+    sections = [nav(active=title if title in ("The Students","The Companies") else "")] \
+               + content_sections + [footer()]
+    upsert_page(page_id, title, slug, sections, front=front, menu_order=menu_order)
