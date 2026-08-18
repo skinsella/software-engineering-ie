@@ -1,0 +1,69 @@
+# Production handoff — importing the ISE site
+
+This package moves the locally-built site onto the production WordPress host in an
+**Elementor-native, database-independent** way. No SQLite→MySQL migration needed.
+
+## What's in the package
+```
+exports/hello-elementor-child.zip        Brand child theme (installable zip)
+exports/elementor-templates/*.json       One importable Elementor template per page
+exports/elementor-templates/manifest.json  Page list + slugs + which is the front page
+```
+Regenerate any time: `python3 builders/export_kit.py` (templates) and re-zip
+`theme-src/hello-elementor-child`.
+
+## Prerequisites on the host
+- WordPress (matching production, currently 6.8.x)
+- **Hello Elementor** theme (from wordpress.org)
+- **Elementor** (free is enough to import; production also runs **Elementor Pro**
+  for the global Theme Builder header/footer and forms)
+- **Work on staging first.** Never import directly onto the live page.
+
+## Steps
+1. **Theme** — Appearance → Themes: install *Hello Elementor*, then upload
+   `hello-elementor-child.zip` and activate it.
+2. **Plugins** — install/activate *Elementor* (and *Elementor Pro* if available).
+3. **Global brand** — Elementor → Site Settings:
+   - *Global Colors*: Primary `#005335`, Secondary `#00B140`, Text `#16211c`,
+     Accent `#003726` (see brand values below).
+   - *Global Fonts*: Primary **Inter**, Secondary **Roboto Condensed**,
+     Text **Inter**, Accent **Cormorant Garamond**.
+   (These mirror the CSS tokens in the child theme's `style.css`.)
+4. **Import pages** — for each file in `elementor-templates/`:
+   Templates → Saved Templates → *Import Templates* → choose the `.json`.
+   Then create/assign a Page for it, or use *Elementor → My Templates* to apply
+   the page template. Set each page's template to **Elementor Canvas** (until the
+   Pro global header/footer exists), or **Elementor Full Width** afterwards.
+5. **Front page** — Settings → Reading → *A static page* → Home
+   (the `home` template; see `manifest.json.front_page`).
+6. **Menus/permalinks** — Settings → Permalinks → *Post name* (`/%postname%/`).
+   Build the primary menu to match: The Students, The Companies, Course, About,
+   Apply. (Currently the nav/footer are in-page sections; see step 7.)
+7. **Global header & footer (Elementor Pro)** — the current build renders the nav
+   and footer as the first/last section of each page for a self-contained preview.
+   In production, lift these into **Theme Builder → Header** and **→ Footer** as
+   global templates, then remove the in-page copies. The markup/classes are in
+   `builders/shared.py` (`nav()` / `footer()`).
+8. **Site icon** — Appearance → Customize → Site Identity: upload
+   `theme-src/hello-elementor-child/assets/favicon-192.png`.
+
+## Brand values (reference)
+| Token | Value |
+|---|---|
+| UL Green (core / primary) | `#005335` (confirm vs `#005844` on the official UL kit) |
+| UL Modern Green (accent) | `#00B140` |
+| UL Heritage Green (dark) | `#003726` |
+| Ink (text) | `#16211c` |
+| Display / headings | Roboto Condensed *(brand: Formula Condensed)* |
+| Body / UI | Inter |
+| Serif accents | Cormorant Garamond *(brand: Saol)* |
+
+## Notes & things to confirm before publishing
+- **Fonts** — the licensed UL faces *Saol* and *Formula Condensed* can replace the
+  free fallbacks once the font files are supplied.
+- **Partner logos** — shown as uniform white marks on the dark band; swap to the
+  colour-on-white treatment if preferred. Confirm display permissions.
+- **Placeholder copy** — *Global Fellowships*, *For Schools* and *Privacy* carry
+  framing copy only; replace with confirmed content (Privacy should use UL's
+  official data-protection notice).
+- **Analytics/forms** — production also runs MailOptin + Burst/GA; re-add on the host.

@@ -1,0 +1,102 @@
+{
+  "pages": [
+    {
+      "id": 100,
+      "title": "Home",
+      "slug": "home",
+      "file": "home.json",
+      "front_page": true
+    },
+    {
+      "id": 101,
+      "title": "The Students",
+      "slug": "students",
+      "file": "students.json",
+      "front_page": false
+    },
+    {
+      "id": 102,
+      "title": "The Companies",
+      "slug": "companies",
+      "file": "companies.json",
+      "front_page": false
+    },
+    {
+      "id": 103,
+      "title": "Apply",
+      "slug": "apply",
+      "file": "apply.json",
+      "front_page": false
+    },
+    {
+      "id": 104,
+      "title": "Course",
+      "slug": "course",
+      "file": "course.json",
+      "front_page": false
+    },
+    {
+      "id": 105,
+      "title": "Why ISE",
+      "slug": "why-ise",
+      "file": "why-ise.json",
+      "front_page": false
+    },
+    {
+      "id": 106,
+      "title": "About",
+      "slug": "about",
+      "file": "about.json",
+      "front_page": false
+    },
+    {
+      "id": 107,
+      "title": "FAQ",
+      "slug": "faq",
+      "file": "faq.json",
+      "front_page": false
+    },
+    {
+      "id": 108,
+      "title": "Careers",
+      "slug": "careers",
+      "file": "careers.json",
+      "front_page": false
+    },
+    {
+      "id": 109,
+      "title": "Global Fellowships",
+      "slug": "global-fellowships",
+      "file": "global-fellowships.json",
+      "front_page": false
+    },
+    {
+      "id": 110,
+      "title": "EDI Scholarships",
+      "slug": "edi-scholarships",
+      "file": "edi-scholarships.json",
+      "front_page": false
+    },
+    {
+      "id": 111,
+      "title": "For Schools",
+      "slug": "schools",
+      "file": "schools.json",
+      "front_page": false
+    },
+    {
+      "id": 112,
+      "title": "Become a partner",
+      "slug": "become-a-partner",
+      "file": "become-a-partner.json",
+      "front_page": false
+    },
+    {
+      "id": 113,
+      "title": "Privacy",
+      "slug": "privacy",
+      "file": "privacy.json",
+      "front_page": false
+    }
+  ]
+}

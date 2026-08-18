@@ -186,6 +186,17 @@ a:hover { color: var(--ul-green-modern); }
 }
 .ise-logo-cell:hover img { opacity: 1; }
 
+/* --- FAQ accordion --- */
+.ise-faq details { border-bottom: 1px solid var(--line); padding: 1.15rem 0; }
+.ise-faq summary { cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--ul-green-heritage); list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+.ise-faq summary::-webkit-details-marker { display: none; }
+.ise-faq summary::after { content: "+"; color: var(--ul-green-modern); font-weight: 700; }
+.ise-faq details[open] summary::after { content: "\2013"; }
+.ise-faq details > p { margin: .75rem 0 0; color: var(--ink-70); max-width: 72ch; }
+
+/* --- Simple two-column prose block --- */
+.ise-prose p { max-width: 68ch; color: var(--ink-70); font-size: var(--fs-lead); line-height: 1.55; }
+
 *{box-sizing:border-box} body{margin:0} img{max-width:100%}
 </style></head><body><div class="ise-nav" style="">
 <div class="ise-container" style="display:flex;align-items:center;justify-content:space-between;padding-block:1.15rem;gap:1rem;flex-wrap:wrap;">
