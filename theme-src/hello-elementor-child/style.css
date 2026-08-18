@@ -1,0 +1,181 @@
+/*
+Theme Name: ISE — Hello Elementor Child
+Theme URI: https://www.software-engineering.ie
+Description: Brand-foundation child theme for Immersive Software Engineering (ISE), University of Limerick. Establishes UL-brand design tokens (colours, typography, spacing) and utility classes consumed by Elementor sections. Parent: Hello Elementor.
+Author: ISE / University of Limerick
+Template: hello-elementor
+Version: 0.1.0
+Text Domain: hello-elementor-child
+*/
+
+/* =============================================================
+   UL BRAND DESIGN TOKENS
+   Single CSS source of truth. Mirror these into Elementor
+   Site Settings -> Global Colors / Global Fonts.
+   Colours confirmed against UL brand guidelines:
+     UL Green (core)      #005335   (verify vs #005844 on official kit)
+     UL Modern Green      #00B140
+     UL Heritage Green    #003726
+   Fonts: Saol / Inter / Formula Condensed (brand);
+   licence-clean fallbacks: Cormorant Garamond / Inter / Roboto Condensed.
+   ============================================================= */
+:root {
+  /* --- Brand greens --- */
+  --ul-green:            #005335;   /* core / primary */
+  --ul-green-modern:     #00B140;   /* bright accent, sparing use */
+  --ul-green-heritage:   #003726;   /* deep backgrounds, footer */
+  --ul-green-050:        #e6efeb;   /* tint for section bands */
+  --ul-green-100:        #cde0d8;
+
+  /* --- Neutrals --- */
+  --ink:                 #16211c;   /* near-black text, green-cast */
+  --ink-70:              #46514c;
+  --ink-50:              #6b746f;
+  --line:                #dfe4e1;   /* hairline borders */
+  --paper:               #ffffff;
+  --paper-off:           #f6f8f7;   /* off-white section bg */
+
+  /* --- Typography --- */
+  --font-display: "Roboto Condensed", "Formula Condensed", "Arial Narrow", sans-serif; /* Spirit / display */
+  --font-serif:   "Cormorant Garamond", "Saol", Georgia, "Times New Roman", serif;      /* Heritage / editorial */
+  --font-sans:    "Inter", "Helvetica Neue", Arial, sans-serif;                          /* Modern / body + UI */
+
+  --fs-hero:   clamp(2.75rem, 6vw, 5rem);
+  --fs-h1:     clamp(2.25rem, 4.5vw, 3.5rem);
+  --fs-h2:     clamp(1.75rem, 3vw, 2.5rem);
+  --fs-h3:     clamp(1.25rem, 2vw, 1.6rem);
+  --fs-lead:   clamp(1.125rem, 1.6vw, 1.375rem);
+  --fs-body:   1.0625rem;
+  --fs-small:  0.875rem;
+  --lh-tight:  1.05;
+  --lh-snug:   1.25;
+  --lh-body:   1.6;
+
+  /* --- Spacing / layout --- */
+  --container:      1200px;
+  --container-wide: 1440px;
+  --gutter:         clamp(1rem, 4vw, 3rem);
+  --section-y:      clamp(3.5rem, 8vw, 7rem);
+  --space-1: .5rem; --space-2: 1rem; --space-3: 1.5rem; --space-4: 2rem;
+  --space-5: 3rem; --space-6: 4rem;
+
+  /* --- Form --- */
+  --radius:    10px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 1px 2px rgba(3,55,38,.06), 0 2px 8px rgba(3,55,38,.06);
+  --shadow-md: 0 8px 30px rgba(3,55,38,.12);
+  --focus:     0 0 0 3px rgba(0,177,64,.45);
+  --transition: 200ms cubic-bezier(.2,.6,.2,1);
+}
+
+/* =============================================================
+   BASE
+   ============================================================= */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4,h5 { font-family: var(--font-display); font-weight: 700; line-height: var(--lh-tight); letter-spacing: -0.01em; color: var(--ul-green-heritage); text-transform: none; }
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); line-height: var(--lh-snug); }
+a { color: var(--ul-green); text-underline-offset: 3px; }
+a:hover { color: var(--ul-green-modern); }
+:focus-visible { outline: none; box-shadow: var(--focus); border-radius: 4px; }
+
+/* =============================================================
+   UTILITY CLASSES  (apply via Elementor "CSS Classes" field)
+   ============================================================= */
+.ise-container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.ise-section   { padding-block: var(--section-y); }
+.ise-band      { background: var(--paper-off); }
+.ise-band--green    { background: var(--ul-green); color: #fff; }
+.ise-band--heritage { background: var(--ul-green-heritage); color: #fff; }
+.ise-band--green h1, .ise-band--green h2, .ise-band--green h3,
+.ise-band--heritage h1, .ise-band--heritage h2, .ise-band--heritage h3 { color: #fff; }
+
+/* Eyebrow / kicker label */
+.ise-eyebrow {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 600;
+  font-size: var(--fs-small);
+  color: var(--ul-green-modern);
+}
+
+/* Editorial serif accent for pull quotes / lead statements */
+.ise-serif  { font-family: var(--font-serif); font-weight: 500; font-size: var(--fs-lead); line-height: 1.4; }
+.ise-lead   { font-size: var(--fs-lead); color: var(--ink-70); line-height: 1.5; }
+
+/* Buttons */
+.ise-btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--font-sans); font-weight: 600; font-size: 1rem;
+  padding: .85rem 1.5rem; border-radius: var(--radius);
+  text-decoration: none; transition: var(--transition); cursor: pointer;
+  border: 2px solid transparent;
+}
+.ise-btn--primary { background: var(--ul-green); color: #fff; }
+.ise-btn--primary:hover { background: var(--ul-green-modern); color: #052; transform: translateY(-1px); }
+.ise-btn--ghost { background: transparent; color: var(--ul-green); border-color: var(--ul-green); }
+.ise-btn--ghost:hover { background: var(--ul-green); color: #fff; }
+.ise-btn--on-dark { background: #fff; color: var(--ul-green-heritage); }
+.ise-btn--on-dark.ise-btn--ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.7); }
+
+/* Hero overlay (place over full-bleed image) */
+.ise-hero { position: relative; color: #fff; }
+.ise-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(3,55,38,.35) 0%, rgba(0,83,53,.78) 100%);
+}
+.ise-hero > * { position: relative; z-index: 1; }
+.ise-hero h1 { color: #fff; font-size: var(--fs-hero); }
+
+/* Stat block */
+.ise-stat__num { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.5rem,5vw,3.75rem); color: var(--ul-green); line-height: 1; }
+.ise-stat__label { font-size: var(--fs-small); color: var(--ink-70); text-transform: uppercase; letter-spacing: .08em; }
+
+/* Partner logo wall */
+.ise-logo-wall { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: clamp(1rem,3vw,2.5rem); align-items: center; }
+.ise-logo-wall img { max-height: 46px; width: auto; margin-inline: auto; filter: grayscale(1); opacity: .7; transition: var(--transition); }
+.ise-logo-wall img:hover { filter: none; opacity: 1; }
+
+/* Card */
+.ise-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: var(--space-4); transition: var(--transition); }
+.ise-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+/* Rounded media */
+.ise-media-round img { border-radius: var(--radius-lg); }
+
+/* Footer (heritage green) */
+.ise-footer { background: var(--ul-green-heritage); color: #cfe3da; }
+.ise-footer a { color: #fff; }
+.ise-footer a:hover { color: var(--ul-green-modern); }
+
+/* --- Brand header/footer with the official white ISE·UL lockup on dark green --- */
+.ise-nav { background: var(--ul-green-heritage); }
+.ise-nav a { color: #eaf3ee; }
+.ise-nav a:hover { color: #fff; }
+.ise-logo-wall.ise-logo-wall--mono img { filter: none; opacity: .85; max-height: 52px; }
+.ise-logo-wall.ise-logo-wall--mono img:hover { opacity: 1; }
+
+/* --- Partner logo wall: uniform white silhouettes on dark green, in chips --- */
+.ise-logo-wall.ise-logo-wall--mono { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.ise-logo-cell {
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.1rem 1rem; min-height: 84px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+}
+.ise-logo-cell img {
+  max-height: 40px; width: auto;
+  filter: brightness(0) invert(1);   /* normalise any logo colour to clean white */
+  opacity: .82; transition: opacity var(--transition);
+}
+.ise-logo-cell:hover img { opacity: 1; }

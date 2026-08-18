@@ -1,0 +1,270 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ISE — homepage preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Roboto+Condensed:wght@400;500;700&display=swap" rel="stylesheet">
+<style>/*
+Theme Name: ISE — Hello Elementor Child
+Theme URI: https://www.software-engineering.ie
+Description: Brand-foundation child theme for Immersive Software Engineering (ISE), University of Limerick. Establishes UL-brand design tokens (colours, typography, spacing) and utility classes consumed by Elementor sections. Parent: Hello Elementor.
+Author: ISE / University of Limerick
+Template: hello-elementor
+Version: 0.1.0
+Text Domain: hello-elementor-child
+*/
+
+/* =============================================================
+   UL BRAND DESIGN TOKENS
+   Single CSS source of truth. Mirror these into Elementor
+   Site Settings -> Global Colors / Global Fonts.
+   Colours confirmed against UL brand guidelines:
+     UL Green (core)      #005335   (verify vs #005844 on official kit)
+     UL Modern Green      #00B140
+     UL Heritage Green    #003726
+   Fonts: Saol / Inter / Formula Condensed (brand);
+   licence-clean fallbacks: Cormorant Garamond / Inter / Roboto Condensed.
+   ============================================================= */
+:root {
+  /* --- Brand greens --- */
+  --ul-green:            #005335;   /* core / primary */
+  --ul-green-modern:     #00B140;   /* bright accent, sparing use */
+  --ul-green-heritage:   #003726;   /* deep backgrounds, footer */
+  --ul-green-050:        #e6efeb;   /* tint for section bands */
+  --ul-green-100:        #cde0d8;
+
+  /* --- Neutrals --- */
+  --ink:                 #16211c;   /* near-black text, green-cast */
+  --ink-70:              #46514c;
+  --ink-50:              #6b746f;
+  --line:                #dfe4e1;   /* hairline borders */
+  --paper:               #ffffff;
+  --paper-off:           #f6f8f7;   /* off-white section bg */
+
+  /* --- Typography --- */
+  --font-display: "Roboto Condensed", "Formula Condensed", "Arial Narrow", sans-serif; /* Spirit / display */
+  --font-serif:   "Cormorant Garamond", "Saol", Georgia, "Times New Roman", serif;      /* Heritage / editorial */
+  --font-sans:    "Inter", "Helvetica Neue", Arial, sans-serif;                          /* Modern / body + UI */
+
+  --fs-hero:   clamp(2.75rem, 6vw, 5rem);
+  --fs-h1:     clamp(2.25rem, 4.5vw, 3.5rem);
+  --fs-h2:     clamp(1.75rem, 3vw, 2.5rem);
+  --fs-h3:     clamp(1.25rem, 2vw, 1.6rem);
+  --fs-lead:   clamp(1.125rem, 1.6vw, 1.375rem);
+  --fs-body:   1.0625rem;
+  --fs-small:  0.875rem;
+  --lh-tight:  1.05;
+  --lh-snug:   1.25;
+  --lh-body:   1.6;
+
+  /* --- Spacing / layout --- */
+  --container:      1200px;
+  --container-wide: 1440px;
+  --gutter:         clamp(1rem, 4vw, 3rem);
+  --section-y:      clamp(3.5rem, 8vw, 7rem);
+  --space-1: .5rem; --space-2: 1rem; --space-3: 1.5rem; --space-4: 2rem;
+  --space-5: 3rem; --space-6: 4rem;
+
+  /* --- Form --- */
+  --radius:    10px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 1px 2px rgba(3,55,38,.06), 0 2px 8px rgba(3,55,38,.06);
+  --shadow-md: 0 8px 30px rgba(3,55,38,.12);
+  --focus:     0 0 0 3px rgba(0,177,64,.45);
+  --transition: 200ms cubic-bezier(.2,.6,.2,1);
+}
+
+/* =============================================================
+   BASE
+   ============================================================= */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4,h5 { font-family: var(--font-display); font-weight: 700; line-height: var(--lh-tight); letter-spacing: -0.01em; color: var(--ul-green-heritage); text-transform: none; }
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); line-height: var(--lh-snug); }
+a { color: var(--ul-green); text-underline-offset: 3px; }
+a:hover { color: var(--ul-green-modern); }
+:focus-visible { outline: none; box-shadow: var(--focus); border-radius: 4px; }
+
+/* =============================================================
+   UTILITY CLASSES  (apply via Elementor "CSS Classes" field)
+   ============================================================= */
+.ise-container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.ise-section   { padding-block: var(--section-y); }
+.ise-band      { background: var(--paper-off); }
+.ise-band--green    { background: var(--ul-green); color: #fff; }
+.ise-band--heritage { background: var(--ul-green-heritage); color: #fff; }
+.ise-band--green h1, .ise-band--green h2, .ise-band--green h3,
+.ise-band--heritage h1, .ise-band--heritage h2, .ise-band--heritage h3 { color: #fff; }
+
+/* Eyebrow / kicker label */
+.ise-eyebrow {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 600;
+  font-size: var(--fs-small);
+  color: var(--ul-green-modern);
+}
+
+/* Editorial serif accent for pull quotes / lead statements */
+.ise-serif  { font-family: var(--font-serif); font-weight: 500; font-size: var(--fs-lead); line-height: 1.4; }
+.ise-lead   { font-size: var(--fs-lead); color: var(--ink-70); line-height: 1.5; }
+
+/* Buttons */
+.ise-btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--font-sans); font-weight: 600; font-size: 1rem;
+  padding: .85rem 1.5rem; border-radius: var(--radius);
+  text-decoration: none; transition: var(--transition); cursor: pointer;
+  border: 2px solid transparent;
+}
+.ise-btn--primary { background: var(--ul-green); color: #fff; }
+.ise-btn--primary:hover { background: var(--ul-green-modern); color: #052; transform: translateY(-1px); }
+.ise-btn--ghost { background: transparent; color: var(--ul-green); border-color: var(--ul-green); }
+.ise-btn--ghost:hover { background: var(--ul-green); color: #fff; }
+.ise-btn--on-dark { background: #fff; color: var(--ul-green-heritage); }
+.ise-btn--on-dark.ise-btn--ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.7); }
+
+/* Hero overlay (place over full-bleed image) */
+.ise-hero { position: relative; color: #fff; }
+.ise-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(3,55,38,.35) 0%, rgba(0,83,53,.78) 100%);
+}
+.ise-hero > * { position: relative; z-index: 1; }
+.ise-hero h1 { color: #fff; font-size: var(--fs-hero); }
+
+/* Stat block */
+.ise-stat__num { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.5rem,5vw,3.75rem); color: var(--ul-green); line-height: 1; }
+.ise-stat__label { font-size: var(--fs-small); color: var(--ink-70); text-transform: uppercase; letter-spacing: .08em; }
+
+/* Partner logo wall */
+.ise-logo-wall { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: clamp(1rem,3vw,2.5rem); align-items: center; }
+.ise-logo-wall img { max-height: 46px; width: auto; margin-inline: auto; filter: grayscale(1); opacity: .7; transition: var(--transition); }
+.ise-logo-wall img:hover { filter: none; opacity: 1; }
+
+/* Card */
+.ise-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: var(--space-4); transition: var(--transition); }
+.ise-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+/* Rounded media */
+.ise-media-round img { border-radius: var(--radius-lg); }
+
+/* Footer (heritage green) */
+.ise-footer { background: var(--ul-green-heritage); color: #cfe3da; }
+.ise-footer a { color: #fff; }
+.ise-footer a:hover { color: var(--ul-green-modern); }
+
+/* --- Brand header/footer with the official white ISE·UL lockup on dark green --- */
+.ise-nav { background: var(--ul-green-heritage); }
+.ise-nav a { color: #eaf3ee; }
+.ise-nav a:hover { color: #fff; }
+.ise-logo-wall.ise-logo-wall--mono img { filter: none; opacity: .85; max-height: 52px; }
+.ise-logo-wall.ise-logo-wall--mono img:hover { opacity: 1; }
+
+/* --- Partner logo wall: uniform white silhouettes on dark green, in chips --- */
+.ise-logo-wall.ise-logo-wall--mono { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.ise-logo-cell {
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.1rem 1rem; min-height: 84px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+}
+.ise-logo-cell img {
+  max-height: 40px; width: auto;
+  filter: brightness(0) invert(1);   /* normalise any logo colour to clean white */
+  opacity: .82; transition: opacity var(--transition);
+}
+.ise-logo-cell:hover img { opacity: 1; }
+
+*{box-sizing:border-box} body{margin:0} img{max-width:100%}
+</style></head><body><div class="ise-nav" style="">
+<div class="ise-container" style="display:flex;align-items:center;justify-content:space-between;padding-block:1.15rem;gap:1rem;flex-wrap:wrap;">
+  <a href="/" style="display:inline-flex;align-items:center;"><img src="assets/ise-ul-logo.png" alt="Immersive Software Engineering · University of Limerick" style="height:40px;width:auto;"></a>
+  <nav style="display:flex;gap:1.6rem;align-items:center;font-weight:500;flex-wrap:wrap;">
+    <a href="/students" style="text-decoration:none;">The Students</a>
+    <a href="/companies" style="text-decoration:none;">The Companies</a>
+    <a href="#course" style="text-decoration:none;">Course</a>
+    <a href="/about" style="text-decoration:none;">About</a>
+    <a class="ise-btn ise-btn--primary" href="/apply" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
+  </nav>
+</div></div><div class="ise-hero" style="background:#0a3f2c;padding-block:var(--section-y);">
+<div class="ise-container" style="min-height:clamp(560px,78vh,720px);display:flex;flex-direction:column;justify-content:center;padding-block:6rem 5rem;">
+  <p class="ise-eyebrow" style="color:#8fe3b0;">Immersive Software Engineering · University of Limerick</p>
+  <h1 style="color:#fff;font-size:var(--fs-hero);margin:.6rem 0 1.25rem;max-width:17ch;">Exceptional students. World-class companies.</h1>
+  <p style="font-size:var(--fs-lead);color:#e7f2ec;max-width:60ch;">A four-year integrated BSc and MSc where you learn by doing — spending almost half of your degree in paid residencies with the best software companies in the world.</p>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem;">
+    <a class="ise-btn ise-btn--primary" href="/apply">Apply now — CAO LM173</a>
+    <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Book a call</a>
+  </div>
+</div></div><div class="ise-band" style="padding-block:var(--section-y);">
+<div class="ise-container" style="display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:center;">
+  <p class="ise-serif" style="font-size:clamp(1.4rem,2.6vw,2.05rem);color:var(--ul-green-heritage);line-height:1.35;margin:0;">ISE is a computer science degree where you learn by doing — not in lecture halls, but in studios and inside real companies, shipping real software from first year.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;">
+    <div><div class="ise-stat__num">45%</div><div class="ise-stat__label">in paid residency</div></div>
+    <div><div class="ise-stat__num">4 yrs</div><div class="ise-stat__label">BSc + MSc</div></div>
+    <div><div class="ise-stat__num">5</div><div class="ise-stat__label">residencies</div></div>
+  </div>
+</div></div><div class="" style="padding-block:var(--section-y);">
+<div class="ise-container">
+  <div style="max-width:54ch;margin-bottom:2.5rem;">
+    <p class="ise-eyebrow">The Students</p>
+    <h2>The most capable cohort in the country</h2>
+    <p class="ise-lead">ISE admits a small, highly selective group each year, chosen for how they actually think and build. The result is a cohort that companies compete to work with.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+    <div class="ise-card" style="background:#fff;border-color:var(--line);"><h3 style="color:var(--ul-green-heritage);margin:0 0 .5rem;">Selected on substance</h3><p style="margin:0;color:var(--ink-70);">A highly selective intake focused on genuine ability, not points alone — we look for real builders.</p></div>
+    <div class="ise-card" style="background:#fff;border-color:var(--line);"><h3 style="color:var(--ul-green-heritage);margin:0 0 .5rem;">Learning by shipping</h3><p style="margin:0;color:var(--ink-70);">Studio-based, project-driven and continuously assessed. Students build from week one.</p></div>
+    <div class="ise-card" style="background:#fff;border-color:var(--line);"><h3 style="color:var(--ul-green-heritage);margin:0 0 .5rem;">Ready for industry</h3><p style="margin:0;color:var(--ink-70);">Partners report students performing well beyond their years by their very first residency.</p></div>
+  </div>
+  <div style="margin-top:2rem;"><a class="ise-btn ise-btn--ghost" href="/students">Meet the students →</a></div>
+</div></div><div class="ise-band--heritage" style="padding-block:var(--section-y);">
+<div class="ise-container">
+  <div style="max-width:58ch;margin-bottom:2.5rem;">
+    <p class="ise-eyebrow" style="color:#8fe3b0;">The Companies</p>
+    <h2 style="color:#fff;">You will work inside the best</h2>
+    <p style="color:#d7e8df;font-size:var(--fs-lead);">Residencies are not shadowing. Students join world-leading engineering teams as paid contributors — from global platforms to Ireland's fastest-growing startups in fintech, medtech, robotics and quantum.</p>
+  </div>
+  <div class="ise-logo-wall ise-logo-wall--mono" style="gap:1rem;margin-top:.5rem;">
+    <div class="ise-logo-cell"><img src="assets/partners/stripe.png" alt="stripe logo"></div><div class="ise-logo-cell"><img src="assets/partners/aws.png" alt="aws logo"></div><div class="ise-logo-cell"><img src="assets/partners/intercom.png" alt="intercom logo"></div><div class="ise-logo-cell"><img src="assets/partners/mastercard.png" alt="mastercard logo"></div><div class="ise-logo-cell"><img src="assets/partners/intel.png" alt="intel logo"></div><div class="ise-logo-cell"><img src="assets/partners/dell.png" alt="dell logo"></div><div class="ise-logo-cell"><img src="assets/partners/workday.png" alt="workday logo"></div><div class="ise-logo-cell"><img src="assets/partners/fiserv.png" alt="fiserv logo"></div><div class="ise-logo-cell"><img src="assets/partners/jj.png" alt="jj logo"></div><div class="ise-logo-cell"><img src="assets/partners/bd.png" alt="bd logo"></div><div class="ise-logo-cell"><img src="assets/partners/gm.png" alt="gm logo"></div><div class="ise-logo-cell"><img src="assets/partners/jlr.png" alt="jlr logo"></div><div class="ise-logo-cell"><img src="assets/partners/first-derivatives.png" alt="first-derivatives logo"></div><div class="ise-logo-cell"><img src="assets/partners/keeper-sloutions.png" alt="keeper-sloutions logo"></div><div class="ise-logo-cell"><img src="assets/partners/tines.png" alt="tines logo"></div><div class="ise-logo-cell"><img src="assets/partners/teckro.png" alt="teckro logo"></div><div class="ise-logo-cell"><img src="assets/partners/kneat.png" alt="kneat logo"></div><div class="ise-logo-cell"><img src="assets/partners/payslip.png" alt="payslip logo"></div><div class="ise-logo-cell"><img src="assets/partners/macmarts.png" alt="macmarts logo"></div><div class="ise-logo-cell"><img src="assets/partners/viotas.png" alt="viotas logo"></div><div class="ise-logo-cell"><img src="assets/partners/mbryonics.png" alt="mbryonics logo"></div><div class="ise-logo-cell"><img src="assets/partners/deveire.png" alt="deveire logo"></div><div class="ise-logo-cell"><img src="assets/partners/equal1.png" alt="equal1 logo"></div><div class="ise-logo-cell"><img src="assets/partners/provizio.png" alt="provizio logo"></div><div class="ise-logo-cell"><img src="assets/partners/manna.png" alt="manna logo"></div><div class="ise-logo-cell"><img src="assets/partners/bsci.png" alt="bsci logo"></div><div class="ise-logo-cell"><img src="assets/partners/transact.png" alt="transact logo"></div><div class="ise-logo-cell"><img src="assets/partners/shannonside.png" alt="shannonside logo"></div><div class="ise-logo-cell"><img src="assets/partners/ida.png" alt="ida logo"></div><div class="ise-logo-cell"><img src="assets/partners/enterprise-ireland.png" alt="enterprise-ireland logo"></div><div class="ise-logo-cell"><img src="assets/partners/ulatwork.png" alt="ulatwork logo"></div><div class="ise-logo-cell"><img src="assets/partners/dogpatch.png" alt="dogpatch logo"></div><div class="ise-logo-cell"><img src="assets/partners/frontline.png" alt="frontline logo"></div>
+  </div>
+  <blockquote style="margin:2.75rem 0 0;padding:0;border:0;">
+    <p class="ise-serif" style="font-size:clamp(1.4rem,2.6vw,2rem);color:#fff;max-width:34ch;margin:0;line-height:1.3;">“Software engineering is a wonderful career.”</p>
+    <footer style="font-family:var(--font-sans);font-size:1rem;color:#8fe3b0;margin-top:.85rem;">John Collison · co-founder, Stripe</footer>
+  </blockquote>
+  <div style="margin-top:2rem;"><a class="ise-btn ise-btn--on-dark" href="/companies">See partner companies →</a></div>
+</div></div><div class="ise-band" style="padding-block:var(--section-y);">
+<div class="ise-container" id="course">
+  <div style="max-width:52ch;margin-bottom:2.25rem;">
+    <p class="ise-eyebrow">How it works</p>
+    <h2 style="max-width:20ch;">Four years. Two degrees. Five residencies.</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;"><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 1</p><h3 style="margin:0 0 .5rem;">Foundations</h3><p style="margin:0;color:var(--ink-70);">Studio-based fundamentals — programming, systems and maths — building real projects in small teams.</p></div><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 2</p><h3 style="margin:0 0 .5rem;">First residencies</h3><p style="margin:0;color:var(--ink-70);">Paid residencies begin. Students join partner engineering teams for three to six months at a time.</p></div><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 3</p><h3 style="margin:0 0 .5rem;">Depth & specialism</h3><p style="margin:0;color:var(--ink-70);">Deeper residencies paired with advanced coursework in a chosen area of software engineering.</p></div><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 4</p><h3 style="margin:0 0 .5rem;">Master's project</h3><p style="margin:0;color:var(--ink-70);">A capstone master's project, often with an industry partner, completing the integrated MSc.</p></div></div>
+</div></div><div class="ise-band--green" style="padding-block:var(--section-y);">
+<div class="ise-container" style="text-align:center;max-width:760px;">
+  <h2 style="color:#fff;">Applications for 2026 are open</h2>
+  <p style="color:#e7f2ec;font-size:var(--fs-lead);">Apply through the CAO with code LM173, or talk to our team about residencies and partnerships.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+    <a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a>
+    <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Become a partner</a>
+  </div>
+</div></div><div class="ise-footer">
+<div class="ise-container" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2rem;padding-block:3.5rem 2rem;">
+  <div>
+    <img src="assets/ise-ul-logo.png" alt="ISE · University of Limerick" style="height:40px;width:auto;margin-bottom:.35rem;">
+    <p style="max-width:34ch;margin:.75rem 0 0;color:#a9c9bb;">Immersive Software Engineering, University of Limerick. A radically practical computer science degree.</p>
+  </div>
+  <div><h3 style="color:#fff;font-size:1rem;">Explore</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/students">The Students</a><br><a href="/companies">The Companies</a><br><a href="#course">Course</a></p></div>
+  <div><h3 style="color:#fff;font-size:1rem;">Apply</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/apply">How to apply</a><br><a href="/why-ise">Why ISE</a><br><a href="/faq">FAQ</a></p></div>
+  <div><h3 style="color:#fff;font-size:1rem;">Connect</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/about">About us</a><br><a href="/companies">Partner with us</a><br><a href="/careers">Careers</a></p></div>
+</div>
+<div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2026 University of Limerick</span><span>CAO code LM173 · software-engineering.ie</span></div></div></div></body></html>

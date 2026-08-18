@@ -1,0 +1,15 @@
+# Local wp-now runtime log
+wpnow.log
+
+# Python
+**/__pycache__/
+*.pyc
+
+# Regenerated preview assets (canonical copies live in theme-src/.../assets)
+design/assets/
+
+# OS
+.DS_Store
+
+# Build/export artefacts (regenerated)
+exports/*.zip
