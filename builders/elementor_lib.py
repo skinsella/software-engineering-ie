@@ -61,3 +61,18 @@ def upsert_page(page_id, title, slug, sections, template="elementor_canvas",
             cur.execute("UPDATE wp_options SET option_value=? WHERE option_name=?", (val, name))
     con.commit(); con.close()
     print(f"upserted page #{page_id} '{title}' ({len(sections)} sections, {len(data)} bytes data)")
+
+def shortcode_widget(code):
+    return {"id": eid(), "elType": "widget", "widgetType": "shortcode",
+            "settings": {"shortcode": code}, "elements": []}
+
+def section_of(widget, css_classes="", settings=None):
+    """Full-width section wrapping a single arbitrary widget (e.g. a shortcode)."""
+    zero = {"unit":"px","top":"0","right":"0","bottom":"0","left":"0","isLinked":True}
+    col = {"id": eid(), "elType": "column",
+           "settings": {"_column_size": 100, "_inline_size": None, "padding": zero, "margin": zero},
+           "elements": [widget]}
+    st = {"content_width": "full", "gap": "no", "padding": zero, "margin": zero, "structure": "10"}
+    if settings: st.update(settings)
+    if css_classes: st["_css_classes"] = css_classes
+    return {"id": eid(), "elType": "section", "settings": st, "elements": [col]}

@@ -19,6 +19,7 @@ Work in progress.
 - [x] Core pages: Apply, Course, Why ISE, About, FAQ, Careers
 - [x] Remaining pages: Fellowships, EDI scholarships, Schools, Partner sign-up, Privacy
 - [x] Elementor template exports + child-theme zip + handoff runbook
+- [x] Residency Job Board plugin (partner login + moderated job uploads)
 - [ ] Global header/footer via Elementor Pro Theme Builder (production step — see docs/HANDOFF.md)
 - [x] Export as importable Elementor templates for the production host
 
@@ -39,6 +40,7 @@ builders/                          Python scripts that author Elementor pages as
   build_all.py                     Build every page + snapshot
   build_preview.py                 Emits a standalone HTML snapshot of the homepage
 design/home_preview.html           Standalone homepage snapshot (regenerated)
+plugin-src/ise-residency-board/     Custom plugin: Residency Job Board (CPT + gated submit)
 builders/export_kit.py             Emits importable Elementor template JSON per page
 exports/elementor-templates/       Per-page Elementor templates + manifest.json
 docs/PLAN.md                       The approved build plan

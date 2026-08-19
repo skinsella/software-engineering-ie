@@ -1,0 +1,268 @@
+<?php
+/**
+ * Plugin Name: ISE Residency Board
+ * Description: Residency job board for Immersive Software Engineering — a "Residency Job" post type, a Partner role, a gated front-end submission form (moderated), and shortcodes for the public board and the submit/login/register flow.
+ * Version: 0.1.0
+ * Author: ISE / University of Limerick
+ */
+
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+
+const ISE_RB_CPT   = 'residency_job';
+const ISE_RB_ROLE  = 'partner';
+const ISE_RB_ROUNDS_OPEN   = array( 'Residency 4', 'Residency 5' );
+const ISE_RB_ROUNDS_CLOSED = array( 'Residency 1 closed', 'Residency 2 closed', 'Residency 1 + 2 closed', 'Residency 3 closed' );
+const ISE_RB_META = array( 'round', 'company', 'salary', 'champion', 'apply' );
+
+/* ---------------------------------------------------------------------------
+ * Post type + Partner role + one-time sample seed (idempotent — works even
+ * when the plugin is activated by writing active_plugins directly, since we
+ * self-initialise on init rather than relying only on activation hooks).
+ * ------------------------------------------------------------------------- */
+add_action( 'init', function () {
+	register_post_type( ISE_RB_CPT, array(
+		'labels' => array(
+			'name'          => 'Residency Jobs',
+			'singular_name' => 'Residency Job',
+			'add_new_item'  => 'Add Residency Job',
+			'edit_item'     => 'Edit Residency Job',
+		),
+		'public'             => true,
+		'publicly_queryable' => false,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'menu_icon'          => 'dashicons-businessperson',
+		'supports'           => array( 'title' ),
+		'capability_type'    => 'post',
+		'map_meta_cap'       => true,
+	) );
+
+	foreach ( ISE_RB_META as $key ) {
+		register_post_meta( ISE_RB_CPT, '_rj_' . $key, array(
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => false,
+			'auth_callback'=> function () { return current_user_can( 'edit_posts' ); },
+		) );
+	}
+
+	// Partner role: can read + submit (pending) but not publish.
+	if ( ! get_role( ISE_RB_ROLE ) ) {
+		add_role( ISE_RB_ROLE, 'Partner', array( 'read' => true ) );
+	}
+
+	// Seed a few published sample jobs once, so the board is not empty.
+	if ( ! get_option( 'ise_rb_seeded' ) ) {
+		$samples = array(
+			array( 'R4 | Stripe-01',  'Residency 4', 'stripe',      '€3,000 / month (indicative)', 'stripe-champion@example.com',   'residencies@stripe.example' ),
+			array( 'R4 | Intercom-01','Residency 4', 'intercom',    '€2,800 / month (indicative)', 'intercom-champion@example.com', 'earlycareers@intercom.example' ),
+			array( 'R4 | Provizio-01','Residency 4', 'provizio',    '€2,600 / month (indicative)', 'provizio-champion@example.com', 'jobs@provizio.example' ),
+			array( 'R4 | Tines-01',   'Residency 4', 'tines',       'Competitive — TBC',           'tines-champion@example.com',    'residency@tines.example' ),
+			array( 'R5 | Stripe-01',  'Residency 5', 'stripe',      '€3,200 / month (indicative)', 'stripe-champion@example.com',   'residencies@stripe.example' ),
+			array( 'R5 | Kneat-01',   'Residency 5', 'kneat',       '€2,700 / month (indicative)', 'kneat-champion@example.com',    'careers@kneat.example' ),
+			array( 'R5 | Wayflyer-01','Residency 5', 'wayflyer',    '€2,800 / month (indicative)', 'wayflyer-champion@example.com', 'talent@wayflyer.example' ),
+		);
+		foreach ( $samples as $s ) {
+			$id = wp_insert_post( array(
+				'post_type'   => ISE_RB_CPT,
+				'post_title'  => $s[0],
+				'post_status' => 'publish',
+			) );
+			if ( $id && ! is_wp_error( $id ) ) {
+				update_post_meta( $id, '_rj_round',    $s[1] );
+				update_post_meta( $id, '_rj_company',  $s[2] );
+				update_post_meta( $id, '_rj_salary',   $s[3] );
+				update_post_meta( $id, '_rj_champion', $s[4] );
+				update_post_meta( $id, '_rj_apply',    $s[5] );
+			}
+		}
+		update_option( 'ise_rb_seeded', 1 );
+	}
+} );
+
+/* Admin list columns for quick moderation. */
+add_filter( 'manage_' . ISE_RB_CPT . '_posts_columns', function ( $cols ) {
+	$cols['rj_round']   = 'Round';
+	$cols['rj_company'] = 'Company';
+	$cols['rj_salary']  = 'Salary';
+	return $cols;
+} );
+add_action( 'manage_' . ISE_RB_CPT . '_posts_custom_column', function ( $col, $post_id ) {
+	if ( 0 === strpos( $col, 'rj_' ) ) {
+		echo esc_html( get_post_meta( $post_id, '_' . $col, true ) );
+	}
+}, 10, 2 );
+
+/* ---------------------------------------------------------------------------
+ * Helpers
+ * ------------------------------------------------------------------------- */
+function ise_rb_asset() {
+	return get_stylesheet_directory_uri() . '/assets';
+}
+
+function ise_rb_positions_for( $round ) {
+	return get_posts( array(
+		'post_type'   => ISE_RB_CPT,
+		'post_status' => 'publish',
+		'numberposts' => -1,
+		'orderby'     => 'title',
+		'order'       => 'ASC',
+		'meta_key'    => '_rj_round',
+		'meta_value'  => $round,
+	) );
+}
+
+/* ---------------------------------------------------------------------------
+ * [ise_residency_board] — public board grouped by round, with per-round search
+ * ------------------------------------------------------------------------- */
+add_shortcode( 'ise_residency_board', function () {
+	ob_start();
+	$submit_url = home_url( '/post-a-job/' );
+	echo '<div class="ise-band--heritage" style="padding-block:2.75rem;"><div class="ise-container" id="rounds"><div class="rb-rounds">';
+	foreach ( ISE_RB_ROUNDS_CLOSED as $c ) {
+		echo '<span class="rb-round-btn rb-round-btn--closed">' . esc_html( $c ) . '</span>';
+	}
+	foreach ( ISE_RB_ROUNDS_OPEN as $o ) {
+		echo '<a class="rb-round-btn rb-round-btn--post" href="' . esc_url( $submit_url ) . '">Post a ' . esc_html( $o ) . ' Job</a>';
+	}
+	echo '</div></div></div>';
+
+	echo '<div class="ise-container" style="padding-block:3rem 4rem;">';
+	foreach ( ISE_RB_ROUNDS_OPEN as $round ) {
+		$posts = ise_rb_positions_for( $round );
+		echo '<div class="rb-round"><div class="rb-round__head"><p class="ise-eyebrow">Now open</p><h2>ISE Current Open ' . esc_html( $round ) . ' Positions</h2></div>';
+		echo '<input class="rb-search" type="search" placeholder="Type here to search ' . esc_attr( $round ) . ' positions…" aria-label="Search ' . esc_attr( $round ) . ' positions">';
+		echo '<div class="rb-count"></div><div class="rb-list">';
+		if ( $posts ) {
+			foreach ( $posts as $p ) {
+				$title    = get_the_title( $p );
+				$salary   = get_post_meta( $p->ID, '_rj_salary', true );
+				$champ    = get_post_meta( $p->ID, '_rj_champion', true );
+				$apply    = get_post_meta( $p->ID, '_rj_apply', true );
+				echo '<div class="rb-pos"><h3 class="rb-pos__title">' . esc_html( $title ) . '</h3><div class="rb-pos__grid">'
+					. '<div><span class="rb-label">Residency Title</span><span class="rb-val">' . esc_html( $title ) . '</span></div>'
+					. '<div><span class="rb-label">Monthly Salary</span><span class="rb-val">' . esc_html( $salary ) . '</span></div>'
+					. '<div><span class="rb-label">ISE Champion Email</span><span class="rb-val"><a href="mailto:' . esc_attr( $champ ) . '">' . esc_html( $champ ) . '</a></span></div>'
+					. '<div><span class="rb-label">Email Application Address</span><span class="rb-val"><a href="mailto:' . esc_attr( $apply ) . '">' . esc_html( $apply ) . '</a></span></div>'
+					. '</div></div>';
+			}
+		}
+		echo '</div><div class="rb-empty" hidden>No positions match your search.</div></div>';
+	}
+	echo '</div>';
+	?>
+	<script>
+	(function(){
+	  document.querySelectorAll('.rb-round').forEach(function(round){
+	    var input=round.querySelector('.rb-search'), cards=round.querySelectorAll('.rb-pos'),
+	        count=round.querySelector('.rb-count'), empty=round.querySelector('.rb-empty');
+	    function apply(){ var q=input.value.trim().toLowerCase(), n=0;
+	      cards.forEach(function(c){ var s=c.textContent.toLowerCase().indexOf(q)>=0; c.style.display=s?'':'none'; if(s)n++; });
+	      if(count) count.textContent=n+(n===1?' position':' positions'); if(empty) empty.hidden=n>0; }
+	    input.addEventListener('input',apply); apply();
+	  });
+	})();
+	</script>
+	<?php
+	return ob_get_clean();
+} );
+
+/* ---------------------------------------------------------------------------
+ * [ise_residency_submit] — gated submission form (partners/admins only).
+ * Creates a PENDING residency_job for ISE to review.
+ * ------------------------------------------------------------------------- */
+add_shortcode( 'ise_residency_submit', function () {
+	ob_start();
+	if ( ! is_user_logged_in() ) {
+		echo '<div class="ise-card" style="max-width:520px;"><h3>Partner sign-in required</h3>'
+			. '<p style="color:var(--ink-70);">Posting a residency job is for ISE partner companies. Please sign in, or register your company.</p>'
+			. '<p><a class="ise-btn ise-btn--primary" href="' . esc_url( wp_login_url( home_url( '/post-a-job/' ) ) ) . '">Sign in</a> '
+			. '<a class="ise-btn ise-btn--ghost" href="#register">Register your company</a></p></div>';
+		return ob_get_clean();
+	}
+
+	$msg = '';
+	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['ise_rb_submit'] )
+		&& check_admin_referer( 'ise_rb_submit', 'ise_rb_nonce' ) ) {
+		$title = sanitize_text_field( wp_unslash( $_POST['rj_title'] ?? '' ) );
+		if ( $title ) {
+			$id = wp_insert_post( array(
+				'post_type'   => ISE_RB_CPT,
+				'post_title'  => $title,
+				'post_status' => 'pending',           // moderated: ISE approves before it shows
+				'post_author' => get_current_user_id(),
+			) );
+			if ( $id && ! is_wp_error( $id ) ) {
+				update_post_meta( $id, '_rj_round',    sanitize_text_field( wp_unslash( $_POST['rj_round'] ?? '' ) ) );
+				update_post_meta( $id, '_rj_company',  sanitize_text_field( wp_unslash( $_POST['rj_company'] ?? '' ) ) );
+				update_post_meta( $id, '_rj_salary',   sanitize_text_field( wp_unslash( $_POST['rj_salary'] ?? '' ) ) );
+				update_post_meta( $id, '_rj_champion', sanitize_email( wp_unslash( $_POST['rj_champion'] ?? '' ) ) );
+				update_post_meta( $id, '_rj_apply',    sanitize_email( wp_unslash( $_POST['rj_apply'] ?? '' ) ) );
+				$msg = '<div class="ise-card" style="border-color:var(--ul-green-modern);"><strong>Thanks — your role was submitted.</strong><br>It will appear on the board once the ISE team approves it.</div>';
+			}
+		}
+	}
+
+	echo $msg;
+	$rounds = array_merge( ISE_RB_ROUNDS_OPEN );
+	?>
+	<form method="post" class="ise-form" style="max-width:560px;display:grid;gap:1rem;">
+		<?php wp_nonce_field( 'ise_rb_submit', 'ise_rb_nonce' ); ?>
+		<label>Residency title<br><input name="rj_title" required placeholder="e.g. R4 | Acme-01" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<label>Round<br><select name="rj_round" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;">
+			<?php foreach ( $rounds as $r ) echo '<option>' . esc_html( $r ) . '</option>'; ?>
+		</select></label>
+		<label>Company (logo slug, optional)<br><input name="rj_company" placeholder="e.g. stripe" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<label>Monthly salary<br><input name="rj_salary" placeholder="e.g. €2,800 / month" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<label>ISE champion email<br><input type="email" name="rj_champion" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<label>Application email<br><input type="email" name="rj_apply" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<button class="ise-btn ise-btn--primary" name="ise_rb_submit" value="1" type="submit">Submit for review</button>
+	</form>
+	<?php
+	return ob_get_clean();
+} );
+
+/* ---------------------------------------------------------------------------
+ * [ise_partner_register] — simple company registration -> Partner role.
+ * (MVP: creates the account immediately. For production add admin approval.)
+ * ------------------------------------------------------------------------- */
+add_shortcode( 'ise_partner_register', function () {
+	ob_start();
+	echo '<div id="register"></div>';
+	if ( is_user_logged_in() ) {
+		echo '<p style="color:var(--ink-70);">You are signed in as ' . esc_html( wp_get_current_user()->user_login ) . '.</p>';
+		return ob_get_clean();
+	}
+	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['ise_rb_register'] )
+		&& check_admin_referer( 'ise_rb_register', 'ise_rb_rnonce' ) ) {
+		$email = sanitize_email( wp_unslash( $_POST['reg_email'] ?? '' ) );
+		$pass  = (string) ( $_POST['reg_pass'] ?? '' );
+		$company = sanitize_text_field( wp_unslash( $_POST['reg_company'] ?? '' ) );
+		if ( $email && $pass && ! email_exists( $email ) ) {
+			$uid = wp_insert_user( array(
+				'user_login'   => $email,
+				'user_email'   => $email,
+				'user_pass'    => $pass,
+				'display_name' => $company,
+				'role'         => ISE_RB_ROLE,
+			) );
+			if ( ! is_wp_error( $uid ) ) {
+				wp_set_current_user( $uid );
+				wp_set_auth_cookie( $uid );
+				echo '<div class="ise-card" style="border-color:var(--ul-green-modern);"><strong>Welcome — your company account is ready.</strong> You can post a role below.</div>';
+				return ob_get_clean();
+			}
+		}
+		echo '<div class="ise-card" style="border-color:#c0392b;">Could not register — that email may already be in use.</div>';
+	}
+	?>
+	<form method="post" class="ise-form" style="max-width:520px;display:grid;gap:1rem;">
+		<?php wp_nonce_field( 'ise_rb_register', 'ise_rb_rnonce' ); ?>
+		<label>Company name<br><input name="reg_company" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<label>Work email<br><input type="email" name="reg_email" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<label>Password<br><input type="password" name="reg_pass" required minlength="8" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<button class="ise-btn ise-btn--primary" name="ise_rb_register" value="1" type="submit">Register company</button>
+	</form>
+	<?php
+	return ob_get_clean();
+} );

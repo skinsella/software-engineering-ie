@@ -67,3 +67,33 @@ Regenerate any time: `python3 builders/export_kit.py` (templates) and re-zip
   framing copy only; replace with confirmed content (Privacy should use UL's
   official data-protection notice).
 - **Analytics/forms** — production also runs MailOptin + Burst/GA; re-add on the host.
+
+## Residency Job Board (custom plugin — partner logins + job uploads)
+The job board is a self-contained plugin: **`plugin-src/ise-residency-board/`**. No
+paid plugins required.
+
+**Install:** zip the folder (or copy it) into `wp-content/plugins/` and activate
+*ISE Residency Board*. On first load it registers everything and seeds a few
+sample roles.
+
+**What it provides**
+- A **Residency Job** post type (managed in wp-admin → Residency Jobs), with meta:
+  round, company (logo slug), monthly salary, ISE champion email, application email.
+- A **Partner** user role.
+- Shortcodes (already placed on the pages by the builders):
+  - `[ise_residency_board]` → the public board on **/jobs** (rounds, per-round
+    search, four-field cards), rendered live from published posts.
+  - `[ise_residency_submit]` → **/post-a-job**: gated form (partners/admins only)
+    that creates a **pending** job for review.
+  - `[ise_partner_register]` → company self-registration into the Partner role.
+
+**Partner flow:** register/sign in on /post-a-job → submit a role → it is created
+as *Pending* → ISE approves it in wp-admin (Residency Jobs) → it appears on /jobs.
+Verified end-to-end locally (pending hidden, approved shown).
+
+**Production hardening to consider**
+- Require admin approval of new partner accounts (MVP registers immediately).
+- Add spam protection (honeypot/CAPTCHA) to the public register/submit forms.
+- Optionally email the ISE team on each new pending submission.
+- If you want members-only *viewing* of the board (like Softr), add a membership
+  plugin or restrict the /jobs page; the board content itself is public by default.

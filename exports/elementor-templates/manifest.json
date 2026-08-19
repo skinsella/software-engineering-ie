@@ -104,6 +104,13 @@
       "slug": "jobs",
       "file": "jobs.json",
       "front_page": false
+    },
+    {
+      "id": 115,
+      "title": "Post a job",
+      "slug": "post-a-job",
+      "file": "post-a-job.json",
+      "front_page": false
     }
   ]
 }
