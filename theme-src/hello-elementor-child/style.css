@@ -205,3 +205,15 @@ a:hover { color: var(--ul-green-modern); }
 .ise-pcard__c h3 { margin: 0 0 .2rem; font-size: 1.15rem; }
 .ise-pcard__c p { margin: 0; color: var(--ink-70); font-size: .95rem; }
 @media (max-width: 820px){ .ise-pcards { grid-template-columns: 1fr; } }
+
+/* --- Audience chooser: student flow vs partner flow --- */
+.ise-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.ise-path { border-radius: var(--radius-lg); padding: clamp(1.75rem, 3vw, 2.5rem); border: 1px solid var(--line); background: #fff; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); }
+.ise-path h3 { font-size: 1.6rem; margin: .25rem 0 .5rem; }
+.ise-path p { color: var(--ink-70); margin: 0 0 1.25rem; max-width: 44ch; }
+.ise-path .row { margin-top: auto; display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; }
+.ise-path--dark { background: var(--ul-green-heritage); border-color: transparent; color: #fff; }
+.ise-path--dark h3 { color: #fff; }
+.ise-path--dark p { color: #d7e8df; }
+.ise-path--dark .ise-eyebrow { color: #8fe3b0; }
+@media (max-width: 820px){ .ise-paths { grid-template-columns: 1fr; } }

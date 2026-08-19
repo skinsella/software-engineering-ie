@@ -22,22 +22,19 @@ await page.setViewport({ width: 1440, height: 1000, deviceScaleFactor: 1 });
 
 let n = 0;
 for (const p of pages) {
-  const url = p.front_page ? `${BASE}/` : `${BASE}/?page_id=${p.id}`;
+  const url = p.front_page ? `${BASE}/` : `${BASE}/${p.slug}/`;
   await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 });
   // ensure fonts + images settled
   try { await page.evaluate(() => document.fonts && document.fonts.ready); } catch {}
   // force-load lazy images and scroll the whole page so everything decodes
   await page.evaluate(async () => {
-    document.querySelectorAll('img').forEach(i => {
-      i.loading = 'eager';
-      if (!i.complete || i.naturalWidth === 0) { const s = i.src; i.src = ''; i.src = s; }
-    });
+    document.querySelectorAll('img').forEach(i => { i.loading = 'eager'; });
     await new Promise(res => {
-      let y = 0; const step = 600;
+      let y = 0; const step = 400;
       const t = setInterval(() => {
         window.scrollTo(0, y); y += step;
         if (y >= document.body.scrollHeight) { clearInterval(t); window.scrollTo(0, 0); res(); }
-      }, 60);
+      }, 120);
     });
   });
 
@@ -46,7 +43,7 @@ for (const p of pages) {
     () => Array.from(document.images).every(i => i.complete && i.naturalWidth > 0),
     { timeout: 30000 }
   ).catch(() => {});
-  await new Promise(r => setTimeout(r, 600));
+  await new Promise(r => setTimeout(r, 1200));
   const num = String(++n).padStart(2, '0');
   const file = path.join(OUT, `${num}-${p.slug}.png`);
   await page.screenshot({ path: file, fullPage: true });

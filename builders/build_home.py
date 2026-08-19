@@ -35,6 +35,7 @@ nav = '''
     <a href="/companies" style="text-decoration:none;">The Companies</a>
     <a href="#course" style="text-decoration:none;">Course</a>
     <a href="/about" style="text-decoration:none;">About</a>
+    <a href="/become-a-partner" style="text-decoration:none;">For partners</a>
     <a class="ise-btn ise-btn--primary" href="/apply" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
   </nav>
 </div>'''
@@ -140,10 +141,35 @@ footer = '''
 </div>
 <div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2026 University of Limerick</span><span>CAO code LM173 · software-engineering.ie</span></div></div>'''
 
+
+# ---- TWO PATHS: student flow vs partner flow ----
+two_paths = '''
+<div class="ise-container">
+  <div style="max-width:54ch;margin-bottom:2rem;">
+    <p class="ise-eyebrow">Two ways in</p>
+    <h2>Whether you want to study — or to partner</h2>
+  </div>
+  <div class="ise-paths">
+    <div class="ise-path">
+      <p class="ise-eyebrow">Future students</p>
+      <h3>Join the next cohort</h3>
+      <p>Learn by doing, get paid to work with world-class companies, and graduate with a master\'s in four years.</p>
+      <div class="row"><a class="ise-btn ise-btn--primary" href="/students">Explore the programme →</a><a href="/apply" style="font-weight:600;">or apply now · LM173</a></div>
+    </div>
+    <div class="ise-path ise-path--dark">
+      <p class="ise-eyebrow">Companies &amp; partners</p>
+      <h3>Host an ISE resident</h3>
+      <p>Meet exceptional engineers early, host paid residents on your team, and build your hiring pipeline.</p>
+      <div class="row"><a class="ise-btn ise-btn--on-dark" href="/companies">How residencies work →</a><a href="/become-a-partner" style="color:#8fe3b0;font-weight:600;">or become a partner</a></div>
+    </div>
+  </div>
+</div>'''
+
 sections = [
   section(band(nav, "ise-nav", pad=False)),
   section(band(hero, "ise-hero").replace('class="ise-hero" style="', 'class="ise-hero" style="background:#0a3f2c url(/wp-content/themes/hello-elementor-child/assets/photos/home-hero.jpg) center/cover no-repeat;')),
   section(band(prop, "ise-band")),
+  section(band(two_paths, "")),
   section(band(students, "")),
   section(band(companies, "ise-band--heritage")),
   section(band(how, "ise-band")),

@@ -49,7 +49,7 @@ def nav(active=""):
 <div class="ise-container" style="display:flex;align-items:center;justify-content:space-between;padding-block:1.1rem;gap:1rem;flex-wrap:wrap;">
   <a href="/" style="display:inline-flex;align-items:center;"><img src="{ASSET}/ise-ul-logo.png" alt="Immersive Software Engineering · University of Limerick" style="height:40px;width:auto;"></a>
   <nav style="display:flex;gap:1.6rem;align-items:center;font-weight:500;flex-wrap:wrap;">
-    {link("/students","The Students")}{link("/companies","The Companies")}{link("/course","Course")}{link("/about","About")}
+    {link("/students","The Students")}{link("/companies","The Companies")}{link("/course","Course")}{link("/about","About")}<a href="/become-a-partner" style="text-decoration:none;">For partners</a>
     <a class="ise-btn ise-btn--primary" href="/apply" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
   </nav>
 </div>'''
