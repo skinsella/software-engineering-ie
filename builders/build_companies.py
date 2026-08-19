@@ -11,7 +11,7 @@ hero = S.hero(
   "Work with the best engineers, early",
   "Residencies place ISE students inside your engineering team as paid contributors for three to six months at a time — real work, real impact, with academic mentoring alongside.",
   BTN_PARTNER + ' ' + BTN_CALL,
-  max_title="20ch")
+  max_title="20ch", bg_image="companies-hero.jpg")
 
 wall = section(S.band(f'''
 <div class="ise-container">

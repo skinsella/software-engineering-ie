@@ -69,7 +69,7 @@ def footer():
 <div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2026 University of Limerick</span><span><a href="/privacy">Privacy</a> · CAO code LM173 · software-engineering.ie</span></div></div>'''
     return section('<div class="ise-footer">' + inner + '</div>')
 
-def hero(eyebrow, title, lead, buttons_html, max_title="17ch"):
+def hero(eyebrow, title, lead, buttons_html, max_title="17ch", bg_image=None):
     inner = f'''
 <div class="ise-container" style="min-height:clamp(440px,58vh,560px);display:flex;flex-direction:column;justify-content:center;padding-block:5rem 4rem;">
   <p class="ise-eyebrow" style="color:#8fe3b0;">{eyebrow}</p>
@@ -77,7 +77,8 @@ def hero(eyebrow, title, lead, buttons_html, max_title="17ch"):
   <p style="font-size:var(--fs-lead);color:#e7f2ec;max-width:60ch;">{lead}</p>
   <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.75rem;">{buttons_html}</div>
 </div>'''
-    return section('<div class="ise-hero" style="background:#0a3f2c;padding-block:0;">' + inner + '</div>')
+    bg = "#0a3f2c" + (f" url('{ASSET}/photos/{bg_image}') center/cover no-repeat" if bg_image else "")
+    return section(f'<div class="ise-hero" style="background:{bg};padding-block:0;">' + inner + '</div>')
 
 BTN_APPLY = '<a class="ise-btn ise-btn--primary" href="/apply">Apply now — CAO LM173</a>'
 BTN_CALL  = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Book a call</a>'
@@ -90,6 +91,27 @@ def cta(title, text, buttons_html):
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">{buttons_html}</div>
 </div>'''
     return band(inner, "ise-band--green")
+
+
+def split(img_file, eyebrow, title, body_html, reverse=False):
+    """Full-width image + text row (Option B). reverse=True puts text on the left."""
+    img = f'<img src="{ASSET}/photos/{img_file}" alt="">'
+    text = (f'<div class="ise-split__text"><p class="ise-eyebrow">{eyebrow}</p>'
+            f'<h2>{title}</h2>{body_html}</div>')
+    inner = (text + img) if reverse else (img + text)
+    cls = "ise-split ise-split--rev" if reverse else "ise-split"
+    return section(f'<div class="{cls}">{inner}</div>')
+
+def portrait_cards(eyebrow, title, items, klass="ise-band"):
+    """Row of student portrait cards (Option D). items = [(img_file, name, sub)]."""
+    cells = ''.join(
+        f'<div class="ise-pcard"><img src="{ASSET}/photos/{img}" alt="">'
+        f'<div class="ise-pcard__c"><h3>{name}</h3><p>{sub}</p></div></div>'
+        for img, name, sub in items)
+    inner = (f'<div class="ise-container"><div style="max-width:52ch;margin-bottom:2rem;">'
+             f'<p class="ise-eyebrow">{eyebrow}</p><h2>{title}</h2></div>'
+             f'<div class="ise-pcards">{cells}</div></div>')
+    return section(band(inner, klass))
 
 def assemble(page_id, title, slug, content_sections, menu_order=0, front=False):
     """Wrap page-specific sections between the global nav and footer, then upsert."""

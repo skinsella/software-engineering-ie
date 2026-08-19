@@ -8,7 +8,7 @@ hero = S.hero(
   "A cohort companies compete for",
   "ISE takes a small, highly selective intake each year and teaches them to build. By their first residency, partner engineering teams describe them as performing well beyond their years.",
   S.BTN_APPLY + ' <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Book a call</a>',
-  max_title="18ch")
+  max_title="18ch", bg_image="students-hero.jpg")
 
 selective = section(S.band(f'''
 <div class="ise-container">
@@ -70,4 +70,9 @@ cta = section(S.cta("Think you could be one of them?",
   "Applications for 2026 are open through the CAO with code LM173.",
   '<a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a> <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Talk to us</a>'))
 
-S.assemble(101, "The Students", "students", [hero, selective, learn, partners_say, where, cta], menu_order=1)
+cohort = S.portrait_cards("Meet the cohort", "Real students, real projects",
+  [("cohort-1.jpg", "Built from day one", "Studio to residency"),
+   ("cohort-2.jpg", "Selected on substance", "Chosen for how they build"),
+   ("cohort-3.jpg", "Ready for industry", "Beyond their years")], klass="")
+
+S.assemble(101, "The Students", "students", [hero, selective, cohort, learn, partners_say, where, cta], menu_order=1)

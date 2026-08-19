@@ -66,7 +66,11 @@ course_teach = sec(f'''
 </div>''')
 course_cta = section(S.cta("Apply for 2026","Add CAO code LM173 to your application.",
   '<a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a> ' + CALL))
-S.assemble(104, "Course", "course", [course_hero, course_tl, course_teach, course_cta], menu_order=3)
+course_split = S.split("course-teach.jpg", "Inside ISE",
+  "Where the learning happens",
+  "<p class=\"ise-lead\">Studios, whiteboards and real projects — students work through problems together, closer to an engineering floor than a classroom.</p>")
+
+S.assemble(104, "Course", "course", [course_hero, course_tl, course_split, course_teach, course_cta], menu_order=3)
 
 # ============================== WHY ISE (105) ==============================
 why_hero = S.hero("Why ISE","A different kind of computer science degree",
@@ -84,7 +88,12 @@ why_cards = sec(f'''
 </div>''', "ise-band")
 why_cta = section(S.cta("See if ISE is for you","Applications for 2026 are open through the CAO with code LM173.",
   '<a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a> ' + CALL))
-S.assemble(105, "Why ISE", "why-ise", [why_hero, why_cards, why_cta], menu_order=4)
+why_split = S.split("why-feature.jpg", "In practice",
+  "You build from week one",
+  "<p class=\"ise-lead\">Real projects in small teams from the first weeks — the fastest way to become a genuinely capable software engineer.</p>",
+  reverse=True)
+
+S.assemble(105, "Why ISE", "why-ise", [why_hero, why_cards, why_split, why_cta], menu_order=4)
 
 # ============================== ABOUT (106) ==============================
 about_hero = S.hero("About","Immersive Software Engineering at UL",

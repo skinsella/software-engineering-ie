@@ -142,7 +142,7 @@ footer = '''
 
 sections = [
   section(band(nav, "ise-nav", pad=False)),
-  section(band(hero, "ise-hero").replace('class="ise-hero" style="', 'class="ise-hero" style="background:#0a3f2c;')),
+  section(band(hero, "ise-hero").replace('class="ise-hero" style="', 'class="ise-hero" style="background:#0a3f2c url(/wp-content/themes/hello-elementor-child/assets/photos/home-hero.jpg) center/cover no-repeat;')),
   section(band(prop, "ise-band")),
   section(band(students, "")),
   section(band(companies, "ise-band--heritage")),
