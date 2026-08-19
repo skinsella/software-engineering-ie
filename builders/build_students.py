@@ -29,7 +29,7 @@ learn = section(S.band(f'''
   <div style="max-width:54ch;margin-bottom:2.25rem;">
     <p class="ise-eyebrow">How they learn</p>
     <h2>Learning by doing, from week one</h2>
-    <p class="ise-lead">No lecture-hall-only terms. Students learn in studios, on real projects, assessed continuously — then spend almost half the degree in paid company residencies.</p>
+    <p class="ise-lead">No lecture-hall-only terms. Students learn in studios, on real projects, assessed continuously — then spend half the degree in paid company residencies.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
     {S.card("Studio-based","Small teams working in a studio, closer to a real engineering floor than a classroom.")}
@@ -61,7 +61,7 @@ where = section(S.band(f'''
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
     <div>{S.stat("4 yrs","to an integrated master's")}</div>
     <div>{S.stat("5","company residencies")}</div>
-    <div>{S.stat("45%","of the degree in industry")}</div>
+    <div>{S.stat("50%","of the degree in industry")}</div>
   </div>
   <div style="margin-top:2rem;"><a class="ise-btn ise-btn--ghost" href="/careers">Explore graduate paths →</a></div>
 </div>''', "ise-band"))

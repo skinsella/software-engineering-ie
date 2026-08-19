@@ -59,7 +59,7 @@ course_teach = sec(f'''
     {S.card("Continuously assessed","Progress is measured through the work itself, not end-of-year exams alone.")}
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;">
-    <div>{S.stat("45%","of the degree in industry")}</div>
+    <div>{S.stat("50%","of the degree in industry")}</div>
     <div>{S.stat("5","paid residencies")}</div>
     <div>{S.stat("2","degrees (BSc + MSc)")}</div>
   </div>
@@ -77,7 +77,7 @@ why_cards = sec(f'''
   <div style="max-width:52ch;margin-bottom:2.25rem;"><p class="ise-eyebrow">Why choose ISE</p><h2>What makes it different</h2></div>
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;">
     {S.card("Learn by doing","Studios and real projects instead of lecture-hall-only terms — you build from week one.")}
-    {S.card("Paid residencies","Spend almost half the degree contributing inside real engineering teams, and get paid for it.")}
+    {S.card("Paid residencies","Spend half the degree contributing inside real engineering teams, and get paid for it.")}
     {S.card("Graduate with a master's","Four years to an integrated BSc and MSc — a faster route to a postgraduate qualification.")}
     {S.card("Work with the best","Residencies with world-leading companies and Ireland's fastest-growing startups.")}
   </div>
@@ -106,7 +106,7 @@ faqs = [
   ("What is ISE?","Immersive Software Engineering is a four-year integrated BSc and MSc in software engineering at the University of Limerick, where you learn by doing — in studios and inside real companies."),
   ("How long is the programme?","Four years, at the end of which you graduate with both a BSc and a master's (MSc)."),
   ("Do I get paid during residencies?","Yes. Residencies are paid — students join partner engineering teams as paid contributors, typically for three to six months at a time."),
-  ("How many residencies are there?","Up to five residencies across the programme, making up roughly 45% of your time."),
+  ("How many residencies are there?","Up to five residencies across the programme, making up roughly 50% of your time."),
   ("What is the CAO code?","LM173. List it on your CAO application to apply."),
   ("Which companies take part?","A network of world-leading technology companies and Ireland's fastest-growing start-ups across fintech, medtech, robotics, quantum and more."),
   ("Are there scholarships?","Yes — a number of €10,000 Equity, Diversity &amp; Inclusion scholarships are available each year."),
