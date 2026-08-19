@@ -35,6 +35,7 @@ nav = '''
     <a href="/students" style="text-decoration:none;">The Students</a>
     <a href="/companies" style="text-decoration:none;">The Companies</a>
     <a href="#course" style="text-decoration:none;">Course</a>
+    <a href="/jobs" style="text-decoration:none;">Jobs</a>
     <a href="/about" style="text-decoration:none;">About</a>
     <a href="/become-a-partner" style="text-decoration:none;">For partners</a>
     <a class="ise-btn ise-btn--primary" href="/apply" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>

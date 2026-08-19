@@ -97,6 +97,13 @@
       "slug": "privacy",
       "file": "privacy.json",
       "front_page": false
+    },
+    {
+      "id": 114,
+      "title": "Jobs",
+      "slug": "jobs",
+      "file": "jobs.json",
+      "front_page": false
     }
   ]
 }
