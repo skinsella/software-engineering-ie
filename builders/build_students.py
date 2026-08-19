@@ -75,4 +75,6 @@ cohort = S.portrait_cards("Meet the cohort", "Real students, real projects",
    ("cohort-2.jpg", "Selected on substance", "Chosen for how they build"),
    ("cohort-3.jpg", "Ready for industry", "Beyond their years")], klass="")
 
-S.assemble(101, "The Students", "students", [hero, selective, cohort, learn, partners_say, where, cta], menu_order=1)
+stories = S.testimonials("Student stories", "Real projects, in their words", klass="")
+
+S.assemble(101, "The Students", "students", [hero, selective, cohort, learn, partners_say, stories, where, cta], menu_order=1)

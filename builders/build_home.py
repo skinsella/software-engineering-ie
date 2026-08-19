@@ -1,6 +1,7 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from elementor_lib import section, upsert_page
+import shared as _S
 
 ASSET = "/wp-content/themes/hello-elementor-child/assets"
 
@@ -173,6 +174,7 @@ sections = [
   section(band(students, "")),
   section(band(companies, "ise-band--heritage")),
   section(band(how, "ise-band")),
+  _S.testimonials("Student stories", "In their words", klass=""),
   section(band(cta, "ise-band--green")),
   section('<div class="ise-footer">'+footer+'</div>'),
 ]

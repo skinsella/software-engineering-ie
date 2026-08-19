@@ -224,6 +224,17 @@ a:hover { color: var(--ul-green-modern); }
 .ise-path--dark .ise-eyebrow { color: #8fe3b0; }
 @media (max-width: 820px){ .ise-paths { grid-template-columns: 1fr; } }
 
+/* --- Student testimonials --- */
+.ise-tcards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.ise-tcard { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 1.1rem; }
+.ise-tcard__quote { font-family: var(--font-serif); font-size: 1.22rem; line-height: 1.4; color: var(--ul-green-heritage); margin: 0; }
+.ise-tcard__quote::before { content: "\201C"; color: var(--ul-green-modern); font-weight: 700; margin-right: .05em; }
+.ise-tcard__who { display: flex; align-items: center; gap: .85rem; margin-top: auto; }
+.ise-tcard__who img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; object-position: top center; flex: none; }
+.ise-tcard__name { font-weight: 700; font-family: var(--font-sans); color: var(--ink); line-height: 1.2; }
+.ise-tcard__proj { font-size: .85rem; color: var(--ink-70); }
+@media (max-width: 820px){ .ise-tcards { grid-template-columns: 1fr; } }
+
 *{box-sizing:border-box} body{margin:0} img{max-width:100%}
 </style></head><body><div class="ise-nav" style="">
 <div class="ise-container" style="display:flex;align-items:center;justify-content:space-between;padding-block:1.15rem;gap:1rem;flex-wrap:wrap;">

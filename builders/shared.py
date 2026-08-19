@@ -120,6 +120,32 @@ def portrait_cards(eyebrow, title, items, klass="ise-band"):
              f'<div class="ise-pcards">{cells}</div></div>')
     return section(band(inner, klass))
 
+
+# Illustrative student testimonials — PLACEHOLDER copy + names, to be replaced
+# with real, approved student quotes before publishing.
+STUDENT_TESTIMONIALS = [
+    ("In my first residency I was shipping code to production within weeks — real features used by real customers. I learned more in three months than I thought was possible.",
+     "Aoife M.", "Residency at Stripe · payments dashboard", "avatar-2.jpg"),
+    ("I went from writing my first real program to building a computer-vision pipeline for a medtech company. ISE throws you in — then makes sure you can swim.",
+     "Cian D.", "Residency at Provizio · sensor data & ML", "avatar-1.jpg"),
+    ("The studio changed how I work. We build together, review each other's code and ship real things. By second year I already felt like an engineer.",
+     "Eoin R.", "Residency at Intercom · internal tooling", "avatar-3.jpg"),
+]
+
+def testimonials(eyebrow, title, items=None, klass="ise-band"):
+    """Grid of student testimonial cards: quote + avatar + name + project line."""
+    items = items or STUDENT_TESTIMONIALS
+    cells = ''.join(
+        f'<div class="ise-tcard"><p class="ise-tcard__quote">{q}</p>'
+        f'<div class="ise-tcard__who"><img src="{ASSET}/photos/{av}" alt="">'
+        f'<div><div class="ise-tcard__name">{name}</div>'
+        f'<div class="ise-tcard__proj">{proj}</div></div></div></div>'
+        for q, name, proj, av in items)
+    inner = (f'<div class="ise-container"><div style="max-width:54ch;margin-bottom:2rem;">'
+             f'<p class="ise-eyebrow">{eyebrow}</p><h2>{title}</h2></div>'
+             f'<div class="ise-tcards">{cells}</div></div>')
+    return section(band(inner, klass))
+
 def assemble(page_id, title, slug, content_sections, menu_order=0, front=False):
     """Wrap page-specific sections between the global nav and footer, then upsert."""
     sections = [nav(active=title if title in ("The Students","The Companies") else "")] \
