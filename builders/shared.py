@@ -9,11 +9,18 @@ from elementor_lib import section, upsert_page
 
 ASSET = "/wp-content/themes/hello-elementor-child/assets"
 
-PARTNER_LOGOS = ["stripe","aws","intercom","mastercard","intel","dell","workday",
-    "fiserv","jj","bd","gm","jlr","first-derivatives","keeper-sloutions","tines",
-    "teckro","kneat","payslip","macmarts","viotas","mbryonics","deveire","equal1",
-    "provizio","manna","bsci","transact","shannonside","ida","enterprise-ireland",
-    "ulatwork","dogpatch","frontline"]
+PARTNER_LOGOS = [
+    "stripe", "intercom", "aws", "manna", "bd", "boston-scientific",
+    "transact", "provizio", "tines", "johnson-johnson", "dell", "openai",
+    "viotas", "first-derivatives", "dogpatch", "mbryonics", "fiserv", "general-motors",
+    "deveire", "eli-lilly", "jaguar-landrover", "keeper-solutions", "mastercard", "ericsson",
+    "kirby", "wayflyer", "shannonside", "teckro", "kneat", "macmarts",
+    "equal1", "payslip", "workday", "cloudcards", "reasire", "intel",
+    "frontline", "jentic", "avtrain", "hse", "fluidedge", "totalcare",
+    "cashbook", "openchip", "virtu-financial", "susquehanna", "kinetikiq", "protex-ai",
+    "deloitte", "ei-electronics", "qualcomm", "redfaire", "ailtire", "dairymaster",
+    "carbon-copy", "cubic3", "wrxflo", "dezzai", "nant", "premium-power",
+    "fexco", "fidelity", "ul-at-work", "enterprise-ireland", "ida"]
 
 # ---------- generic helpers ----------
 def band(inner_html, klass="", pad=True):

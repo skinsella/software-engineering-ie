@@ -22,8 +22,9 @@ await page.setViewport({ width: 1440, height: 1000, deviceScaleFactor: 1 });
 
 let n = 0;
 for (const p of pages) {
+ try {
   const url = p.front_page ? `${BASE}/` : `${BASE}/${p.slug}/`;
-  await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 });
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
   // ensure fonts + images settled
   try { await page.evaluate(() => document.fonts && document.fonts.ready); } catch {}
   // force-load lazy images and scroll the whole page so everything decodes
@@ -49,6 +50,7 @@ for (const p of pages) {
   await page.screenshot({ path: file, fullPage: true });
   const { size } = fs.statSync(file);
   console.log(`  ${num}-${p.slug}.png  (${Math.round(size / 1024)} KB)`);
+ } catch (e) { console.log(`  ${String(n+1).padStart(2,'0')}-${p.slug}.png FAILED: ${String(e).slice(0,80)}`); }
 }
 await browser.close();
 console.log(`done: ${n} screenshots in screenshots/`);
