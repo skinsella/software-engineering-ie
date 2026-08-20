@@ -39,3 +39,24 @@ register = section_of(shortcode_widget("[ise_partner_register]"),
 S.assemble(115, "Post a job", "post-a-job", [post_hero, submit, register_band, register], menu_order=99)
 
 print("built /jobs (board) + /post-a-job (submit + register), shortcode-driven")
+
+# ---------------- Student portal pages ----------------
+join_hero = S.hero("For students", "Join the ISE student portal",
+  "Create your student account to browse residency placements and build your profile.",
+  '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/jobs">View the board</a>', max_title="18ch")
+join = section_of(shortcode_widget("[ise_student_register]"))
+S.assemble(116, "Join", "join", [join_hero, join], menu_order=98)
+
+profile_hero = S.hero("Student portal", "Your profile",
+  "Add your photo, skills, website or CV and GitHub so partner companies can find you.",
+  '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/students-directory">Student directory</a>', max_title="16ch")
+profile = section_of(shortcode_widget("[ise_student_profile]"))
+S.assemble(117, "Profile", "profile", [profile_hero, profile], menu_order=97)
+
+dir_hero = S.hero("For partners", "Student directory",
+  "Browse ISE student profiles — skills, portfolios and GitHub — when sourcing for a residency.",
+  '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/jobs">View the board</a>', max_title="16ch")
+directory = section_of(shortcode_widget("[ise_student_directory]"))
+S.assemble(118, "Student directory", "students-directory", [dir_hero, directory], menu_order=96)
+
+print("student portal pages built: /join, /profile, /students-directory")

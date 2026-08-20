@@ -306,6 +306,31 @@ a:hover { color: var(--ul-green-modern); }
 .rb-logo { width: 46px; height: 46px; border-radius: 10px; background: var(--ul-green-heritage); display: flex; align-items: center; justify-content: center; flex: none; }
 .rb-logo img { max-width: 28px; max-height: 24px; filter: brightness(0) invert(1); }
 
+/* Residency board: search + skill filter tools, skills row */
+.rb-tools { display: grid; grid-template-columns: 2fr 1fr; gap: .75rem; margin-bottom: 1rem; }
+.rb-tools .rb-search { margin-bottom: 0; }
+.rb-skill-filter { font-family: var(--font-sans); font-size: 1rem; padding: .85rem 1.1rem; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; color: var(--ink); }
+.rb-skill-filter:focus { outline: none; box-shadow: var(--focus); border-color: var(--ul-green); }
+.rb-skills { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+.rb-skills__label { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-50); margin-right: .25rem; }
+@media (max-width: 600px){ .rb-tools { grid-template-columns: 1fr; } }
+
+/* Student profiles + directory */
+.sp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+@media (max-width: 820px){ .sp-grid { grid-template-columns: 1fr; } }
+.sp-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 1.75rem; }
+.sp-card__head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.sp-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; object-position: top center; flex: none; }
+.sp-photo--initials { display: flex; align-items: center; justify-content: center; background: var(--ul-green); color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; }
+.sp-name { margin: 0; font-size: 1.35rem; }
+.sp-headline { color: var(--ul-green); font-weight: 600; font-size: .95rem; }
+.sp-bio { color: var(--ink-70); line-height: 1.55; }
+.sp-skills { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin: 1rem 0 0; }
+.sp-links { display: flex; gap: 1.25rem; margin-top: 1rem; }
+.sp-links a { font-weight: 600; color: var(--ul-green); }
+.sp-directory { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+.ise-form label { font-weight: 600; font-size: .9rem; color: var(--ink); }
+
 *{box-sizing:border-box} body{margin:0} img{max-width:100%}
 </style></head><body><div class="ise-nav" style="">
 <div class="ise-container" style="display:flex;align-items:center;justify-content:space-between;padding-block:1.15rem;gap:1rem;flex-wrap:wrap;">

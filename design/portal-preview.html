@@ -1,4 +1,8 @@
-/*
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISE portal — logged-in preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<style>/*
 Theme Name: ISE — Hello Elementor Child
 Theme URI: https://www.software-engineering.ie
 Description: Brand-foundation child theme for Immersive Software Engineering (ISE), University of Limerick. Establishes UL-brand design tokens (colours, typography, spacing) and utility classes consumed by Elementor sections. Parent: Hello Elementor.
@@ -324,3 +328,59 @@ a:hover { color: var(--ul-green-modern); }
 .sp-links a { font-weight: 600; color: var(--ul-green); }
 .sp-directory { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
 .ise-form label { font-weight: 600; font-size: .9rem; color: var(--ink); }
+
+*{box-sizing:border-box}body{margin:0;background:#fff}
+.pw-note{background:var(--ul-green-heritage);color:#cfe3da;padding:.8rem 1rem;text-align:center;font:600 .85rem var(--font-sans)}
+</style></head><body>
+<div class="pw-note">Preview of the SIGNED-IN experience (normally behind a student/partner login)</div>
+<div class="ise-band" style="padding-block:3rem;"><div class="ise-container"><p class="ise-eyebrow">The Jobs board students see once signed in</p><h2>Residency board — with skills</h2></div></div><div class="ise-container" style="padding-block:2rem 3rem;"><div class="rb-round"><div class="rb-round__head"><p class="ise-eyebrow">Signed in · now open</p><h2>ISE Current Open Residency 4 Positions</h2></div>
+  <div class="rb-tools"><input class="rb-search" placeholder="Search Residency 4 positions…">
+  <select class="rb-skill-filter"><option>All skills</option><option>Python</option><option>React</option><option>Go</option></select></div>
+  <div class="rb-count">3 positions</div>
+  <div class="rb-pos"><div class="rb-pos__head"><span class="rb-logo" style="font-family:var(--font-display);font-weight:700;color:#fff;">S</span><h3 class="rb-pos__title">R4 | Stripe-01</h3></div>
+      <div class="rb-pos__grid">
+        <div><span class="rb-label">Residency Title</span><span class="rb-val">R4 | Stripe-01</span></div>
+        <div><span class="rb-label">Monthly Salary</span><span class="rb-val">€3,000 / month</span></div>
+        <div><span class="rb-label">ISE Champion Email</span><span class="rb-val"><a>stripe-champion@example.com</a></span></div>
+        <div><span class="rb-label">Email Application Address</span><span class="rb-val"><a>residencies@stripe.example</a></span></div>
+      </div>
+      <div class="rb-skills"><span class="rb-skills__label">Skills</span><span class="jb-tag">Go</span><span class="jb-tag">Ruby</span><span class="jb-tag">Distributed Systems</span></div></div>
+  <div class="rb-pos"><div class="rb-pos__head"><span class="rb-logo" style="font-family:var(--font-display);font-weight:700;color:#fff;">P</span><h3 class="rb-pos__title">R4 | Provizio-01</h3></div>
+      <div class="rb-pos__grid">
+        <div><span class="rb-label">Residency Title</span><span class="rb-val">R4 | Provizio-01</span></div>
+        <div><span class="rb-label">Monthly Salary</span><span class="rb-val">€2,600 / month</span></div>
+        <div><span class="rb-label">ISE Champion Email</span><span class="rb-val"><a>provizio-champion@example.com</a></span></div>
+        <div><span class="rb-label">Email Application Address</span><span class="rb-val"><a>jobs@provizio.example</a></span></div>
+      </div>
+      <div class="rb-skills"><span class="rb-skills__label">Skills</span><span class="jb-tag">Python</span><span class="jb-tag">C++</span><span class="jb-tag">Computer Vision</span></div></div>
+</div></div>
+<div class="ise-band" style="padding-block:3rem;"><div class="ise-container"><p class="ise-eyebrow">What each student edits and shows</p><h2>Student profile</h2></div></div><div class="ise-container" style="padding-block:2rem 3rem;"><div class="sp-grid">
+  <div><p class="ise-eyebrow">Preview</p><div class="sp-card"><div class="sp-card__head"><span class="sp-photo sp-photo--initials">S</span>
+      <div><h3 class="sp-name">Síne O'Brien</h3><div class="sp-headline">2nd-year ISE student · Residency 3</div></div></div>
+      <p class="sp-bio">Building web and data projects. Looking for a Residency 4 placement in backend or ML.</p><div class="sp-skills"><span class="rb-skills__label">Skills</span><span class="jb-tag">Python</span><span class="jb-tag">React</span><span class="jb-tag">Go</span><span class="jb-tag">APIs</span></div>
+      <div class="sp-links"><a>Website</a><a>CV</a><a>GitHub</a></div></div></div>
+  <div><p class="ise-eyebrow">Edit your profile</p>
+    <form class="ise-form" style="display:grid;gap:1rem;" onsubmit="return false">
+      <label>Photo<br><input type="file"></label>
+      <label>Headline<br><input value="2nd-year ISE student · Residency 3" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+      <label>Skills (comma-separated)<br><input value="Python, React, Go, APIs" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+      <label>Short bio<br><textarea rows="3" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;">Building web and data projects…</textarea></label>
+      <label>Website / portfolio URL<br><input value="https://…" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+      <label>GitHub URL<br><input value="https://github.com/…" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+      <button class="ise-btn ise-btn--primary" type="button">Save profile</button>
+    </form></div></div></div>
+<div class="ise-band" style="padding-block:3rem;"><div class="ise-container"><p class="ise-eyebrow">What partners browse when sourcing</p><h2>Student directory</h2></div></div><div class="ise-container" style="padding-block:2rem 3rem;"><div class="sp-directory">
+  <div class="sp-card"><div class="sp-card__head"><span class="sp-photo sp-photo--initials">S</span>
+      <div><h3 class="sp-name">Síne O'Brien</h3><div class="sp-headline">2nd-year · Residency 3</div></div></div>
+      <div class="sp-skills"><span class="rb-skills__label">Skills</span><span class="jb-tag">Python</span><span class="jb-tag">React</span><span class="jb-tag">Go</span></div>
+      <div class="sp-links"><a>Website</a><a>CV</a><a>GitHub</a></div></div>
+  <div class="sp-card"><div class="sp-card__head"><span class="sp-photo sp-photo--initials">C</span>
+      <div><h3 class="sp-name">Cian Doyle</h3><div class="sp-headline">2nd-year · Residency 3</div></div></div>
+      <div class="sp-skills"><span class="rb-skills__label">Skills</span><span class="jb-tag">C++</span><span class="jb-tag">Computer Vision</span></div>
+      <div class="sp-links"><a>Website</a><a>CV</a><a>GitHub</a></div></div>
+  <div class="sp-card"><div class="sp-card__head"><span class="sp-photo sp-photo--initials">A</span>
+      <div><h3 class="sp-name">Aoife Murphy</h3><div class="sp-headline">1st-year</div></div></div>
+      <div class="sp-skills"><span class="rb-skills__label">Skills</span><span class="jb-tag">TypeScript</span><span class="jb-tag">APIs</span><span class="jb-tag">Data</span></div>
+      <div class="sp-links"><a>Website</a><a>CV</a><a>GitHub</a></div></div>
+</div></div>
+</body></html>

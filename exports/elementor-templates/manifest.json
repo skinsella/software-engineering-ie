@@ -111,6 +111,27 @@
       "slug": "post-a-job",
       "file": "post-a-job.json",
       "front_page": false
+    },
+    {
+      "id": 116,
+      "title": "Join",
+      "slug": "join",
+      "file": "join.json",
+      "front_page": false
+    },
+    {
+      "id": 117,
+      "title": "Profile",
+      "slug": "profile",
+      "file": "profile.json",
+      "front_page": false
+    },
+    {
+      "id": 118,
+      "title": "Student directory",
+      "slug": "students-directory",
+      "file": "students-directory.json",
+      "front_page": false
     }
   ]
 }
