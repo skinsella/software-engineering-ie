@@ -139,7 +139,15 @@ add_shortcode( 'ise_residency_board', function () {
 				$salary   = get_post_meta( $p->ID, '_rj_salary', true );
 				$champ    = get_post_meta( $p->ID, '_rj_champion', true );
 				$apply    = get_post_meta( $p->ID, '_rj_apply', true );
-				echo '<div class="rb-pos"><h3 class="rb-pos__title">' . esc_html( $title ) . '</h3><div class="rb-pos__grid">'
+				$company  = get_post_meta( $p->ID, '_rj_company', true );
+				$logo = '';
+				if ( $company ) {
+					$file = get_stylesheet_directory() . '/assets/partners/' . sanitize_file_name( $company ) . '.png';
+					if ( file_exists( $file ) ) {
+						$logo = '<span class="rb-logo"><img src="' . esc_url( ise_rb_asset() . '/partners/' . rawurlencode( $company ) . '.png' ) . '" alt=""></span>';
+					}
+				}
+				echo '<div class="rb-pos"><div class="rb-pos__head">' . $logo . '<h3 class="rb-pos__title">' . esc_html( $title ) . '</h3></div><div class="rb-pos__grid">'
 					. '<div><span class="rb-label">Residency Title</span><span class="rb-val">' . esc_html( $title ) . '</span></div>'
 					. '<div><span class="rb-label">Monthly Salary</span><span class="rb-val">' . esc_html( $salary ) . '</span></div>'
 					. '<div><span class="rb-label">ISE Champion Email</span><span class="rb-val"><a href="mailto:' . esc_attr( $champ ) . '">' . esc_html( $champ ) . '</a></span></div>'
@@ -181,6 +189,11 @@ add_shortcode( 'ise_residency_submit', function () {
 		return ob_get_clean();
 	}
 
+	if ( ! ise_rb_is_approved( wp_get_current_user() ) ) {
+		echo '<div class="ise-card" style="max-width:520px;"><h3>Account pending approval</h3><p style="color:var(--ink-70);">Your company account is awaiting approval by the ISE team. We will email you as soon as you can post roles.</p></div>';
+		return ob_get_clean();
+	}
+
 	$msg = '';
 	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['ise_rb_submit'] )
 		&& check_admin_referer( 'ise_rb_submit', 'ise_rb_nonce' ) ) {
@@ -199,6 +212,7 @@ add_shortcode( 'ise_residency_submit', function () {
 				update_post_meta( $id, '_rj_champion', sanitize_email( wp_unslash( $_POST['rj_champion'] ?? '' ) ) );
 				update_post_meta( $id, '_rj_apply',    sanitize_email( wp_unslash( $_POST['rj_apply'] ?? '' ) ) );
 				$msg = '<div class="ise-card" style="border-color:var(--ul-green-modern);"><strong>Thanks — your role was submitted.</strong><br>It will appear on the board once the ISE team approves it.</div>';
+				ise_rb_notify( 'New residency role pending review', $title . " was submitted and is pending review.\n\nReview: " . admin_url( 'edit.php?post_type=residency_job&post_status=pending' ) );
 			}
 		}
 	}
@@ -247,9 +261,9 @@ add_shortcode( 'ise_partner_register', function () {
 				'role'         => ISE_RB_ROLE,
 			) );
 			if ( ! is_wp_error( $uid ) ) {
-				wp_set_current_user( $uid );
-				wp_set_auth_cookie( $uid );
-				echo '<div class="ise-card" style="border-color:var(--ul-green-modern);"><strong>Welcome — your company account is ready.</strong> You can post a role below.</div>';
+				update_user_meta( $uid, 'ise_rb_approved', 0 );
+				ise_rb_notify( 'New partner account pending approval', $company . ' (' . $email . ") registered and is awaiting approval.\n\nApprove: " . admin_url( 'users.php' ) );
+				echo '<div class="ise-card" style="border-color:var(--ul-green-modern);"><strong>Thanks — your company account was created.</strong><br>It is awaiting approval by the ISE team; we will email you when it is active.</div>';
 				return ob_get_clean();
 			}
 		}
@@ -265,4 +279,48 @@ add_shortcode( 'ise_partner_register', function () {
 	</form>
 	<?php
 	return ob_get_clean();
+} );
+
+/* ---------------------------------------------------------------------------
+ * Partner approval + email notifications
+ * ------------------------------------------------------------------------- */
+function ise_rb_is_approved( $user ) {
+	if ( ! $user || ! $user->ID ) { return false; }
+	if ( user_can( $user, 'publish_posts' ) ) { return true; } // admins/editors
+	return '1' === (string) get_user_meta( $user->ID, 'ise_rb_approved', true );
+}
+
+function ise_rb_notify( $subject, $body ) {
+	$to = apply_filters( 'ise_rb_notify_email', get_option( 'admin_email' ) );
+	if ( $to ) { wp_mail( $to, '[ISE Jobs] ' . $subject, $body ); }
+}
+
+/* Users list: Partner status column + one-click approve. */
+add_filter( 'manage_users_columns', function ( $cols ) {
+	$cols['ise_rb'] = 'Partner status';
+	return $cols;
+} );
+add_filter( 'manage_users_custom_column', function ( $val, $col, $uid ) {
+	if ( 'ise_rb' !== $col ) { return $val; }
+	$u = get_userdata( $uid );
+	if ( ! $u || ! in_array( ISE_RB_ROLE, (array) $u->roles, true ) ) { return '—'; }
+	if ( '1' === (string) get_user_meta( $uid, 'ise_rb_approved', true ) ) {
+		return '<span style="color:#00842b;font-weight:600;">Approved</span>';
+	}
+	$link = wp_nonce_url( admin_url( 'admin-post.php?action=ise_rb_approve&user=' . $uid ), 'ise_rb_approve_' . $uid );
+	return '<span style="color:#b8860b;font-weight:600;">Pending</span> &middot; <a href="' . esc_url( $link ) . '">Approve</a>';
+}, 10, 3 );
+
+add_action( 'admin_post_ise_rb_approve', function () {
+	if ( ! current_user_can( 'edit_users' ) ) { wp_die( 'No permission.' ); }
+	$uid = (int) ( $_GET['user'] ?? 0 );
+	check_admin_referer( 'ise_rb_approve_' . $uid );
+	update_user_meta( $uid, 'ise_rb_approved', 1 );
+	$u = get_userdata( $uid );
+	if ( $u ) {
+		wp_mail( $u->user_email, '[ISE Jobs] Your partner account is approved',
+			"Your ISE partner account is now active. You can post residency roles at " . home_url( '/post-a-job/' ) );
+	}
+	wp_safe_redirect( admin_url( 'users.php' ) );
+	exit;
 } );

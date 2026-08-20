@@ -91,8 +91,20 @@ sample roles.
 as *Pending* → ISE approves it in wp-admin (Residency Jobs) → it appears on /jobs.
 Verified end-to-end locally (pending hidden, approved shown).
 
-**Production hardening to consider**
-- Require admin approval of new partner accounts (MVP registers immediately).
+**Built-in moderation & approval**
+- New partner registrations are created **pending approval** (not auto-logged-in).
+  Approve them in **wp-admin → Users** (a "Partner status" column with a one-click
+  Approve link). Only approved partners see the submission form.
+- Submitting a role creates a **Pending** Residency Job for review under
+  **wp-admin → Residency Jobs**.
+- Job cards show the partner **logo** when the role's company slug matches a file
+  in `assets/partners/`.
+- **Email notifications** (via `wp_mail`): the ISE team is emailed on each new
+  pending role and each new partner registration; partners are emailed on approval.
+  The notification address defaults to the site admin email — override with the
+  `ise_rb_notify_email` filter. Email needs a mail-capable host (SMTP) to deliver.
+
+**Further hardening to consider**
 - Add spam protection (honeypot/CAPTCHA) to the public register/submit forms.
 - Optionally email the ISE team on each new pending submission.
 - If you want members-only *viewing* of the board (like Softr), add a membership
