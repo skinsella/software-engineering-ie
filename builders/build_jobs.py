@@ -65,7 +65,8 @@ myapps_hero = S.hero("Student portal", "My applications",
   "Track the residencies you have applied to and their status.",
   '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/jobs">View the board</a>', max_title="16ch")
 myapps = section_of(shortcode_widget("[ise_my_applications]"))
-S.assemble(119, "My applications", "my-applications", [myapps_hero, myapps], menu_order=95)
+mybookmarks = section_of(shortcode_widget("[ise_my_bookmarks]"), settings={"background_background":"classic","background_color":"#f6f8f7"})
+S.assemble(119, "My applications", "my-applications", [myapps_hero, myapps, mybookmarks], menu_order=95)
 
 applicants_hero = S.hero("For partners", "My applicants",
   "Students who have applied to your residency roles — shortlist, reject, or view their profile.",

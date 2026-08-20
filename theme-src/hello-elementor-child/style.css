@@ -334,3 +334,9 @@ a:hover { color: var(--ul-green-modern); }
 .sp-fav.is-fav { color: #e0245e; border-color: #f2c9d5; background: #fff5f8; }
 .sp-savedonly { display: flex; align-items: center; gap: .4rem; white-space: nowrap; font-size: .9rem; color: var(--ink-70); }
 .sp-count { color: var(--ink-70); font-size: .88rem; margin-bottom: 1rem; }
+
+/* Residency bookmarking (student "Save" on the board) */
+.rb-apply-row { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.rb-bm { background: none; border: 1px solid var(--line); border-radius: 999px; padding: .5rem .95rem; font-family: var(--font-sans); font-weight: 600; font-size: .85rem; color: var(--ink-70); cursor: pointer; transition: var(--transition); }
+.rb-bm:hover { color: var(--ul-green); border-color: var(--ul-green); }
+.rb-bm.is-bm { color: var(--ul-green); border-color: var(--ul-green); background: var(--ul-green-050); }

@@ -122,3 +122,16 @@ Verified end-to-end locally (pending hidden, approved shown).
   search + skill filter; partners can **♥ save** students and filter to *Saved only*.
 - Data: an **Application** post type (wp-admin → Applications) records each apply;
   favourites are stored per partner as user meta. Emails need SMTP on the host.
+
+### Bookmarks, CSV export, applicant digest
+- **Student bookmarking:** students tap **☆ Save** on any residency card; a per-round
+  **"Saved only"** filter shows just saved roles; saved roles are listed at
+  **/my-applications** under "Saved residencies". Stored per student as user meta.
+- **CSV export:** partners get a **Download CSV** button on **/my-applicants**
+  (admin-post + nonce) exporting their applications (student, email, role, status,
+  message, date). Admins export all.
+- **Daily applicant digest:** a `wp_cron` event (`ise_rb_digest`) emails each partner a
+  summary of new applications to their roles, plus an admin summary. Uses a
+  `ise_rb_last_digest` marker. A **"Send digest now"** button appears on the
+  wp-admin → Applications screen for manual/testing. Needs real cron + SMTP to deliver
+  (wp_cron fires on traffic; use a real cron on the host for reliability).

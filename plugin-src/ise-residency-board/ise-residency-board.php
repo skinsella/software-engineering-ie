@@ -129,6 +129,8 @@ add_shortcode( 'ise_residency_board', function () {
 		echo '</div>';
 		return ob_get_clean();
 	}
+	$is_student = ise_rb_is_student( wp_get_current_user() );
+	$bmks = $is_student ? ise_student_bookmarks( get_current_user_id() ) : array();
 	$submit_url = home_url( '/post-a-job/' );
 	echo '<div class="ise-band--heritage" style="padding-block:2.75rem;"><div class="ise-container" id="rounds"><div class="rb-rounds">';
 	foreach ( ISE_RB_ROUNDS_CLOSED as $c ) {
@@ -149,10 +151,10 @@ add_shortcode( 'ise_residency_board', function () {
 			foreach ( (array) wp_get_object_terms( $rp->ID, ISE_RB_SKILL, array( 'fields' => 'names' ) ) as $t ) { $round_skills[ $t ] = 1; }
 		}
 		$round_skills = array_keys( $round_skills ); sort( $round_skills );
-		echo '<div class="rb-tools"><input class="rb-search" type="search" placeholder="Search ' . esc_attr( $round ) . ' positions…" aria-label="Search ' . esc_attr( $round ) . ' positions">';
+		echo '<div class="rb-tools"' . ( $is_student ? ' style="grid-template-columns:2fr 1fr auto;"' : '' ) . '><input class="rb-search" type="search" placeholder="Search ' . esc_attr( $round ) . ' positions…" aria-label="Search ' . esc_attr( $round ) . ' positions">';
 		echo '<select class="rb-skill-filter" aria-label="Filter by skill"><option value="">All skills</option>';
 		foreach ( $round_skills as $sk ) { echo '<option value="' . esc_attr( strtolower( $sk ) ) . '">' . esc_html( $sk ) . '</option>'; }
-		echo '</select></div>';
+		echo '</select>'; if ( $is_student ) { echo '<label class="sp-savedonly"><input type="checkbox" class="rb-saved-toggle"> Saved only</label>'; } echo '</div>';
 		echo '<div class="rb-count"></div><div class="rb-list">';
 		if ( $posts ) {
 			foreach ( $posts as $p ) {
@@ -176,15 +178,17 @@ add_shortcode( 'ise_residency_board', function () {
 						$logo = '<span class="rb-logo"><img src="' . esc_url( ise_rb_asset() . '/partners/' . rawurlencode( $company ) . '.png' ) . '" alt=""></span>';
 					}
 				}
-				$apply_ui = '';
-				if ( ise_rb_is_student( wp_get_current_user() ) ) {
+				$apply_ui = ''; $bm_attr = '0';
+				if ( $is_student ) {
+					$is_bm = in_array( (int) $p->ID, $bmks, true ); $bm_attr = $is_bm ? '1' : '0';
+					$bm_btn = '<button class="rb-bm' . ( $is_bm ? ' is-bm' : '' ) . '" data-job="' . (int) $p->ID . '">' . ( $is_bm ? '&#9733; Saved' : '&#9734; Save' ) . '</button>';
 					if ( ise_ra_has_applied( get_current_user_id(), $p->ID ) ) {
-						$apply_ui = '<div class="rb-apply-row"><span class="rb-applied">&#10003; Applied</span></div>';
+						$apply_ui = '<div class="rb-apply-row"><span class="rb-applied">&#10003; Applied</span>' . $bm_btn . '</div>';
 					} else {
-						$apply_ui = '<div class="rb-apply-row"><button class="ise-btn ise-btn--primary rb-apply" data-job="' . (int) $p->ID . '" data-title="' . esc_attr( $title ) . '">Apply in-app</button></div>';
+						$apply_ui = '<div class="rb-apply-row"><button class="ise-btn ise-btn--primary rb-apply" data-job="' . (int) $p->ID . '" data-title="' . esc_attr( $title ) . '">Apply in-app</button>' . $bm_btn . '</div>';
 					}
 				}
-				echo '<div class="rb-pos" data-skills="' . $skills_attr . '"><div class="rb-pos__head">' . $logo . '<h3 class="rb-pos__title">' . esc_html( $title ) . '</h3></div><div class="rb-pos__grid">'
+				echo '<div class="rb-pos" data-skills="' . $skills_attr . '" data-bookmarked="' . $bm_attr . '"><div class="rb-pos__head">' . $logo . '<h3 class="rb-pos__title">' . esc_html( $title ) . '</h3></div><div class="rb-pos__grid">'
 					. '<div><span class="rb-label">Residency Title</span><span class="rb-val">' . esc_html( $title ) . '</span></div>'
 					. '<div><span class="rb-label">Monthly Salary</span><span class="rb-val">' . esc_html( $salary ) . '</span></div>'
 					. '<div><span class="rb-label">ISE Champion Email</span><span class="rb-val"><a href="mailto:' . esc_attr( $champ ) . '">' . esc_html( $champ ) . '</a></span></div>'
@@ -202,15 +206,17 @@ add_shortcode( 'ise_residency_board', function () {
 	(function(){
 	  document.querySelectorAll('.rb-round').forEach(function(round){
 	    var input=round.querySelector('.rb-search'), skill=round.querySelector('.rb-skill-filter'),
+	        savedcb=round.querySelector('.rb-saved-toggle'),
 	        cards=round.querySelectorAll('.rb-pos'), count=round.querySelector('.rb-count'), empty=round.querySelector('.rb-empty');
-	    function apply(){ var q=input.value.trim().toLowerCase(), sk=skill?skill.value.toLowerCase():'', n=0;
+	    function apply(){ var q=input.value.trim().toLowerCase(), sk=skill?skill.value.toLowerCase():'', so=savedcb&&savedcb.checked, n=0;
 	      cards.forEach(function(c){
 	        var okText=c.textContent.toLowerCase().indexOf(q)>=0;
 	        var okSkill=!sk || ((c.getAttribute('data-skills')||'').indexOf(sk)>=0);
-	        var show=okText&&okSkill; c.style.display=show?'':'none'; if(show)n++;
+	        var okSaved=!so || c.getAttribute('data-bookmarked')==='1';
+	        var show=okText&&okSkill&&okSaved; c.style.display=show?'':'none'; if(show)n++;
 	      });
 	      if(count) count.textContent=n+(n===1?' position':' positions'); if(empty) empty.hidden=n>0; }
-	    input.addEventListener('input',apply); if(skill) skill.addEventListener('change',apply); apply();
+	    input.addEventListener('input',apply); if(skill) skill.addEventListener('change',apply); if(savedcb) savedcb.addEventListener('change',apply); apply();
 	  });
 	  var modal=document.querySelector('.rb-apply-modal'); if(modal){
 	    var body=modal.querySelector('.rb-apply-body'), jobId=null;
@@ -234,6 +240,11 @@ add_shortcode( 'ise_residency_board', function () {
 	    });
 	    document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeM(); });
 	  }
+	  document.addEventListener('click',function(e){ var b=e.target.closest('.rb-bm'); if(!b) return;
+	    fetch(window.ISE_AJAX.url,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+	      body:'action=ise_bookmark&nonce='+encodeURIComponent(window.ISE_AJAX.nonce)+'&job='+encodeURIComponent(b.getAttribute('data-job'))})
+	      .then(function(r){return r.json();}).then(function(d){ if(d&&d.success){ var on=d.data.saved; b.classList.toggle('is-bm',on); b.innerHTML=on?'&#9733; Saved':'&#9734; Save'; var card=b.closest('.rb-pos'); if(card) card.setAttribute('data-bookmarked',on?'1':'0'); } });
+	  });
 	})();
 	</script>
 	<?php
@@ -807,6 +818,7 @@ add_shortcode( 'ise_my_applicants', function () {
 		'meta_query' => array( array( 'key' => '_ra_job', 'value' => $my_jobs, 'compare' => 'IN' ) ), 'orderby' => 'date', 'order' => 'DESC' ) ) : array();
 	if ( ! $apps ) { echo '<div class="ise-card"><p style="color:var(--ink-70);">No applications yet.</p></div>'; }
 	echo ise_rb_ajax_js();
+	echo '<p><a class="ise-btn ise-btn--ghost" href="' . esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ise_export_apps' ), 'ise_export_apps' ) ) . '">Download CSV</a></p>';
 	foreach ( $apps as $a ) {
 		$job = (int) get_post_meta( $a->ID, '_ra_job', true );
 		$sid = (int) get_post_meta( $a->ID, '_ra_student', true );
@@ -840,4 +852,124 @@ add_shortcode( 'ise_my_applicants', function () {
 	<?php
 	echo '</div>';
 	return ob_get_clean();
+} );
+
+/* ===========================================================================
+ * BOOKMARKS (students save residencies) + CSV export + daily applicant digest
+ * ========================================================================= */
+function ise_student_bookmarks( $uid ) {
+	$b = get_user_meta( $uid, '_sp_bookmarks', true );
+	return is_array( $b ) ? array_map( 'intval', $b ) : array();
+}
+add_action( 'wp_ajax_ise_bookmark', function () {
+	check_ajax_referer( 'ise_ajax', 'nonce' );
+	$u = wp_get_current_user();
+	if ( ! ise_rb_is_student( $u ) ) { wp_send_json_error( 'Students only.', 403 ); }
+	$job = (int) ( $_POST['job'] ?? 0 );
+	$b = ise_student_bookmarks( $u->ID );
+	if ( in_array( $job, $b, true ) ) { $b = array_values( array_diff( $b, array( $job ) ) ); $saved = false; }
+	else { $b[] = $job; $saved = true; }
+	update_user_meta( $u->ID, '_sp_bookmarks', $b );
+	wp_send_json_success( array( 'saved' => $saved ) );
+} );
+
+/* [ise_my_bookmarks] — a student's saved residencies. */
+add_shortcode( 'ise_my_bookmarks', function () {
+	ob_start();
+	echo '<div class="ise-container" style="max-width:820px;padding-block:1rem 3rem;">';
+	if ( ! is_user_logged_in() ) { echo '</div>'; return ob_get_clean(); }
+	$bm = ise_student_bookmarks( get_current_user_id() );
+	echo '<h2>Saved residencies</h2>';
+	$any = false;
+	foreach ( $bm as $jid ) {
+		$j = get_post( $jid );
+		if ( ! $j || 'publish' !== $j->post_status || ISE_RB_CPT !== $j->post_type ) { continue; }
+		$any = true;
+		echo '<div class="ise-card" style="margin-bottom:1rem;display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;">'
+			. '<div><strong>' . esc_html( get_the_title( $jid ) ) . '</strong><br><span style="color:var(--ink-50);font-size:.85rem;">' . esc_html( get_post_meta( $jid, '_rj_salary', true ) ) . '</span></div>'
+			. '<a class="ise-btn ise-btn--ghost" href="' . esc_url( home_url( '/jobs/' ) ) . '">View on board</a></div>';
+	}
+	if ( ! $any ) { echo '<p style="color:var(--ink-70);">No saved residencies yet — tap &#9734; Save on any role on the board.</p>'; }
+	echo '</div>';
+	return ob_get_clean();
+} );
+
+/* CSV export of applications (partner: own roles; admin: all). */
+add_action( 'admin_post_ise_export_apps', function () {
+	$user = wp_get_current_user();
+	$is_partner = is_user_logged_in() && ( in_array( ISE_RB_ROLE, (array) $user->roles, true ) || user_can( $user, 'edit_posts' ) );
+	if ( ! $is_partner ) { wp_die( 'No permission.' ); }
+	check_admin_referer( 'ise_export_apps' );
+	$my_jobs = get_posts( array( 'post_type' => ISE_RB_CPT, 'post_status' => 'any', 'numberposts' => -1,
+		'author' => ( current_user_can( 'edit_others_posts' ) ? '' : get_current_user_id() ), 'fields' => 'ids' ) );
+	$apps = $my_jobs ? get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => -1,
+		'meta_query' => array( array( 'key' => '_ra_job', 'value' => $my_jobs, 'compare' => 'IN' ) ), 'orderby' => 'date', 'order' => 'DESC' ) ) : array();
+	nocache_headers();
+	header( 'Content-Type: text/csv; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename=ise-applications.csv' );
+	$out = fopen( 'php://output', 'w' );
+	fputcsv( $out, array( 'Application ID', 'Student', 'Email', 'Residency', 'Status', 'Applied', 'Message' ) );
+	foreach ( $apps as $a ) {
+		$sid = (int) get_post_meta( $a->ID, '_ra_student', true );
+		$st  = get_userdata( $sid );
+		$job = (int) get_post_meta( $a->ID, '_ra_job', true );
+		fputcsv( $out, array( $a->ID, $st ? $st->display_name : '', $st ? $st->user_email : '',
+			get_the_title( $job ), ( get_post_meta( $a->ID, '_ra_status', true ) ?: 'pending' ),
+			get_the_date( 'Y-m-d', $a ), get_post_meta( $a->ID, '_ra_message', true ) ) );
+	}
+	fclose( $out );
+	exit;
+} );
+
+/* Daily applicant email digest (per-partner + admin summary). */
+add_action( 'init', function () {
+	if ( ! wp_next_scheduled( 'ise_rb_digest' ) ) {
+		wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'ise_rb_digest' );
+	}
+} );
+add_action( 'ise_rb_digest', 'ise_rb_send_digest' );
+function ise_rb_send_digest() {
+	$since = (int) get_option( 'ise_rb_last_digest', time() - DAY_IN_SECONDS );
+	$apps  = get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => -1,
+		'date_query' => array( array( 'after' => gmdate( 'Y-m-d H:i:s', $since ), 'inclusive' => true ) ),
+		'orderby' => 'date', 'order' => 'DESC' ) );
+	$by_partner = array();
+	foreach ( $apps as $a ) {
+		$job = (int) get_post_meta( $a->ID, '_ra_job', true );
+		$jp  = get_post( $job );
+		$owner = $jp ? (int) $jp->post_author : 0;
+		if ( $owner ) { $by_partner[ $owner ][] = $a; }
+	}
+	foreach ( $by_partner as $owner => $list ) {
+		$u = get_userdata( $owner );
+		if ( ! $u ) { continue; }
+		$lines = array();
+		foreach ( $list as $a ) {
+			$sid = (int) get_post_meta( $a->ID, '_ra_student', true );
+			$st  = get_userdata( $sid );
+			$job = (int) get_post_meta( $a->ID, '_ra_job', true );
+			$lines[] = '- ' . ( $st ? $st->display_name : 'Student' ) . ' → ' . get_the_title( $job );
+		}
+		wp_mail( $u->user_email, '[ISE Jobs] ' . count( $list ) . ' new applicant(s)',
+			"New applications to your residencies:\n\n" . implode( "\n", $lines ) . "\n\nReview: " . home_url( '/my-applicants/' ) );
+	}
+	if ( $apps ) {
+		ise_rb_notify( 'Daily digest: ' . count( $apps ) . ' new application(s)',
+			count( $apps ) . " new application(s) in the last day.\n\n" . admin_url( 'edit.php?post_type=residency_app' ) );
+	}
+	update_option( 'ise_rb_last_digest', time() );
+}
+add_action( 'admin_post_ise_rb_digest_now', function () {
+	if ( ! current_user_can( 'manage_options' ) ) { wp_die( 'No permission.' ); }
+	check_admin_referer( 'ise_rb_digest_now' );
+	ise_rb_send_digest();
+	wp_safe_redirect( admin_url( 'edit.php?post_type=' . ISE_RB_APP ) );
+	exit;
+} );
+add_action( 'admin_notices', function () {
+	$sc = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( $sc && ISE_RB_APP === $sc->post_type ) {
+		$url = wp_nonce_url( admin_url( 'admin-post.php?action=ise_rb_digest_now' ), 'ise_rb_digest_now' );
+		echo '<div class="notice notice-info"><p>The applicant email digest runs daily. <a class="button" href="' . esc_url( $url ) . '">Send digest now</a></p></div>';
+	}
 } );
