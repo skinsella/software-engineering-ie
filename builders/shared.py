@@ -10,7 +10,7 @@ from elementor_lib import section, upsert_page
 ASSET = "/wp-content/themes/hello-elementor-child/assets"
 
 PARTNER_LOGOS = [
-    "stripe", "intercom", "aws", "manna", "bd", "boston-scientific",
+    "stripe", "intercom", "analog-devices", "aws", "manna", "bd", "boston-scientific",
     "transact", "provizio", "tines", "johnson-johnson", "dell", "openai",
     "viotas", "first-derivatives", "dogpatch", "mbryonics", "fiserv", "general-motors",
     "deveire", "eli-lilly", "jaguar-landrover", "keeper-solutions", "mastercard", "ericsson",
