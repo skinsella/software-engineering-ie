@@ -60,3 +60,17 @@ directory = section_of(shortcode_widget("[ise_student_directory]"))
 S.assemble(118, "Student directory", "students-directory", [dir_hero, directory], menu_order=96)
 
 print("student portal pages built: /join, /profile, /students-directory")
+
+myapps_hero = S.hero("Student portal", "My applications",
+  "Track the residencies you have applied to and their status.",
+  '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/jobs">View the board</a>', max_title="16ch")
+myapps = section_of(shortcode_widget("[ise_my_applications]"))
+S.assemble(119, "My applications", "my-applications", [myapps_hero, myapps], menu_order=95)
+
+applicants_hero = S.hero("For partners", "My applicants",
+  "Students who have applied to your residency roles — shortlist, reject, or view their profile.",
+  '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/post-a-job">Post a role</a>', max_title="16ch")
+applicants = section_of(shortcode_widget("[ise_my_applicants]"))
+S.assemble(120, "My applicants", "my-applicants", [applicants_hero, applicants], menu_order=94)
+
+print("application pages built: /my-applications, /my-applicants")

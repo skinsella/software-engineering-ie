@@ -132,6 +132,20 @@
       "slug": "students-directory",
       "file": "students-directory.json",
       "front_page": false
+    },
+    {
+      "id": 119,
+      "title": "My applications",
+      "slug": "my-applications",
+      "file": "my-applications.json",
+      "front_page": false
+    },
+    {
+      "id": 120,
+      "title": "My applicants",
+      "slug": "my-applicants",
+      "file": "my-applicants.json",
+      "front_page": false
     }
   ]
 }

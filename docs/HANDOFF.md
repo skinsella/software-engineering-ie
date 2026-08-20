@@ -109,3 +109,16 @@ Verified end-to-end locally (pending hidden, approved shown).
 - Optionally email the ISE team on each new pending submission.
 - If you want members-only *viewing* of the board (like Softr), add a membership
   plugin or restrict the /jobs page; the board content itself is public by default.
+
+### Employer tools + in-app applications
+- **Skills:** residencies carry a Skills taxonomy; skills show as tags and drive a
+  per-round filter on the board.
+- **In-app apply:** signed-in students click **Apply in-app** on a residency, send a
+  short note (AJAX), and the ISE champion is emailed. Duplicate applications are
+  blocked. Students track status at **/my-applications**.
+- **Applicants:** partners see applicants to their own roles at **/my-applicants**
+  and can **Shortlist / Reject** (AJAX) or open the student's profile.
+- **Favourites + search:** the student directory (**/students-directory**) has
+  search + skill filter; partners can **♥ save** students and filter to *Saved only*.
+- Data: an **Application** post type (wp-admin → Applications) records each apply;
+  favourites are stored per partner as user meta. Emails need SMTP on the host.
