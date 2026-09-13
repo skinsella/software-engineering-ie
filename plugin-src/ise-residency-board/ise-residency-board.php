@@ -105,15 +105,41 @@ function ise_rb_asset() {
 
 function ise_rb_positions_for( $round ) {
 	return get_posts( array(
-		'post_type'   => ISE_RB_CPT,
-		'post_status' => 'publish',
-		'numberposts' => -1,
-		'orderby'     => 'title',
-		'order'       => 'ASC',
-		'meta_key'    => '_rj_round',
-		'meta_value'  => $round,
+		'post_type'    => ISE_RB_CPT,
+		'post_status'  => 'publish',
+		'numberposts'  => 500,
+		'no_found_rows'=> true,
+		'orderby'      => 'title',
+		'order'        => 'ASC',
+		'meta_key'     => '_rj_round',
+		'meta_value'   => $round,
 	) );
 }
+
+/* Cached, render-ready position data per round (5 min; cleared on job save). */
+function ise_rb_round_data( $round ) {
+	$key  = 'ise_rb_round_' . md5( $round );
+	$data = get_transient( $key );
+	if ( false === $data ) {
+		$data = array();
+		foreach ( ise_rb_positions_for( $round ) as $p ) {
+			$data[] = array(
+				'id'      => $p->ID,
+				'title'   => get_the_title( $p ),
+				'salary'  => get_post_meta( $p->ID, '_rj_salary', true ),
+				'champ'   => get_post_meta( $p->ID, '_rj_champion', true ),
+				'apply'   => get_post_meta( $p->ID, '_rj_apply', true ),
+				'company' => get_post_meta( $p->ID, '_rj_company', true ),
+				'skills'  => array_values( (array) wp_get_object_terms( $p->ID, ISE_RB_SKILL, array( 'fields' => 'names' ) ) ),
+			);
+		}
+		set_transient( $key, $data, 5 * MINUTE_IN_SECONDS );
+	}
+	return $data;
+}
+add_action( 'save_post_' . ISE_RB_CPT, function () {
+	foreach ( ISE_RB_ROUNDS_OPEN as $r ) { delete_transient( 'ise_rb_round_' . md5( $r ) ); }
+} );
 
 /* ---------------------------------------------------------------------------
  * [ise_residency_board] — public board grouped by round, with per-round search
@@ -143,12 +169,12 @@ add_shortcode( 'ise_residency_board', function () {
 
 	echo '<div class="ise-container" style="padding-block:3rem 4rem;">';
 	foreach ( ISE_RB_ROUNDS_OPEN as $round ) {
-		$posts = ise_rb_positions_for( $round );
+		$posts = ise_rb_round_data( $round );
 		echo '<div class="rb-round"><div class="rb-round__head"><p class="ise-eyebrow">Now open</p><h2>ISE Current Open ' . esc_html( $round ) . ' Positions</h2></div>';
 		// gather skills present in this round for the filter
 		$round_skills = array();
 		foreach ( $posts as $rp ) {
-			foreach ( (array) wp_get_object_terms( $rp->ID, ISE_RB_SKILL, array( 'fields' => 'names' ) ) as $t ) { $round_skills[ $t ] = 1; }
+			foreach ( (array) $rp['skills'] as $t ) { $round_skills[ $t ] = 1; }
 		}
 		$round_skills = array_keys( $round_skills ); sort( $round_skills );
 		echo '<div class="rb-tools"' . ( $is_student ? ' style="grid-template-columns:2fr 1fr auto;"' : '' ) . '><input class="rb-search" type="search" placeholder="Search ' . esc_attr( $round ) . ' positions…" aria-label="Search ' . esc_attr( $round ) . ' positions">';
@@ -158,12 +184,12 @@ add_shortcode( 'ise_residency_board', function () {
 		echo '<div class="rb-count"></div><div class="rb-list">';
 		if ( $posts ) {
 			foreach ( $posts as $p ) {
-				$title    = get_the_title( $p );
-				$salary   = get_post_meta( $p->ID, '_rj_salary', true );
-				$champ    = get_post_meta( $p->ID, '_rj_champion', true );
-				$apply    = get_post_meta( $p->ID, '_rj_apply', true );
-				$company  = get_post_meta( $p->ID, '_rj_company', true );
-				$skills   = wp_get_object_terms( $p->ID, ISE_RB_SKILL, array( 'fields' => 'names' ) );
+				$title    = $p['title'];
+				$salary   = $p['salary'];
+				$champ    = $p['champ'];
+				$apply    = $p['apply'];
+				$company  = $p['company'];
+				$skills   = $p['skills'];
 				$skills_attr = esc_attr( strtolower( implode( ',', (array) $skills ) ) );
 				$skills_html = '';
 				if ( $skills && ! is_wp_error( $skills ) ) {
@@ -180,12 +206,12 @@ add_shortcode( 'ise_residency_board', function () {
 				}
 				$apply_ui = ''; $bm_attr = '0';
 				if ( $is_student ) {
-					$is_bm = in_array( (int) $p->ID, $bmks, true ); $bm_attr = $is_bm ? '1' : '0';
-					$bm_btn = '<button class="rb-bm' . ( $is_bm ? ' is-bm' : '' ) . '" data-job="' . (int) $p->ID . '">' . ( $is_bm ? '&#9733; Saved' : '&#9734; Save' ) . '</button>';
-					if ( ise_ra_has_applied( get_current_user_id(), $p->ID ) ) {
+					$is_bm = in_array( (int) $p['id'], $bmks, true ); $bm_attr = $is_bm ? '1' : '0';
+					$bm_btn = '<button class="rb-bm' . ( $is_bm ? ' is-bm' : '' ) . '" data-job="' . (int) $p['id'] . '">' . ( $is_bm ? '&#9733; Saved' : '&#9734; Save' ) . '</button>';
+					if ( ise_ra_has_applied( get_current_user_id(), $p['id'] ) ) {
 						$apply_ui = '<div class="rb-apply-row"><span class="rb-applied">&#10003; Applied</span>' . $bm_btn . '</div>';
 					} else {
-						$apply_ui = '<div class="rb-apply-row"><button class="ise-btn ise-btn--primary rb-apply" data-job="' . (int) $p->ID . '" data-title="' . esc_attr( $title ) . '">Apply in-app</button>' . $bm_btn . '</div>';
+						$apply_ui = '<div class="rb-apply-row"><button class="ise-btn ise-btn--primary rb-apply" data-job="' . (int) $p['id'] . '" data-title="' . esc_attr( $title ) . '">Apply in-app</button>' . $bm_btn . '</div>';
 					}
 				}
 				echo '<div class="rb-pos" data-skills="' . $skills_attr . '" data-bookmarked="' . $bm_attr . '"><div class="rb-pos__head">' . $logo . '<h3 class="rb-pos__title">' . esc_html( $title ) . '</h3></div><div class="rb-pos__grid">'
@@ -334,7 +360,8 @@ add_shortcode( 'ise_partner_register', function () {
 		$email = sanitize_email( wp_unslash( $_POST['reg_email'] ?? '' ) );
 		$pass  = (string) ( $_POST['reg_pass'] ?? '' );
 		$company = sanitize_text_field( wp_unslash( $_POST['reg_company'] ?? '' ) );
-		if ( $email && $pass && ! email_exists( $email ) ) {
+		$spam = ise_rb_is_bot() || ! ise_rb_captcha_ok() || ! ise_rb_throttle( 'preg', 5 );
+		if ( ! $spam && $email && $pass && ! email_exists( $email ) ) {
 			$uid = wp_insert_user( array(
 				'user_login'   => $email,
 				'user_email'   => $email,
@@ -353,7 +380,7 @@ add_shortcode( 'ise_partner_register', function () {
 	}
 	?>
 	<form method="post" class="ise-form" style="max-width:520px;display:grid;gap:1rem;">
-		<?php wp_nonce_field( 'ise_rb_register', 'ise_rb_rnonce' ); ?>
+		<?php wp_nonce_field( 'ise_rb_register', 'ise_rb_rnonce' ); echo ise_rb_hp_field() . ise_rb_captcha_field(); ?>
 		<label>Company name<br><input name="reg_company" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
 		<label>Work email<br><input type="email" name="reg_email" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
 		<label>Password<br><input type="password" name="reg_pass" required minlength="8" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
@@ -522,7 +549,8 @@ add_shortcode( 'ise_student_register', function () {
 		$name  = sanitize_text_field( wp_unslash( $_POST['sr_name'] ?? '' ) );
 		$email = sanitize_email( wp_unslash( $_POST['sr_email'] ?? '' ) );
 		$pass  = (string) ( $_POST['sr_pass'] ?? '' );
-		if ( $email && $pass && ! email_exists( $email ) ) {
+		$spam = ise_rb_is_bot() || ! ise_rb_captcha_ok() || ! ise_rb_throttle( 'sreg', 5 );
+		if ( ! $spam && $email && $pass && ! email_exists( $email ) ) {
 			$uid = wp_insert_user( array( 'user_login' => $email, 'user_email' => $email, 'user_pass' => $pass, 'display_name' => $name, 'role' => ISE_RB_STUDENT ) );
 			if ( ! is_wp_error( $uid ) ) {
 				wp_set_current_user( $uid ); wp_set_auth_cookie( $uid );
@@ -535,7 +563,7 @@ add_shortcode( 'ise_student_register', function () {
 	}
 	?>
 	<form method="post" class="ise-form" style="display:grid;gap:1rem;">
-		<?php wp_nonce_field( 'ise_sr', 'ise_sr_nonce' ); ?>
+		<?php wp_nonce_field( 'ise_sr', 'ise_sr_nonce' ); echo ise_rb_hp_field() . ise_rb_captcha_field(); ?>
 		<label>Full name<br><input name="sr_name" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
 		<label>Email<br><input type="email" name="sr_email" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
 		<label>Password<br><input type="password" name="sr_pass" required minlength="8" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
@@ -617,7 +645,7 @@ add_shortcode( 'ise_student_directory', function () {
 		echo '</div>'; return ob_get_clean();
 	}
 
-	$students = get_users( array( 'role' => ISE_RB_STUDENT, 'number' => 200 ) );
+	$students = get_users( array( 'role' => ISE_RB_STUDENT, 'number' => 500, 'count_total' => false ) );
 	$all_skills = array();
 	foreach ( $students as $st ) { foreach ( ise_sp_skills( $st->ID ) as $sk ) { $all_skills[ $sk ] = 1; } }
 	$all_skills = array_keys( $all_skills ); sort( $all_skills );
@@ -712,6 +740,7 @@ add_action( 'wp_ajax_ise_apply', function () {
 	check_ajax_referer( 'ise_ajax', 'nonce' );
 	$user = wp_get_current_user();
 	if ( ! ise_rb_is_student( $user ) ) { wp_send_json_error( 'Students only.', 403 ); }
+	if ( ! ise_rb_throttle( 'apply', 30, HOUR_IN_SECONDS ) ) { wp_send_json_error( 'Too many applications — please slow down.', 429 ); }
 	$job = (int) ( $_POST['job'] ?? 0 );
 	$job_post = get_post( $job );
 	if ( ! $job_post || ISE_RB_CPT !== $job_post->post_type ) { wp_send_json_error( 'Unknown role.', 400 ); }
@@ -788,7 +817,8 @@ add_shortcode( 'ise_my_applications', function () {
 		echo '<div class="ise-card"><p>Sign in to view your applications. <a href="' . esc_url( wp_login_url( home_url( '/my-applications/' ) ) ) . '">Sign in</a></p></div></div>';
 		return ob_get_clean();
 	}
-	$apps = get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => -1,
+	$apps = get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => 500,
+		'no_found_rows' => true,
 		'author' => get_current_user_id(), 'orderby' => 'date', 'order' => 'DESC' ) );
 	if ( ! $apps ) { echo '<div class="ise-card"><p style="color:var(--ink-70);">You have not applied to any residencies yet. <a href="' . esc_url( home_url( '/jobs/' ) ) . '">Browse the board</a>.</p></div>'; }
 	foreach ( $apps as $a ) {
@@ -812,9 +842,11 @@ add_shortcode( 'ise_my_applicants', function () {
 		echo '<div class="ise-card"><p>Sign in as a partner to view applicants. <a href="' . esc_url( wp_login_url( home_url( '/my-applicants/' ) ) ) . '">Sign in</a></p></div></div>';
 		return ob_get_clean();
 	}
-	$my_jobs = get_posts( array( 'post_type' => ISE_RB_CPT, 'post_status' => 'any', 'numberposts' => -1,
+	$my_jobs = get_posts( array( 'post_type' => ISE_RB_CPT, 'post_status' => 'any', 'numberposts' => 500,
+		'no_found_rows' => true,
 		'author' => ( current_user_can( 'edit_others_posts' ) ? '' : get_current_user_id() ), 'fields' => 'ids' ) );
-	$apps = $my_jobs ? get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => -1,
+	$apps = $my_jobs ? get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => 500,
+		'no_found_rows' => true,
 		'meta_query' => array( array( 'key' => '_ra_job', 'value' => $my_jobs, 'compare' => 'IN' ) ), 'orderby' => 'date', 'order' => 'DESC' ) ) : array();
 	if ( ! $apps ) { echo '<div class="ise-card"><p style="color:var(--ink-70);">No applications yet.</p></div>'; }
 	echo ise_rb_ajax_js();
@@ -900,9 +932,11 @@ add_action( 'admin_post_ise_export_apps', function () {
 	$is_partner = is_user_logged_in() && ( in_array( ISE_RB_ROLE, (array) $user->roles, true ) || user_can( $user, 'edit_posts' ) );
 	if ( ! $is_partner ) { wp_die( 'No permission.' ); }
 	check_admin_referer( 'ise_export_apps' );
-	$my_jobs = get_posts( array( 'post_type' => ISE_RB_CPT, 'post_status' => 'any', 'numberposts' => -1,
+	$my_jobs = get_posts( array( 'post_type' => ISE_RB_CPT, 'post_status' => 'any', 'numberposts' => 500,
+		'no_found_rows' => true,
 		'author' => ( current_user_can( 'edit_others_posts' ) ? '' : get_current_user_id() ), 'fields' => 'ids' ) );
-	$apps = $my_jobs ? get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => -1,
+	$apps = $my_jobs ? get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => 500,
+		'no_found_rows' => true,
 		'meta_query' => array( array( 'key' => '_ra_job', 'value' => $my_jobs, 'compare' => 'IN' ) ), 'orderby' => 'date', 'order' => 'DESC' ) ) : array();
 	nocache_headers();
 	header( 'Content-Type: text/csv; charset=utf-8' );
@@ -930,7 +964,8 @@ add_action( 'init', function () {
 add_action( 'ise_rb_digest', 'ise_rb_send_digest' );
 function ise_rb_send_digest() {
 	$since = (int) get_option( 'ise_rb_last_digest', time() - DAY_IN_SECONDS );
-	$apps  = get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => -1,
+	$apps  = get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => 500,
+		'no_found_rows' => true,
 		'date_query' => array( array( 'after' => gmdate( 'Y-m-d H:i:s', $since ), 'inclusive' => true ) ),
 		'orderby' => 'date', 'order' => 'DESC' ) );
 	$by_partner = array();
@@ -973,3 +1008,40 @@ add_action( 'admin_notices', function () {
 		echo '<div class="notice notice-info"><p>The applicant email digest runs daily. <a class="button" href="' . esc_url( $url ) . '">Send digest now</a></p></div>';
 	}
 } );
+
+/* ===========================================================================
+ * SPAM PROTECTION: honeypot, per-IP throttle, optional Cloudflare Turnstile
+ * (Turnstile activates only when ise_rb_turnstile_site/secret options are set.)
+ * ========================================================================= */
+function ise_rb_client_ip() {
+	$ip = $_SERVER['REMOTE_ADDR'] ?? '';
+	return is_string( $ip ) ? $ip : '';
+}
+function ise_rb_throttle( $action, $max = 5, $window = HOUR_IN_SECONDS ) {
+	$key = 'ise_thr_' . $action . '_' . md5( ise_rb_client_ip() );
+	$n = (int) get_transient( $key );
+	if ( $n >= $max ) { return false; }
+	set_transient( $key, $n + 1, $window );
+	return true;
+}
+function ise_rb_is_bot() { return ! empty( $_POST['ise_hp'] ); }
+function ise_rb_hp_field() {
+	return '<input type="text" name="ise_hp" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0;">';
+}
+function ise_rb_captcha_field() {
+	$site = get_option( 'ise_rb_turnstile_site' );
+	if ( ! $site ) { return ''; }
+	return '<div class="cf-turnstile" data-sitekey="' . esc_attr( $site ) . '"></div>'
+		. '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
+}
+function ise_rb_captcha_ok() {
+	$secret = get_option( 'ise_rb_turnstile_secret' );
+	if ( ! $secret ) { return true; } // not configured -> skip
+	$tok = $_POST['cf-turnstile-response'] ?? '';
+	if ( ! $tok ) { return false; }
+	$r = wp_remote_post( 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+		array( 'timeout' => 8, 'body' => array( 'secret' => $secret, 'response' => $tok, 'remoteip' => ise_rb_client_ip() ) ) );
+	if ( is_wp_error( $r ) ) { return false; }
+	$b = json_decode( wp_remote_retrieve_body( $r ), true );
+	return ! empty( $b['success'] );
+}

@@ -135,3 +135,12 @@ Verified end-to-end locally (pending hidden, approved shown).
   `ise_rb_last_digest` marker. A **"Send digest now"** button appears on the
   wp-admin → Applications screen for manual/testing. Needs real cron + SMTP to deliver
   (wp_cron fires on traffic; use a real cron on the host for reliability).
+
+### Phase A — hardening
+- **Performance:** board round data is cached in 5-min transients (cleared on job
+  save); all list queries are capped (500) with `no_found_rows` / `count_total=false`.
+- **Spam protection:** honeypot field + per-IP throttle on the public register and
+  apply flows. Optional **Cloudflare Turnstile** activates automatically when the
+  `ise_rb_turnstile_site` / `ise_rb_turnstile_secret` options are set (no keys = skipped).
+- **Repo:** canonical working copy now lives outside OneDrive (OneDrive was offloading
+  the files); GitHub remains the source of truth.
