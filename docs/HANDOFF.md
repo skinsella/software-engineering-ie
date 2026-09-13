@@ -144,3 +144,14 @@ Verified end-to-end locally (pending hidden, approved shown).
   `ise_rb_turnstile_site` / `ise_rb_turnstile_secret` options are set (no keys = skipped).
 - **Repo:** canonical working copy now lives outside OneDrive (OneDrive was offloading
   the files); GitHub remains the source of truth.
+
+### Phase B — discoverability + matching
+- **Single-role pages:** each residency has a public URL (`/residency/<slug>/`) with a
+  branded summary and an "Apply on the board" CTA. The ISE champion email is NOT shown
+  publicly (applications route through the gated board). `residency_app` stays private.
+- **Google Jobs:** single pages emit `JobPosting` structured data (title, description,
+  datePosted, validThrough, hiringOrganization, jobLocation IE, skills) — eligible for
+  Google's job results once the site is public and submitted.
+- **Skill-match:** signed-in students see an "N% match" badge on each role and the board
+  is sorted best-match first. Partners can pick one of their roles ("Match to your role")
+  in the student directory to rank students by fit.

@@ -340,3 +340,9 @@ a:hover { color: var(--ul-green-modern); }
 .rb-bm { background: none; border: 1px solid var(--line); border-radius: 999px; padding: .5rem .95rem; font-family: var(--font-sans); font-weight: 600; font-size: .85rem; color: var(--ink-70); cursor: pointer; transition: var(--transition); }
 .rb-bm:hover { color: var(--ul-green); border-color: var(--ul-green); }
 .rb-bm.is-bm { color: var(--ul-green); border-color: var(--ul-green); background: var(--ul-green-050); }
+
+/* Skill-match badges */
+.rb-match { margin-left: auto; align-self: center; font-family: var(--font-sans); font-size: .78rem; font-weight: 700; color: var(--ul-green); background: var(--ul-green-050); border-radius: 999px; padding: .22rem .65rem; white-space: nowrap; }
+.sp-match { position: absolute; top: 1.1rem; left: 1.1rem; margin: 0; z-index: 2; }
+.sp-rolematch { margin: 0 0 1rem; color: var(--ink-70); font-size: .92rem; }
+.sp-rolematch select { padding: .5rem .7rem; border: 1px solid var(--line); border-radius: 8px; font-family: var(--font-sans); }

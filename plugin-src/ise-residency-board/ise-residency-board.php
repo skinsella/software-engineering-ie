@@ -31,11 +31,13 @@ add_action( 'init', function () {
 			'edit_item'     => 'Edit Residency Job',
 		),
 		'public'             => true,
-		'publicly_queryable' => false,
+		'publicly_queryable' => true,
 		'show_ui'            => true,
 		'show_in_menu'       => true,
 		'menu_icon'          => 'dashicons-businessperson',
 		'supports'           => array( 'title' ),
+		'has_archive'        => false,
+		'rewrite'            => array( 'slug' => 'residency', 'with_front' => false ),
 		'capability_type'    => 'post',
 		'map_meta_cap'       => true,
 	) );
@@ -157,6 +159,7 @@ add_shortcode( 'ise_residency_board', function () {
 	}
 	$is_student = ise_rb_is_student( wp_get_current_user() );
 	$bmks = $is_student ? ise_student_bookmarks( get_current_user_id() ) : array();
+	$student_skills = $is_student ? ise_sp_skills( get_current_user_id() ) : array();
 	$submit_url = home_url( '/post-a-job/' );
 	echo '<div class="ise-band--heritage" style="padding-block:2.75rem;"><div class="ise-container" id="rounds"><div class="rb-rounds">';
 	foreach ( ISE_RB_ROUNDS_CLOSED as $c ) {
@@ -170,6 +173,11 @@ add_shortcode( 'ise_residency_board', function () {
 	echo '<div class="ise-container" style="padding-block:3rem 4rem;">';
 	foreach ( ISE_RB_ROUNDS_OPEN as $round ) {
 		$posts = ise_rb_round_data( $round );
+		if ( $is_student ) {
+			usort( $posts, function ( $a, $b ) use ( $student_skills ) {
+				return (int) ise_rb_match_pct( $b['skills'], $student_skills ) <=> (int) ise_rb_match_pct( $a['skills'], $student_skills );
+			} );
+		}
 		echo '<div class="rb-round"><div class="rb-round__head"><p class="ise-eyebrow">Now open</p><h2>ISE Current Open ' . esc_html( $round ) . ' Positions</h2></div>';
 		// gather skills present in this round for the filter
 		$round_skills = array();
@@ -214,7 +222,9 @@ add_shortcode( 'ise_residency_board', function () {
 						$apply_ui = '<div class="rb-apply-row"><button class="ise-btn ise-btn--primary rb-apply" data-job="' . (int) $p['id'] . '" data-title="' . esc_attr( $title ) . '">Apply in-app</button>' . $bm_btn . '</div>';
 					}
 				}
-				echo '<div class="rb-pos" data-skills="' . $skills_attr . '" data-bookmarked="' . $bm_attr . '"><div class="rb-pos__head">' . $logo . '<h3 class="rb-pos__title">' . esc_html( $title ) . '</h3></div><div class="rb-pos__grid">'
+				$match = ( $is_student && $p['skills'] ) ? ise_rb_match_pct( $p['skills'], $student_skills ) : null;
+				$match_badge = ( null !== $match ) ? '<span class="rb-match">' . (int) $match . '% match</span>' : '';
+				echo '<div class="rb-pos" data-skills="' . $skills_attr . '" data-bookmarked="' . $bm_attr . '" data-match="' . ( null === $match ? '' : (int) $match ) . '"><div class="rb-pos__head">' . $logo . '<h3 class="rb-pos__title">' . esc_html( $title ) . '</h3>' . $match_badge . '</div><div class="rb-pos__grid">'
 					. '<div><span class="rb-label">Residency Title</span><span class="rb-val">' . esc_html( $title ) . '</span></div>'
 					. '<div><span class="rb-label">Monthly Salary</span><span class="rb-val">' . esc_html( $salary ) . '</span></div>'
 					. '<div><span class="rb-label">ISE Champion Email</span><span class="rb-val"><a href="mailto:' . esc_attr( $champ ) . '">' . esc_html( $champ ) . '</a></span></div>'
@@ -635,6 +645,8 @@ add_shortcode( 'ise_student_directory', function () {
 	$user = wp_get_current_user();
 	$is_partner = in_array( ISE_RB_ROLE, (array) $user->roles, true ) || user_can( $user, 'edit_posts' );
 	$favs = ise_partner_favourites( $user->ID );
+	$role_id     = isset( $_GET['role'] ) ? (int) $_GET['role'] : 0;
+	$role_skills = $role_id ? (array) wp_get_object_terms( $role_id, ISE_RB_SKILL, array( 'fields' => 'names' ) ) : array();
 
 	// Single profile view (?student=ID), e.g. from an applicant list.
 	$single = isset( $_GET['student'] ) ? (int) $_GET['student'] : 0;
@@ -649,6 +661,11 @@ add_shortcode( 'ise_student_directory', function () {
 	$all_skills = array();
 	foreach ( $students as $st ) { foreach ( ise_sp_skills( $st->ID ) as $sk ) { $all_skills[ $sk ] = 1; } }
 	$all_skills = array_keys( $all_skills ); sort( $all_skills );
+	if ( $role_skills ) {
+		usort( $students, function ( $a, $b ) use ( $role_skills ) {
+			return (int) ise_rb_match_pct( $role_skills, ise_sp_skills( $b->ID ) ) <=> (int) ise_rb_match_pct( $role_skills, ise_sp_skills( $a->ID ) );
+		} );
+	}
 
 	echo ise_rb_ajax_js();
 	echo '<div class="rb-tools"' . ( $is_partner ? ' style="grid-template-columns:2fr 1fr auto;"' : '' ) . '>';
@@ -657,7 +674,19 @@ add_shortcode( 'ise_student_directory', function () {
 	foreach ( $all_skills as $sk ) { echo '<option value="' . esc_attr( strtolower( $sk ) ) . '">' . esc_html( $sk ) . '</option>'; }
 	echo '</select>';
 	if ( $is_partner ) { echo '<label class="sp-savedonly"><input type="checkbox" class="sp-saved-toggle"> Saved only</label>'; }
-	echo '</div><div class="sp-count"></div>';
+	echo '</div>';
+	if ( $is_partner ) {
+		$my_roles = get_posts( array( 'post_type' => ISE_RB_CPT, 'post_status' => 'any', 'numberposts' => 200, 'no_found_rows' => true, 'author' => ( current_user_can( 'edit_others_posts' ) ? '' : get_current_user_id() ), 'fields' => 'ids' ) );
+		if ( $my_roles ) {
+			echo '<div class="sp-rolematch"><label>Match to your role: <select onchange="if(this.value)location=this.value;">';
+			echo '<option value="">— none —</option>';
+			foreach ( $my_roles as $rid ) { echo '<option value="' . esc_url( add_query_arg( 'role', $rid, home_url( '/students-directory/' ) ) ) . '"' . selected( $rid, $role_id, false ) . '>' . esc_html( get_the_title( $rid ) ) . '</option>'; }
+			echo '</select></label>';
+			if ( $role_id ) { echo ' <a href="' . esc_url( home_url( '/students-directory/' ) ) . '">clear</a>'; }
+			echo '</div>';
+		}
+	}
+	echo '<div class="sp-count"></div>';
 
 	echo '<div class="sp-directory">';
 	if ( $students ) {
@@ -665,8 +694,10 @@ add_shortcode( 'ise_student_directory', function () {
 			$sk = ise_sp_skills( $st->ID );
 			$is_fav = in_array( (int) $st->ID, $favs, true );
 			$favbtn = $is_partner ? '<button class="sp-fav' . ( $is_fav ? ' is-fav' : '' ) . '" data-student="' . (int) $st->ID . '" title="Save student" aria-label="Save student">&#9829;</button>' : '';
-			echo '<div class="sp-dir-item" data-name="' . esc_attr( strtolower( $st->display_name ) ) . '" data-skills="' . esc_attr( strtolower( implode( ',', $sk ) ) ) . '" data-fav="' . ( $is_fav ? '1' : '0' ) . '">'
-				. $favbtn . ise_rb_render_profile( $st, true ) . '</div>';
+			$m = $role_skills ? ise_rb_match_pct( $role_skills, $sk ) : null;
+			$mbadge = ( null !== $m ) ? '<span class="rb-match sp-match">' . (int) $m . '% match</span>' : '';
+			echo '<div class="sp-dir-item" data-name="' . esc_attr( strtolower( $st->display_name ) ) . '" data-skills="' . esc_attr( strtolower( implode( ',', $sk ) ) ) . '" data-fav="' . ( $is_fav ? '1' : '0' ) . '" data-match="' . ( null === $m ? '' : (int) $m ) . '">'
+				. $mbadge . $favbtn . ise_rb_render_profile( $st, true ) . '</div>';
 		}
 	} else {
 		echo '<p style="color:var(--ink-70);">No student profiles yet.</p>';
@@ -779,6 +810,8 @@ add_action( 'wp_ajax_ise_fav', function () {
 	if ( ! $is_partner ) { wp_send_json_error( 'Partners only.', 403 ); }
 	$sid = (int) ( $_POST['student'] ?? 0 );
 	$favs = ise_partner_favourites( $user->ID );
+	$role_id     = isset( $_GET['role'] ) ? (int) $_GET['role'] : 0;
+	$role_skills = $role_id ? (array) wp_get_object_terms( $role_id, ISE_RB_SKILL, array( 'fields' => 'names' ) ) : array();
 	if ( in_array( $sid, $favs, true ) ) {
 		$favs = array_values( array_diff( $favs, array( $sid ) ) ); $saved = false;
 	} else {
@@ -1044,4 +1077,74 @@ function ise_rb_captcha_ok() {
 	if ( is_wp_error( $r ) ) { return false; }
 	$b = json_decode( wp_remote_retrieve_body( $r ), true );
 	return ! empty( $b['success'] );
+}
+
+/* ===========================================================================
+ * PHASE B — single-role pages, Google JobPosting schema
+ * ========================================================================= */
+add_action( 'init', function () {
+	if ( ! get_option( 'ise_rb_rewrites_v1' ) ) {
+		flush_rewrite_rules( false );
+		update_option( 'ise_rb_rewrites_v1', 1 );
+	}
+}, 20 );
+
+/* JobPosting structured data on single residency pages (Google Jobs). */
+add_action( 'wp_head', function () {
+	if ( ! is_singular( ISE_RB_CPT ) ) { return; }
+	$id      = get_queried_object_id();
+	$round   = get_post_meta( $id, '_rj_round', true );
+	$company = get_post_meta( $id, '_rj_company', true );
+	$salary  = get_post_meta( $id, '_rj_salary', true );
+	$skills  = (array) wp_get_object_terms( $id, ISE_RB_SKILL, array( 'fields' => 'names' ) );
+	$org     = $company ? ucwords( str_replace( '-', ' ', $company ) ) : 'ISE partner company';
+	$desc    = get_the_title( $id ) . ' — an Immersive Software Engineering residency (' . $round . ') with ' . $org . '.'
+		. ( $skills ? ' Skills: ' . implode( ', ', $skills ) . '.' : '' );
+	$schema = array(
+		'@context'           => 'https://schema.org/',
+		'@type'              => 'JobPosting',
+		'title'              => get_the_title( $id ),
+		'description'        => '<p>' . esc_html( $desc ) . '</p>',
+		'datePosted'         => get_the_date( 'c', $id ),
+		'validThrough'       => gmdate( 'c', get_post_time( 'U', true, $id ) + 60 * DAY_IN_SECONDS ),
+		'employmentType'     => 'INTERN',
+		'hiringOrganization' => array( '@type' => 'Organization', 'name' => $org ),
+		'jobLocation'        => array( '@type' => 'Place', 'address' => array( '@type' => 'PostalAddress', 'addressCountry' => 'IE' ) ),
+		'directApply'        => false,
+		'url'                => get_permalink( $id ),
+	);
+	if ( $skills ) { $schema['skills'] = implode( ', ', $skills ); }
+	echo "\n" . '<script type="application/ld+json">' . wp_json_encode( $schema ) . '</script>' . "\n";
+} );
+
+/* Branded content for the single residency page (no champion email exposed publicly). */
+add_filter( 'the_content', function ( $content ) {
+	if ( ! is_singular( ISE_RB_CPT ) || ! in_the_loop() || ! is_main_query() ) { return $content; }
+	$id      = get_the_ID();
+	$round   = get_post_meta( $id, '_rj_round', true );
+	$company = get_post_meta( $id, '_rj_company', true );
+	$salary  = get_post_meta( $id, '_rj_salary', true );
+	$skills  = (array) wp_get_object_terms( $id, ISE_RB_SKILL, array( 'fields' => 'names' ) );
+	$org     = $company ? ucwords( str_replace( '-', ' ', $company ) ) : '';
+	$tags    = '';
+	foreach ( $skills as $sk ) { $tags .= '<span class="jb-tag">' . esc_html( $sk ) . '</span>'; }
+	ob_start();
+	echo '<div class="ise-container" style="max-width:720px;padding-block:1rem 3rem;">';
+	echo '<p class="ise-eyebrow">' . esc_html( $round ) . ( $org ? ' · ' . esc_html( $org ) : '' ) . '</p>';
+	echo '<div class="rb-pos"><div class="rb-pos__grid">';
+	echo '<div><span class="rb-label">Residency Title</span><span class="rb-val">' . esc_html( get_the_title( $id ) ) . '</span></div>';
+	echo '<div><span class="rb-label">Monthly Salary</span><span class="rb-val">' . esc_html( $salary ) . '</span></div>';
+	echo '</div>' . ( $tags ? '<div class="rb-skills"><span class="rb-skills__label">Skills</span>' . $tags . '</div>' : '' ) . '</div>';
+	echo '<p style="margin-top:1.5rem;"><a class="ise-btn ise-btn--primary" href="' . esc_url( home_url( '/jobs/' ) ) . '">Apply on the ISE board</a></p>';
+	echo '<p style="color:var(--ink-70);font-size:.9rem;">Applications are made by signed-in ISE students on the residency board.</p>';
+	echo '</div>';
+	return ob_get_clean();
+} );
+
+/* Skill-match: % of a role's required skills that the candidate has. */
+function ise_rb_match_pct( $role_skills, $candidate_skills ) {
+	$role = array_filter( array_map( 'strtolower', (array) $role_skills ) );
+	$cand = array_filter( array_map( 'strtolower', (array) $candidate_skills ) );
+	if ( ! $role ) { return null; }
+	return (int) round( 100 * count( array_intersect( $role, $cand ) ) / count( $role ) );
 }
