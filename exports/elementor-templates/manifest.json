@@ -146,6 +146,13 @@
       "slug": "my-applicants",
       "file": "my-applicants.json",
       "front_page": false
+    },
+    {
+      "id": 121,
+      "title": "Residency dashboard",
+      "slug": "ise-dashboard",
+      "file": "ise-dashboard.json",
+      "front_page": false
     }
   ]
 }

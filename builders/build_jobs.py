@@ -75,3 +75,10 @@ applicants = section_of(shortcode_widget("[ise_my_applicants]"))
 S.assemble(120, "My applicants", "my-applicants", [applicants_hero, applicants], menu_order=94)
 
 print("application pages built: /my-applications, /my-applicants")
+
+dash_hero = S.hero("ISE admin", "Residency dashboard",
+  "Placements by round, applications by status, most-requested skills, and roles that still need applicants.",
+  '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/jobs">View the board</a>', max_title="18ch")
+dash = section_of(shortcode_widget("[ise_admin_stats]"))
+S.assemble(121, "Residency dashboard", "ise-dashboard", [dash_hero, dash], menu_order=93)
+print("admin dashboard page built: /ise-dashboard")

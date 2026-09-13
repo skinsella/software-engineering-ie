@@ -542,6 +542,17 @@ function ise_rb_render_profile( $user, $compact = false ) {
 	if ( $cv )   { $links[] = '<a href="' . esc_url( $cv ) . '" target="_blank" rel="noopener">CV</a>'; }
 	if ( $gh )   { $links[] = '<a href="' . esc_url( $gh ) . '" target="_blank" rel="noopener">GitHub</a>'; }
 	if ( $links ) { $out .= '<div class="sp-links">' . implode( '', $links ) . '</div>'; }
+	if ( ! $compact ) {
+		$ghuser = ise_rb_github_user( $gh );
+		if ( $ghuser ) {
+			$repos = ise_rb_github_repos( $ghuser );
+			if ( $repos ) {
+				$out .= '<div class="sp-repos"><span class="rb-skills__label">Recent GitHub</span><ul>';
+				foreach ( $repos as $r ) { $out .= '<li><a href="' . esc_url( $r['url'] ) . '" target="_blank" rel="noopener">' . esc_html( $r['name'] ) . '</a>' . ( $r['desc'] ? ' — ' . esc_html( $r['desc'] ) : '' ) . '</li>'; }
+				$out .= '</ul></div>';
+			}
+		}
+	}
 	$out .= '</div>';
 	return $out;
 }
@@ -788,6 +799,13 @@ add_action( 'wp_ajax_ise_apply', function () {
 	update_post_meta( $id, '_ra_job', $job );
 	update_post_meta( $id, '_ra_message', $msg );
 	update_post_meta( $id, '_ra_status', 'pending' );
+	if ( ! empty( $_FILES['cv']['name'] ) && 0 === (int) $_FILES['cv']['error'] ) {
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+		$att = media_handle_upload( 'cv', 0 );
+		if ( ! is_wp_error( $att ) ) { update_post_meta( $id, '_ra_cv', $att ); }
+	}
 	$champ = get_post_meta( $job, '_rj_champion', true );
 	if ( $champ ) {
 		wp_mail( $champ, '[ISE Jobs] New application: ' . get_the_title( $job ),
@@ -827,17 +845,25 @@ add_action( 'wp_ajax_ise_appstatus', function () {
 	$user = wp_get_current_user();
 	$app = (int) ( $_POST['app'] ?? 0 );
 	$status = sanitize_key( $_POST['status'] ?? '' );
-	if ( ! in_array( $status, array( 'pending', 'shortlisted', 'rejected' ), true ) ) { wp_send_json_error( 'Bad status.', 400 ); }
+	if ( ! in_array( $status, array( 'pending', 'shortlisted', 'interview', 'offer', 'accepted', 'rejected' ), true ) ) { wp_send_json_error( 'Bad status.', 400 ); }
 	$job = (int) get_post_meta( $app, '_ra_job', true );
 	$job_post = get_post( $job );
 	$owner = $job_post ? (int) $job_post->post_author : 0;
 	if ( $owner !== $user->ID && ! current_user_can( 'edit_others_posts' ) ) { wp_send_json_error( 'Not your role.', 403 ); }
 	update_post_meta( $app, '_ra_status', $status );
+	$sid = (int) get_post_meta( $app, '_ra_student', true );
+	$st  = get_userdata( $sid );
+	if ( $st ) {
+		$labels = array( 'shortlisted' => 'shortlisted', 'interview' => 'invited to interview', 'offer' => 'made an offer', 'accepted' => 'confirmed', 'rejected' => 'not progressed', 'pending' => 'received' );
+		$word = $labels[ $status ] ?? $status;
+		wp_mail( $st->user_email, '[ISE Jobs] Update on your application: ' . get_the_title( (int) get_post_meta( $app, '_ra_job', true ) ),
+			'Your application for ' . get_the_title( (int) get_post_meta( $app, '_ra_job', true ) ) . ' has been ' . $word . ".\n\nTrack it: " . home_url( '/my-applications/' ) );
+	}
 	wp_send_json_success( array( 'status' => $status ) );
 } );
 
 function ise_ra_badge( $status ) {
-	$map = array( 'pending' => '#b8860b', 'shortlisted' => '#00842b', 'rejected' => '#c0392b' );
+	$map = array( 'pending' => '#b8860b', 'shortlisted' => '#00842b', 'interview' => '#0b6bcb', 'offer' => '#7b3fe4', 'accepted' => '#00842b', 'rejected' => '#c0392b' );
 	$c = $map[ $status ] ?? '#6b746f';
 	return '<span class="jb-tag" style="color:' . $c . ';background:rgba(0,0,0,.04);">' . esc_html( ucfirst( $status ) ) . '</span>';
 }
@@ -884,6 +910,14 @@ add_shortcode( 'ise_my_applicants', function () {
 	if ( ! $apps ) { echo '<div class="ise-card"><p style="color:var(--ink-70);">No applications yet.</p></div>'; }
 	echo ise_rb_ajax_js();
 	echo '<p><a class="ise-btn ise-btn--ghost" href="' . esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ise_export_apps' ), 'ise_export_apps' ) ) . '">Download CSV</a></p>';
+	$counts = array( 'pending' => 0, 'shortlisted' => 0, 'interview' => 0, 'offer' => 0, 'accepted' => 0, 'rejected' => 0 );
+	foreach ( $apps as $a ) { $stt = get_post_meta( $a->ID, '_ra_status', true ) ?: 'pending'; if ( isset( $counts[ $stt ] ) ) { $counts[ $stt ]++; } }
+	echo '<div class="ise-stats-row">';
+	echo '<div class="ise-stat"><div class="ise-stat__num">' . count( $apps ) . '</div><div class="ise-stat__label">Applicants</div></div>';
+	foreach ( array( 'shortlisted' => 'Shortlisted', 'interview' => 'Interview', 'offer' => 'Offers', 'accepted' => 'Accepted' ) as $k => $lbl ) {
+		echo '<div class="ise-stat"><div class="ise-stat__num">' . (int) $counts[ $k ] . '</div><div class="ise-stat__label">' . esc_html( $lbl ) . '</div></div>';
+	}
+	echo '</div>';
 	foreach ( $apps as $a ) {
 		$job = (int) get_post_meta( $a->ID, '_ra_job', true );
 		$sid = (int) get_post_meta( $a->ID, '_ra_student', true );
@@ -897,7 +931,11 @@ add_shortcode( 'ise_my_applicants', function () {
 			. ( $msg ? '<p style="color:var(--ink-70);margin:.75rem 0 0;">' . esc_html( $msg ) . '</p>' : '' )
 			. '<div class="ra-actions" data-app="' . (int) $a->ID . '" style="margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap;">'
 			. ( $sid ? '<a class="ise-btn ise-btn--ghost" href="' . esc_url( add_query_arg( 'student', $sid, home_url( '/students-directory/' ) ) ) . '">View profile</a>' : '' )
-			. '<button class="ise-btn ise-btn--primary ra-set" data-status="shortlisted">Shortlist</button>'
+			. ( ( $cvatt = (int) get_post_meta( $a->ID, '_ra_cv', true ) ) ? '<a class="ise-btn ise-btn--ghost" href="' . esc_url( wp_get_attachment_url( $cvatt ) ) . '" target="_blank" rel="noopener">CV</a>' : '' )
+			. ( ( $ghl = $sid ? ise_sp_get( $sid, 'github' ) : '' ) ? '<a class="ise-btn ise-btn--ghost" href="' . esc_url( $ghl ) . '" target="_blank" rel="noopener">GitHub</a>' : '' )
+			. '<button class="ise-btn ise-btn--ghost ra-set" data-status="shortlisted">Shortlist</button>'
+			. '<button class="ise-btn ise-btn--ghost ra-set" data-status="interview">Interview</button>'
+			. '<button class="ise-btn ise-btn--primary ra-set" data-status="offer">Offer</button>'
 			. '<button class="ise-btn ise-btn--ghost ra-set" data-status="rejected">Reject</button>'
 			. '</div></div>';
 	}
@@ -1148,3 +1186,79 @@ function ise_rb_match_pct( $role_skills, $candidate_skills ) {
 	if ( ! $role ) { return null; }
 	return (int) round( 100 * count( array_intersect( $role, $cand ) ) / count( $role ) );
 }
+
+/* GitHub: parse username + fetch top repos (cached 12h; public API, rate-limited). */
+function ise_rb_github_user( $url ) {
+	return preg_match( '#github\.com/([A-Za-z0-9_.-]+)#', (string) $url, $m ) ? $m[1] : '';
+}
+function ise_rb_github_repos( $user ) {
+	if ( ! $user ) { return array(); }
+	$key = 'ise_gh_' . md5( strtolower( $user ) );
+	$cached = get_transient( $key );
+	if ( false !== $cached ) { return $cached; }
+	$resp = wp_remote_get( 'https://api.github.com/users/' . rawurlencode( $user ) . '/repos?sort=updated&per_page=3',
+		array( 'timeout' => 8, 'headers' => array( 'Accept' => 'application/vnd.github+json', 'User-Agent' => 'ISE-Board' ) ) );
+	$repos = array();
+	if ( ! is_wp_error( $resp ) ) {
+		$d = json_decode( wp_remote_retrieve_body( $resp ), true );
+		if ( is_array( $d ) ) {
+			foreach ( $d as $x ) {
+				if ( ! empty( $x['name'] ) ) { $repos[] = array( 'name' => $x['name'], 'url' => $x['html_url'], 'desc' => $x['description'] ?? '' ); }
+			}
+		}
+	}
+	set_transient( $key, $repos, 12 * HOUR_IN_SECONDS );
+	return $repos;
+}
+
+/* [ise_admin_stats] — ISE admin analytics dashboard. */
+add_shortcode( 'ise_admin_stats', function () {
+	ob_start();
+	echo '<div class="ise-container" style="padding-block:2rem 4rem;">';
+	if ( ! current_user_can( 'manage_options' ) ) {
+		echo '<div class="ise-card"><p>This dashboard is for ISE administrators. <a href="' . esc_url( wp_login_url( home_url( '/ise-dashboard/' ) ) ) . '">Sign in</a></p></div></div>';
+		return ob_get_clean();
+	}
+	$roles_total = 0; $round_counts = array();
+	foreach ( ISE_RB_ROUNDS_OPEN as $r ) { $c = count( ise_rb_positions_for( $r ) ); $round_counts[ $r ] = $c; $roles_total += $c; }
+	$apps = get_posts( array( 'post_type' => ISE_RB_APP, 'post_status' => 'any', 'numberposts' => 2000, 'no_found_rows' => true, 'fields' => 'ids' ) );
+	$status = array(); $filled = array();
+	foreach ( $apps as $aid ) {
+		$st = get_post_meta( $aid, '_ra_status', true ) ?: 'pending'; $status[ $st ] = ( $status[ $st ] ?? 0 ) + 1;
+		$filled[ (int) get_post_meta( $aid, '_ra_job', true ) ] = true;
+	}
+	$students = count( get_users( array( 'role' => ISE_RB_STUDENT, 'fields' => 'ID', 'number' => 5000, 'count_total' => false ) ) );
+	$partners = count( get_users( array( 'role' => ISE_RB_ROLE, 'fields' => 'ID', 'number' => 5000, 'count_total' => false ) ) );
+	$skills = get_terms( array( 'taxonomy' => ISE_RB_SKILL, 'orderby' => 'count', 'order' => 'DESC', 'number' => 10, 'hide_empty' => true ) );
+
+	echo '<div class="ise-stats-row">';
+	foreach ( array( $roles_total => 'Open roles', count( $apps ) => 'Applications', $students => 'Students', $partners => 'Partners' ) as $num => $lbl ) {
+		echo '<div class="ise-stat"><div class="ise-stat__num">' . (int) $num . '</div><div class="ise-stat__label">' . esc_html( $lbl ) . '</div></div>';
+	}
+	echo '</div>';
+
+	echo '<div class="ise-dash-grid">';
+	// roles by round
+	echo '<div class="ise-card"><h3>Open roles by round</h3><ul class="ise-dash-list">';
+	foreach ( $round_counts as $r => $c ) { echo '<li><span>' . esc_html( $r ) . '</span><strong>' . (int) $c . '</strong></li>'; }
+	echo '</ul></div>';
+	// applications by status
+	echo '<div class="ise-card"><h3>Applications by status</h3><ul class="ise-dash-list">';
+	foreach ( array( 'pending', 'shortlisted', 'interview', 'offer', 'accepted', 'rejected' ) as $k ) { echo '<li><span>' . esc_html( ucfirst( $k ) ) . '</span><strong>' . (int) ( $status[ $k ] ?? 0 ) . '</strong></li>'; }
+	echo '</ul></div>';
+	// top skills
+	echo '<div class="ise-card"><h3>Most-requested skills</h3><ul class="ise-dash-list">';
+	if ( ! is_wp_error( $skills ) && $skills ) { foreach ( $skills as $t ) { echo '<li><span>' . esc_html( $t->name ) . '</span><strong>' . (int) $t->count . '</strong></li>'; } } else { echo '<li>No skills yet</li>'; }
+	echo '</ul></div>';
+	// unfilled roles
+	echo '<div class="ise-card"><h3>Roles with no applications</h3><ul class="ise-dash-list">';
+	$unfilled = 0;
+	foreach ( ISE_RB_ROUNDS_OPEN as $r ) { foreach ( ise_rb_positions_for( $r ) as $job ) { if ( empty( $filled[ $job->ID ] ) ) { echo '<li><span>' . esc_html( get_the_title( $job ) ) . '</span></li>'; $unfilled++; } } }
+	if ( ! $unfilled ) { echo '<li>All open roles have applicants</li>'; }
+	echo '</ul></div>';
+	echo '</div>';
+
+	echo '<p style="margin-top:1.5rem;"><a class="ise-btn ise-btn--ghost" href="' . esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ise_export_apps' ), 'ise_export_apps' ) ) . '">Export all applications (CSV)</a></p>';
+	echo '</div>';
+	return ob_get_clean();
+} );

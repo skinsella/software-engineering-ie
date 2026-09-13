@@ -155,3 +155,14 @@ Verified end-to-end locally (pending hidden, approved shown).
 - **Skill-match:** signed-in students see an "N% match" badge on each role and the board
   is sorted best-match first. Partners can pick one of their roles ("Match to your role")
   in the student directory to rank students by fit.
+
+### Phase C — depth
+- **Application pipeline:** statuses extended to Pending → Shortlisted → Interview →
+  Offer → Accepted / Rejected; partners set them on /my-applicants and the student is
+  emailed on each change (needs SMTP).
+- **CV + GitHub:** students can attach a CV when applying (stored on the application);
+  /my-applicants shows the CV + the applicant's GitHub. Full student profiles pull the
+  student's 3 most-recent public GitHub repos (cached 12h).
+- **Dashboards:** /my-applicants shows a per-partner status summary; a new admin-only
+  /ise-dashboard ([ise_admin_stats]) reports open roles by round, applications by status,
+  most-requested skills, and roles with no applicants, plus a CSV export.
