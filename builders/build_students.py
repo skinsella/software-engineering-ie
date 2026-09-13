@@ -67,7 +67,7 @@ where = section(S.band(f'''
 </div>''', "ise-band"))
 
 cta = section(S.cta("Think you could be one of them?",
-  "Applications for 2026 are open through the CAO with code LM173.",
+  "Applications for 2027 are open through the CAO with code LM173.",
   '<a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a> <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Talk to us</a>'))
 
 cohort = S.portrait_cards("Meet the cohort", "Real students, real projects",

@@ -8,7 +8,7 @@ def sec(inner, klass=""): return section(S.band(inner, klass))
 
 # ============================== APPLY (103) ==============================
 apply_hero = S.hero("Apply", "Apply to ISE — CAO&nbsp;LM173",
-  "Applications for 2026 entry are made through the CAO. Here is what you need to know to join the next cohort.",
+  "Applications for 2027 entry are made through the CAO. Here is what you need to know to join the next cohort.",
   '<a class="ise-btn ise-btn--primary" href="https://www.cao.ie" rel="noopener">Apply on CAO</a> ' + CALL,
   max_title="16ch")
 apply_how = sec(f'''
@@ -64,7 +64,7 @@ course_teach = sec(f'''
     <div>{S.stat("2","degrees (BSc + MSc)")}</div>
   </div>
 </div>''')
-course_cta = section(S.cta("Apply for 2026","Add CAO code LM173 to your application.",
+course_cta = section(S.cta("Apply for 2027","Add CAO code LM173 to your application.",
   '<a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a> ' + CALL))
 course_split = S.split("course-teach.jpg", "Inside ISE",
   "Where the learning happens",
@@ -86,7 +86,7 @@ why_cards = sec(f'''
     {S.card("Work with the best","Residencies with world-leading companies and Ireland's fastest-growing startups.")}
   </div>
 </div>''', "ise-band")
-why_cta = section(S.cta("See if ISE is for you","Applications for 2026 are open through the CAO with code LM173.",
+why_cta = section(S.cta("See if ISE is for you","Applications for 2027 are open through the CAO with code LM173.",
   '<a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a> ' + CALL))
 why_split = S.split("why-feature.jpg", "In practice",
   "You build from week one",
@@ -106,7 +106,7 @@ about_prose = sec('''
   <p>The programme is delivered in partnership with a network of leading technology companies and Irish start-ups, and is part of the University of Limerick.</p>
   <p style="margin-top:1.25rem;"><a class="ise-btn ise-btn--ghost" href="https://www.ul.ie" rel="noopener">University of Limerick →</a></p>
 </div>''', "ise-band")
-about_cta = section(S.cta("Join the next cohort","Applications for 2026 are open through the CAO with code LM173.",
+about_cta = section(S.cta("Join the next cohort","Applications for 2027 are open through the CAO with code LM173.",
   '<a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a> ' + CALL))
 S.assemble(106, "About", "about", [about_hero, about_prose, about_cta], menu_order=6)
 
@@ -147,7 +147,7 @@ careers_wall = sec(f'''
   <div style="max-width:56ch;margin-bottom:1.5rem;"><p class="ise-eyebrow" style="color:#8fe3b0;">Residency partners</p><h2 style="color:#fff;">Companies students have worked with</h2></div>
   {S.partner_wall()}
 </div>''', "ise-band--heritage")
-careers_cta = section(S.cta("Start your ISE journey","Applications for 2026 are open through the CAO with code LM173.",
+careers_cta = section(S.cta("Start your ISE journey","Applications for 2027 are open through the CAO with code LM173.",
   '<a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a> ' + CALL))
 S.assemble(108, "Careers", "careers", [careers_hero, careers_out, careers_wall, careers_cta], menu_order=7)
 

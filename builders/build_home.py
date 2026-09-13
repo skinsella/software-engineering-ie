@@ -122,7 +122,7 @@ how = f'''
 # ---- CTA ----
 cta = '''
 <div class="ise-container" style="text-align:center;max-width:760px;">
-  <h2 style="color:#fff;">Applications for 2026 are open</h2>
+  <h2 style="color:#fff;">Applications for 2027 are open</h2>
   <p style="color:#e7f2ec;font-size:var(--fs-lead);">Apply through the CAO with code LM173, or talk to our team about residencies and partnerships.</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
     <a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a>
@@ -141,7 +141,7 @@ footer = '''
   <div><h3 style="color:#fff;font-size:1rem;">Apply</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/apply">How to apply</a><br><a href="/why-ise">Why ISE</a><br><a href="/faq">FAQ</a></p></div>
   <div><h3 style="color:#fff;font-size:1rem;">Connect</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/about">About us</a><br><a href="/companies">Partner with us</a><br><a href="/careers">Careers</a></p></div>
 </div>
-<div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2026 University of Limerick</span><span>CAO code LM173 · software-engineering.ie</span></div></div>'''
+<div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2027 University of Limerick</span><span>CAO code LM173 · software-engineering.ie</span></div></div>'''
 
 
 # ---- TWO PATHS: student flow vs partner flow ----
