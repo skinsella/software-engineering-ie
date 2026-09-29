@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ISE — homepage preview</title>
+<title>ISE, homepage preview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Roboto+Condensed:wght@400;500;700&display=swap" rel="stylesheet">
@@ -364,6 +364,23 @@ a:hover { color: var(--ul-green-modern); }
 .ise-dash-list li:last-child { border-bottom: 0; }
 @media (max-width: 700px){ .ise-dash-grid { grid-template-columns: 1fr; } }
 
+/* =============================================================
+   MOBILE FIXES — collapse inline multi-column grids, stop overflow
+   (inline grid styles have no media queries, so target them here)
+   ============================================================= */
+html, body { overflow-x: hidden; }
+@media (max-width: 820px){
+  [style*="grid-template-columns:repeat(3"], [style*="grid-template-columns: repeat(3"],
+  [style*="grid-template-columns:repeat(4"], [style*="grid-template-columns: repeat(4"] { grid-template-columns: 1fr !important; }
+  .ise-stats-row { gap: 1.25rem 2rem !important; }
+}
+@media (max-width: 680px){
+  [style*="grid-template-columns:repeat(2"], [style*="grid-template-columns: repeat(2"],
+  [style*="grid-template-columns:1.3fr 1fr"], [style*="grid-template-columns:1.1fr 1fr"],
+  [style*="grid-template-columns:1.4fr 1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
+  .ise-container { padding-inline: 1.1rem; }
+}
+
 *{box-sizing:border-box} body{margin:0} img{max-width:100%}
 </style></head><body><div class="ise-nav" style="">
 <div class="ise-container" style="display:flex;align-items:center;justify-content:space-between;padding-block:1.15rem;gap:1rem;flex-wrap:wrap;">
@@ -375,23 +392,23 @@ a:hover { color: var(--ul-green-modern); }
     <a href="/jobs" style="text-decoration:none;">Jobs</a>
     <a href="/about" style="text-decoration:none;">About</a>
     <a href="/become-a-partner" style="text-decoration:none;">For partners</a>
-    <a class="ise-btn ise-btn--primary" href="/apply" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
+    <a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
   </nav>
 </div></div><div class="ise-hero" style="background:#0a3f2c;padding-block:var(--section-y);">
 <div class="ise-container" style="min-height:clamp(560px,78vh,720px);display:flex;flex-direction:column;justify-content:center;padding-block:6rem 5rem;">
   <p class="ise-eyebrow" style="color:#8fe3b0;">Immersive Software Engineering · University of Limerick</p>
   <h1 style="color:#fff;font-size:var(--fs-hero);margin:.6rem 0 1.25rem;max-width:17ch;">Exceptional students. World-class companies.</h1>
-  <p style="font-size:var(--fs-lead);color:#e7f2ec;max-width:60ch;">A four-year integrated BSc and MSc where you learn by doing — spending half of your degree in paid residencies with the best software companies in the world.</p>
+  <p style="font-size:var(--fs-lead);color:#e7f2ec;max-width:60ch;">A four-year integrated MSc, with the option to exit after three years with a BSc, where you learn by doing and spend half your degree in paid residencies with the best software companies in the world.</p>
   <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem;">
-    <a class="ise-btn ise-btn--primary" href="/apply">Apply now — CAO LM173</a>
+    <a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply now, CAO LM173</a>
     <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Book a call</a>
   </div>
 </div></div><div class="ise-band" style="padding-block:var(--section-y);">
 <div class="ise-container" style="display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:center;">
-  <p class="ise-serif" style="font-size:clamp(1.4rem,2.6vw,2.05rem);color:var(--ul-green-heritage);line-height:1.35;margin:0;">ISE is a computer science degree where you learn by doing — not in lecture halls, but in studios and inside real companies, shipping real software from first year.</p>
+  <p class="ise-serif" style="font-size:clamp(1.4rem,2.6vw,2.05rem);color:var(--ul-green-heritage);line-height:1.35;margin:0;">ISE is a computer science degree where you learn by doing, not in lecture halls, but in studios and inside real companies, shipping real software from first year.</p>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;">
     <div><div class="ise-stat__num">50%</div><div class="ise-stat__label">in paid residency</div></div>
-    <div><div class="ise-stat__num">4 yrs</div><div class="ise-stat__label">BSc + MSc</div></div>
+    <div><div class="ise-stat__num">4 yrs</div><div class="ise-stat__label">to an MSc</div></div>
     <div><div class="ise-stat__num">5</div><div class="ise-stat__label">residencies</div></div>
   </div>
 </div></div><div class="" style="padding-block:var(--section-y);">
@@ -402,7 +419,7 @@ a:hover { color: var(--ul-green-modern); }
     <p class="ise-lead">ISE admits a small, highly selective group each year, chosen for how they actually think and build. The result is a cohort that companies compete to work with.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
-    <div class="ise-card" style="background:#fff;border-color:var(--line);"><h3 style="color:var(--ul-green-heritage);margin:0 0 .5rem;">Selected on substance</h3><p style="margin:0;color:var(--ink-70);">A highly selective intake focused on genuine ability, not points alone — we look for real builders.</p></div>
+    <div class="ise-card" style="background:#fff;border-color:var(--line);"><h3 style="color:var(--ul-green-heritage);margin:0 0 .5rem;">Selected on substance</h3><p style="margin:0;color:var(--ink-70);">A highly selective intake focused on genuine ability, not points alone, we look for real builders.</p></div>
     <div class="ise-card" style="background:#fff;border-color:var(--line);"><h3 style="color:var(--ul-green-heritage);margin:0 0 .5rem;">Learning by shipping</h3><p style="margin:0;color:var(--ink-70);">Studio-based, project-driven and continuously assessed. Students build from week one.</p></div>
     <div class="ise-card" style="background:#fff;border-color:var(--line);"><h3 style="color:var(--ul-green-heritage);margin:0 0 .5rem;">Ready for industry</h3><p style="margin:0;color:var(--ink-70);">Partners report students performing well beyond their years by their very first residency.</p></div>
   </div>
@@ -412,7 +429,7 @@ a:hover { color: var(--ul-green-modern); }
   <div style="max-width:58ch;margin-bottom:2.5rem;">
     <p class="ise-eyebrow" style="color:#8fe3b0;">The Companies</p>
     <h2 style="color:#fff;">You will work inside the best</h2>
-    <p style="color:#d7e8df;font-size:var(--fs-lead);">Residencies are not shadowing. Students join world-leading engineering teams as paid contributors — from global platforms to Ireland's fastest-growing startups in fintech, medtech, robotics and quantum.</p>
+    <p style="color:#d7e8df;font-size:var(--fs-lead);">Residencies are not shadowing. Students join world-leading engineering teams as paid contributors, from global platforms to Ireland's fastest-growing startups in fintech, medtech, robotics and quantum.</p>
   </div>
   <div class="ise-logo-wall ise-logo-wall--mono" style="gap:1rem;margin-top:.5rem;">
     <div class="ise-logo-cell"><img src="assets/partners/stripe.png" alt="stripe logo"></div><div class="ise-logo-cell"><img src="assets/partners/aws.png" alt="aws logo"></div><div class="ise-logo-cell"><img src="assets/partners/intercom.png" alt="intercom logo"></div><div class="ise-logo-cell"><img src="assets/partners/mastercard.png" alt="mastercard logo"></div><div class="ise-logo-cell"><img src="assets/partners/intel.png" alt="intel logo"></div><div class="ise-logo-cell"><img src="assets/partners/dell.png" alt="dell logo"></div><div class="ise-logo-cell"><img src="assets/partners/workday.png" alt="workday logo"></div><div class="ise-logo-cell"><img src="assets/partners/fiserv.png" alt="fiserv logo"></div><div class="ise-logo-cell"><img src="assets/partners/jj.png" alt="jj logo"></div><div class="ise-logo-cell"><img src="assets/partners/bd.png" alt="bd logo"></div><div class="ise-logo-cell"><img src="assets/partners/gm.png" alt="gm logo"></div><div class="ise-logo-cell"><img src="assets/partners/jlr.png" alt="jlr logo"></div><div class="ise-logo-cell"><img src="assets/partners/first-derivatives.png" alt="first-derivatives logo"></div><div class="ise-logo-cell"><img src="assets/partners/keeper-sloutions.png" alt="keeper-sloutions logo"></div><div class="ise-logo-cell"><img src="assets/partners/tines.png" alt="tines logo"></div><div class="ise-logo-cell"><img src="assets/partners/teckro.png" alt="teckro logo"></div><div class="ise-logo-cell"><img src="assets/partners/kneat.png" alt="kneat logo"></div><div class="ise-logo-cell"><img src="assets/partners/payslip.png" alt="payslip logo"></div><div class="ise-logo-cell"><img src="assets/partners/macmarts.png" alt="macmarts logo"></div><div class="ise-logo-cell"><img src="assets/partners/viotas.png" alt="viotas logo"></div><div class="ise-logo-cell"><img src="assets/partners/mbryonics.png" alt="mbryonics logo"></div><div class="ise-logo-cell"><img src="assets/partners/deveire.png" alt="deveire logo"></div><div class="ise-logo-cell"><img src="assets/partners/equal1.png" alt="equal1 logo"></div><div class="ise-logo-cell"><img src="assets/partners/provizio.png" alt="provizio logo"></div><div class="ise-logo-cell"><img src="assets/partners/manna.png" alt="manna logo"></div><div class="ise-logo-cell"><img src="assets/partners/bsci.png" alt="bsci logo"></div><div class="ise-logo-cell"><img src="assets/partners/transact.png" alt="transact logo"></div><div class="ise-logo-cell"><img src="assets/partners/shannonside.png" alt="shannonside logo"></div><div class="ise-logo-cell"><img src="assets/partners/ida.png" alt="ida logo"></div><div class="ise-logo-cell"><img src="assets/partners/enterprise-ireland.png" alt="enterprise-ireland logo"></div><div class="ise-logo-cell"><img src="assets/partners/ulatwork.png" alt="ulatwork logo"></div><div class="ise-logo-cell"><img src="assets/partners/dogpatch.png" alt="dogpatch logo"></div><div class="ise-logo-cell"><img src="assets/partners/frontline.png" alt="frontline logo"></div>
@@ -426,15 +443,15 @@ a:hover { color: var(--ul-green-modern); }
 <div class="ise-container" id="course">
   <div style="max-width:52ch;margin-bottom:2.25rem;">
     <p class="ise-eyebrow">How it works</p>
-    <h2 style="max-width:20ch;">Four years. Two degrees. Five residencies.</h2>
+    <h2 style="max-width:20ch;">Four years. One master's. Five residencies.</h2>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;"><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 1</p><h3 style="margin:0 0 .5rem;">Foundations</h3><p style="margin:0;color:var(--ink-70);">Studio-based fundamentals — programming, systems and maths — building real projects in small teams.</p></div><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 2</p><h3 style="margin:0 0 .5rem;">First residencies</h3><p style="margin:0;color:var(--ink-70);">Paid residencies begin. Students join partner engineering teams for three to six months at a time.</p></div><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 3</p><h3 style="margin:0 0 .5rem;">Depth & specialism</h3><p style="margin:0;color:var(--ink-70);">Deeper residencies paired with advanced coursework in a chosen area of software engineering.</p></div><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 4</p><h3 style="margin:0 0 .5rem;">Master's project</h3><p style="margin:0;color:var(--ink-70);">A capstone master's project, often with an industry partner, completing the integrated MSc.</p></div></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;"><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 1</p><h3 style="margin:0 0 .5rem;">Foundations</h3><p style="margin:0;color:var(--ink-70);">Studio-based fundamentals, programming, systems and maths, building real projects in small teams.</p></div><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 2</p><h3 style="margin:0 0 .5rem;">First residencies</h3><p style="margin:0;color:var(--ink-70);">Paid residencies begin. Students join partner engineering teams for three to six months at a time.</p></div><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 3</p><h3 style="margin:0 0 .5rem;">Depth & specialism</h3><p style="margin:0;color:var(--ink-70);">Deeper residencies paired with advanced coursework in a chosen area of software engineering.</p></div><div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">Year 4</p><h3 style="margin:0 0 .5rem;">Master's project</h3><p style="margin:0;color:var(--ink-70);">A capstone master's project, often with an industry partner, completing the integrated MSc.</p></div></div>
 </div></div><div class="ise-band--green" style="padding-block:var(--section-y);">
 <div class="ise-container" style="text-align:center;max-width:760px;">
   <h2 style="color:#fff;">Applications for 2027 are open</h2>
   <p style="color:#e7f2ec;font-size:var(--fs-lead);">Apply through the CAO with code LM173, or talk to our team about residencies and partnerships.</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
-    <a class="ise-btn ise-btn--on-dark" href="/apply">Apply — LM173</a>
+    <a class="ise-btn ise-btn--on-dark" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply, LM173</a>
     <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Become a partner</a>
   </div>
 </div></div><div class="ise-footer">
@@ -444,7 +461,7 @@ a:hover { color: var(--ul-green-modern); }
     <p style="max-width:34ch;margin:.75rem 0 0;color:#a9c9bb;">Immersive Software Engineering, University of Limerick. A radically practical computer science degree.</p>
   </div>
   <div><h3 style="color:#fff;font-size:1rem;">Explore</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/students">The Students</a><br><a href="/companies">The Companies</a><br><a href="#course">Course</a></p></div>
-  <div><h3 style="color:#fff;font-size:1rem;">Apply</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/apply">How to apply</a><br><a href="/why-ise">Why ISE</a><br><a href="/faq">FAQ</a></p></div>
+  <div><h3 style="color:#fff;font-size:1rem;">Apply</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">How to apply</a><br><a href="/why-ise">Why ISE</a><br><a href="/faq">FAQ</a></p></div>
   <div><h3 style="color:#fff;font-size:1rem;">Connect</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/about">About us</a><br><a href="/companies">Partner with us</a><br><a href="/careers">Careers</a></p></div>
 </div>
 <div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2027 University of Limerick</span><span>CAO code LM173 · software-engineering.ie</span></div></div></div></body></html>

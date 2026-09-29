@@ -153,6 +153,20 @@
       "slug": "ise-dashboard",
       "file": "ise-dashboard.json",
       "front_page": false
+    },
+    {
+      "id": 122,
+      "title": "Team",
+      "slug": "team",
+      "file": "team.json",
+      "front_page": false
+    },
+    {
+      "id": 123,
+      "title": "Entrance submission",
+      "slug": "entrance-submission",
+      "file": "entrance-submission.json",
+      "front_page": false
     }
   ]
 }

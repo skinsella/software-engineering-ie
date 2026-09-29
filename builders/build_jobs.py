@@ -54,7 +54,7 @@ profile = section_of(shortcode_widget("[ise_student_profile]"))
 S.assemble(117, "Profile", "profile", [profile_hero, profile], menu_order=97)
 
 dir_hero = S.hero("For partners", "Student directory",
-  "Browse ISE student profiles — skills, portfolios and GitHub — when sourcing for a residency.",
+  "Browse ISE student profiles, skills, portfolios and GitHub, when sourcing for a residency.",
   '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/jobs">View the board</a>', max_title="16ch")
 directory = section_of(shortcode_widget("[ise_student_directory]"))
 S.assemble(118, "Student directory", "students-directory", [dir_hero, directory], menu_order=96)
@@ -69,7 +69,7 @@ mybookmarks = section_of(shortcode_widget("[ise_my_bookmarks]"), settings={"back
 S.assemble(119, "My applications", "my-applications", [myapps_hero, myapps, mybookmarks], menu_order=95)
 
 applicants_hero = S.hero("For partners", "My applicants",
-  "Students who have applied to your residency roles — shortlist, reject, or view their profile.",
+  "Students who have applied to your residency roles, shortlist, reject, or view their profile.",
   '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/post-a-job">Post a role</a>', max_title="16ch")
 applicants = section_of(shortcode_widget("[ise_my_applicants]"))
 S.assemble(120, "My applicants", "my-applicants", [applicants_hero, applicants], menu_order=94)

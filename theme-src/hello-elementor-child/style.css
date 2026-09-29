@@ -357,3 +357,20 @@ a:hover { color: var(--ul-green-modern); }
 .ise-dash-list li { display: flex; justify-content: space-between; gap: 1rem; padding: .45rem 0; border-bottom: 1px solid var(--line); }
 .ise-dash-list li:last-child { border-bottom: 0; }
 @media (max-width: 700px){ .ise-dash-grid { grid-template-columns: 1fr; } }
+
+/* =============================================================
+   MOBILE FIXES — collapse inline multi-column grids, stop overflow
+   (inline grid styles have no media queries, so target them here)
+   ============================================================= */
+html, body { overflow-x: hidden; }
+@media (max-width: 820px){
+  [style*="grid-template-columns:repeat(3"], [style*="grid-template-columns: repeat(3"],
+  [style*="grid-template-columns:repeat(4"], [style*="grid-template-columns: repeat(4"] { grid-template-columns: 1fr !important; }
+  .ise-stats-row { gap: 1.25rem 2rem !important; }
+}
+@media (max-width: 680px){
+  [style*="grid-template-columns:repeat(2"], [style*="grid-template-columns: repeat(2"],
+  [style*="grid-template-columns:1.3fr 1fr"], [style*="grid-template-columns:1.1fr 1fr"],
+  [style*="grid-template-columns:1.4fr 1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
+  .ise-container { padding-inline: 1.1rem; }
+}

@@ -57,7 +57,7 @@ def nav(active=""):
   <a href="/" style="display:inline-flex;align-items:center;"><img src="{ASSET}/ise-ul-logo.png" alt="Immersive Software Engineering · University of Limerick" style="height:40px;width:auto;"></a>
   <nav style="display:flex;gap:1.6rem;align-items:center;font-weight:500;flex-wrap:wrap;">
     {link("/students","The Students")}{link("/companies","The Companies")}{link("/course","Course")}{link("/jobs","Jobs")}{link("/about","About")}<a href="/become-a-partner" style="text-decoration:none;">For partners</a>
-    <a class="ise-btn ise-btn--primary" href="/apply" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
+    <a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
   </nav>
 </div>'''
     return section(band(inner, "ise-nav", pad=False))
@@ -70,8 +70,8 @@ def footer():
     <p style="max-width:34ch;margin:.75rem 0 0;color:#a9c9bb;">Immersive Software Engineering, University of Limerick. A radically practical computer science degree.</p>
   </div>
   <div><h3 style="color:#fff;font-size:1rem;">Explore</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/students">The Students</a><br><a href="/companies">The Companies</a><br><a href="/course">Course</a></p></div>
-  <div><h3 style="color:#fff;font-size:1rem;">Apply</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/apply">How to apply</a><br><a href="/why-ise">Why ISE</a><br><a href="/faq">FAQ</a></p></div>
-  <div><h3 style="color:#fff;font-size:1rem;">Connect</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/about">About us</a><br><a href="/companies">Partner with us</a><br><a href="/careers">Careers</a><br><a href="/profile">Student portal</a><br><a href="/my-applications">My applications</a><br><a href="/my-applicants">My applicants</a></p></div>
+  <div><h3 style="color:#fff;font-size:1rem;">Apply</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">How to apply</a><br><a href="/why-ise">Why ISE</a><br><a href="/entrance-submission">Entrance submission</a><br><a href="/faq">FAQ</a></p></div>
+  <div><h3 style="color:#fff;font-size:1rem;">Connect</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/about">About us</a><br><a href="/companies">Partner with us</a><br><a href="/careers">Careers</a><br><a href="/team">Team</a><br><a href="/schools">For schools</a><br><a href="/profile">Student portal</a><br><a href="/my-applications">My applications</a><br><a href="/my-applicants">My applicants</a></p></div>
 </div>
 <div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2027 University of Limerick</span><span><a href="/privacy">Privacy</a> · CAO code LM173 · software-engineering.ie</span></div></div>'''
     return section('<div class="ise-footer">' + inner + '</div>')
@@ -87,7 +87,7 @@ def hero(eyebrow, title, lead, buttons_html, max_title="17ch", bg_image=None):
     bg = "#0a3f2c" + (f" url('{ASSET}/photos/{bg_image}') center/cover no-repeat" if bg_image else "")
     return section(f'<div class="ise-hero" style="background:{bg};padding-block:0;">' + inner + '</div>')
 
-BTN_APPLY = '<a class="ise-btn ise-btn--primary" href="/apply">Apply now — CAO LM173</a>'
+BTN_APPLY = '<a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply now, CAO LM173</a>'
 BTN_CALL  = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Book a call</a>'
 
 def cta(title, text, buttons_html):
@@ -121,12 +121,12 @@ def portrait_cards(eyebrow, title, items, klass="ise-band"):
     return section(band(inner, klass))
 
 
-# Illustrative student testimonials — PLACEHOLDER copy + names, to be replaced
+# Illustrative student testimonials, PLACEHOLDER copy + names, to be replaced
 # with real, approved student quotes before publishing.
 STUDENT_TESTIMONIALS = [
-    ("In my first residency I was shipping code to production within weeks — real features used by real customers. I learned more in three months than I thought was possible.",
+    ("In my first residency I was shipping code to production within weeks, real features used by real customers. I learned more in three months than I thought was possible.",
      "Aoife M.", "Residency at Stripe · payments dashboard", "avatar-2.jpg"),
-    ("I went from writing my first real program to building a computer-vision pipeline for a medtech company. ISE throws you in — then makes sure you can swim.",
+    ("I went from writing my first real program to building a computer-vision pipeline for a medtech company. ISE throws you in, then makes sure you can swim.",
      "Cian D.", "Residency at Provizio · sensor data & ML", "avatar-1.jpg"),
     ("The studio changed how I work. We build together, review each other's code and ship real things. By second year I already felt like an engineer.",
      "Eoin R.", "Residency at Intercom · internal tooling", "avatar-3.jpg"),
