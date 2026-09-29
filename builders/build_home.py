@@ -50,7 +50,7 @@ hero = '''
   <p style="font-size:var(--fs-lead);color:#e7f2ec;max-width:60ch;">A four-year integrated MSc, with the option to exit after three years with a BSc, where you learn by doing and spend half your degree in paid residencies with the best software companies in the world.</p>
   <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem;">
     <a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply now, CAO LM173</a>
-    <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Book a call</a>
+    <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>
   </div>
 </div>'''
 

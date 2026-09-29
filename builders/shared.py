@@ -88,7 +88,7 @@ def hero(eyebrow, title, lead, buttons_html, max_title="17ch", bg_image=None):
     return section(f'<div class="ise-hero" style="background:{bg};padding-block:0;">' + inner + '</div>')
 
 BTN_APPLY = '<a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply now, CAO LM173</a>'
-BTN_CALL  = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Book a call</a>'
+BTN_CALL  = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>'
 
 def cta(title, text, buttons_html):
     inner = f'''

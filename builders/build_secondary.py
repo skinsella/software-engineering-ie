@@ -3,7 +3,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import shared as S
 from elementor_lib import section
 
-CALL = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/team">Book a call</a>'
+CALL = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>'
 def sec(inner, klass=""): return section(S.band(inner, klass))
 
 # ============================== APPLY (103) ==============================
@@ -126,7 +126,7 @@ faq_hero = S.hero("FAQ","Frequently asked questions",
   "Everything you might want to know about applying to and studying ISE.", S.BTN_APPLY + ' ' + CALL, max_title="18ch")
 faq_body = sec(f'<div class="ise-container ise-faq" style="max-width:820px;">{faq_items}</div>')
 faq_cta = section(S.cta("Still have a question?","Book a call with our team and we'll help.",
-  '<a class="ise-btn ise-btn--on-dark" href="/team">Book a call</a>'))
+  '<a class="ise-btn ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>'))
 S.assemble(107, "FAQ", "faq", [faq_hero, faq_body, faq_cta], menu_order=8)
 
 # ============================== CAREERS (108) ==============================

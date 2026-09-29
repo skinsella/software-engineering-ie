@@ -2,7 +2,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 import shared as S
 from elementor_lib import section
-CALL='<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/team">Book a call</a>'
+CALL='<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>'
 def sec(inner, klass=""): return section(S.band(inner, klass))
 
 # ===================== GLOBAL FELLOWSHIPS (109) =====================
@@ -21,7 +21,7 @@ fel_body=sec(f'''
   <p class="ise-lead" style="margin-top:1.75rem;max-width:60ch;">Programme details are being confirmed, talk to the team to find out more.</p>
 </div>''', "ise-band")
 fel_cta=section(S.cta("Interested in the Fellowships?","Get in touch to learn more about international opportunities.",
-  '<a class="ise-btn ise-btn--on-dark" href="/team">Book a call</a>'))
+  '<a class="ise-btn ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>'))
 S.assemble(109,"Global Fellowships","global-fellowships",[fel_hero,fel_body,fel_cta],menu_order=10)
 
 # ===================== EDI SCHOLARSHIPS (110) =====================
@@ -62,7 +62,7 @@ S.assemble(111,"For Schools","schools",[sch_hero,sch_body,sch_cta],menu_order=12
 # ===================== BECOME A PARTNER (112) =====================
 par_hero=S.hero("Partner with ISE","Become a residency partner",
   "Host ISE students as paid contributors on your engineering team, and meet exceptional talent years before the graduate market does.",
-  '<a class="ise-btn ise-btn--primary" href="/team">Book a call</a> <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">How residencies work</a>',
+  '<a class="ise-btn ise-btn--primary" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a> <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">How residencies work</a>',
   max_title="18ch")
 par_body=sec(f'''
 <div class="ise-container">
@@ -79,7 +79,7 @@ par_wall=sec(f'''
   {S.partner_wall()}
 </div>''', "ise-band--heritage")
 par_cta=section(S.cta("Talk to our residency team","Tell us about your team and we'll find the right fit.",
-  '<a class="ise-btn ise-btn--on-dark" href="/team">Book a call</a>'))
+  '<a class="ise-btn ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>'))
 S.assemble(112,"Become a partner","become-a-partner",[par_hero,par_body,par_wall,par_cta],menu_order=13)
 
 # ===================== PRIVACY (113) =====================
@@ -97,7 +97,7 @@ S.assemble(113,"Privacy","privacy",[pri_hero,pri_body],menu_order=20)
 print("extra pages built: global-fellowships, edi-scholarships, schools, become-a-partner, privacy")
 
 # ===================== TEAM (122) =====================
-# NOTE: placeholder — add real ISE team names, roles, photos and a booking/contact link.
+# NOTE: placeholder, add real ISE team names, roles, photos and a booking/contact link.
 team_hero=S.hero("The team","Meet the ISE team",
   "The people behind Immersive Software Engineering, teaching, mentoring and connecting students with residency partners.",
   '<a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Programme details on ul.ie</a>', max_title="18ch")
@@ -116,17 +116,44 @@ team_cta=section(S.cta("Talk to the ISE team","Book a call about the programme, 
 S.assemble(122,"Team","team",[team_hero,team_body,team_cta],menu_order=15)
 
 # ===================== ENTRANCE SUBMISSION (123) =====================
-# NOTE: earlier this was removed at the client's request; re-added per new feedback.
-# Placeholder content — add the current entrance-submission brief / link to UL.
 es_hero=S.hero("Applying","The ISE entrance submission",
-  "ISE looks beyond points. Applicants complete an entrance submission so we can see how you think and build.",
-  '<a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Full details on ul.ie</a>', max_title="18ch")
-es_body=sec('''
-<div class="ise-container ise-prose">
-  <div style="max-width:54ch;margin-bottom:1.5rem;"><p class="ise-eyebrow">How selection works</p><h2>More than points</h2></div>
-  <p>Alongside your CAO application, ISE asks for an entrance submission. It is how we understand your motivation and your ability to build, not just your exam results.</p>
-  <p>This page is a placeholder. Add the current entrance-submission brief, deadlines and requirements, or link to the official details on the University of Limerick site.</p>
+  "ISE looks beyond points. Alongside your CAO application you complete an entrance submission, worth up to 200 points, so we can see how you think and build.",
+  '<a class="ise-btn ise-btn--primary" href="https://www.software-engineering.ie/about-the-ise-entrance-submission/" target="_blank" rel="noopener">Read the full brief</a>', max_title="18ch")
+
+es_routes=sec(f'''
+<div class="ise-container">
+  <div style="max-width:58ch;margin-bottom:2rem;"><p class="ise-eyebrow">How it works</p><h2>Two routes, one submission</h2>
+  <p class="ise-lead">Choose one of two routes. Both carry equal marks and are worth up to 200 points. Pick the one that lets you best show your skills and interests in science, technology, engineering, maths and innovation.</p></div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;">
+    {S.card("Route A · Technology Project","Up to 800 words on a project where you used technology to do something interesting. Tell us what you did and, just as important, how you did it. Add screenshots, links to repositories or sites, and short explained code fragments, plus the impact of the work and what you would do differently.")}
+    {S.card("Route B · Personal Profile","Answer three of four set questions, up to 400 words each, with one optional supporting link per answer. This route suits applicants with or without hands-on software experience and lets you showcase achievements and identity beyond grades.")}
+  </div>
 </div>''', "ise-band")
-S.assemble(123,"Entrance submission","entrance-submission",[es_hero,es_body],menu_order=16)
+
+es_process=sec(f'''
+<div class="ise-container">
+  <div style="max-width:56ch;margin-bottom:2rem;"><p class="ise-eyebrow">Who and how</p><h2>Applying and getting access</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+    {S.card("Who it is for","CAO (Leaving Certificate), mature and international applicants to Immersive Software Engineering, CAO code LM173.")}
+    {S.card("Getting the portal link","Select LM173 on your CAO application and you will be emailed a link to the submission portal. International applicants apply directly to UL and receive the same link.")}
+    {S.card("Evidence is welcome","Screenshots, repositories, portfolios, website links and commented code all help, as long as you explain them in your writing.")}
+  </div>
+</div>''')
+
+es_timeline=sec('''
+<div class="ise-container">
+  <div style="max-width:56ch;margin-bottom:1.5rem;"><p class="ise-eyebrow">Timeline</p><h2>When you will hear from us</h2></div>
+  <div class="ise-faq" style="max-width:820px;">
+    <details open><summary>CAO application by 1 February</summary><p>You will be emailed in early to mid March with details of the entrance submission process.</p></details>
+    <details><summary>CAO application after 1 February, up to 1 May</summary><p>You will be emailed by mid May with the same details.</p></details>
+    <details><summary>CAO Change of Mind up to 1 July</summary><p>If you add LM173 through Change of Mind, you will be emailed by mid July. Dates may differ for international applicants; contact UL Admissions.</p></details>
+  </div>
+</div>''', "ise-band")
+
+es_cta=section(S.cta("Questions about the submission?",
+  "Read the full brief, including the current questions and video guidance, or contact the ISE admissions team.",
+  '<a class="ise-btn ise-btn--on-dark" href="https://www.software-engineering.ie/about-the-ise-entrance-submission/" target="_blank" rel="noopener">Entrance submission brief</a>'))
+
+S.assemble(123,"Entrance submission","entrance-submission",[es_hero,es_routes,es_process,es_timeline,es_cta],menu_order=16)
 
 print("team + entrance-submission pages added")

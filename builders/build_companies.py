@@ -4,7 +4,7 @@ import shared as S
 from elementor_lib import section
 
 BTN_PARTNER = '<a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Become a residency partner</a>'
-BTN_CALL    = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/team">Book a call</a>'
+BTN_CALL    = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>'
 
 hero = S.hero(
   "The Companies",
@@ -56,6 +56,6 @@ why = section(S.band(f'''
 
 cta = section(S.cta("Become a residency partner",
   "Tell us about your engineering team and we'll find the right residency fit.",
-  '<a class="ise-btn ise-btn--on-dark" href="/team">Book a call with our team</a>'))
+  '<a class="ise-btn ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call with our team</a>'))
 
 S.assemble(102, "The Companies", "companies", [hero, wall, what, why, cta], menu_order=2)
