@@ -42,9 +42,29 @@ def stat(num, label, on_dark=False):
     return (f'<div><div class="ise-stat__num" style="color:{ncol};">{num}</div>'
             f'<div class="ise-stat__label" style="color:{lcol};">{label}</div></div>')
 
+# Human-readable partner names for accessible alt text (slug -> display name).
+# Anything not listed falls back to title-casing the slug (stripe -> Stripe).
+PARTNER_NAMES = {
+    "aws": "AWS", "bd": "BD", "hse": "HSE", "ida": "IDA Ireland", "openai": "OpenAI",
+    "ul-at-work": "UL@Work", "ei-electronics": "EI Electronics", "eli-lilly": "Eli Lilly",
+    "jaguar-landrover": "Jaguar Land Rover", "johnson-johnson": "Johnson & Johnson",
+    "first-derivatives": "First Derivatives", "general-motors": "General Motors",
+    "keeper-solutions": "Keeper Solutions", "boston-scientific": "Boston Scientific",
+    "enterprise-ireland": "Enterprise Ireland", "virtu-financial": "Virtu Financial",
+    "protex-ai": "Protex AI", "carbon-copy": "Carbon Copy", "premium-power": "Premium Power",
+    "equal1": "Equal1", "cubic3": "Cubic3", "wrxflo": "WRXFLO", "kinetikiq": "KinetiKiq",
+    "openchip": "OpenChip", "cloudcards": "CloudCards", "fluidedge": "FluidEdge",
+    "totalcare": "TotalCare", "avtrain": "AVTrain", "susquehanna": "Susquehanna",
+}
+
+def partner_name(slug):
+    return PARTNER_NAMES.get(slug) or slug.replace("-", " ").title()
+
 def partner_wall():
-    cells = ''.join(f'<div class="ise-logo-cell"><img src="{ASSET}/partners/{n}.png" alt="{n} logo"></div>'
-                    for n in PARTNER_LOGOS)
+    cells = ''.join(
+        f'<div class="ise-logo-cell">'
+        f'<img src="{ASSET}/partners/{n}.png" alt="{partner_name(n)}" loading="lazy" decoding="async"></div>'
+        for n in PARTNER_LOGOS)
     return f'<div class="ise-logo-wall ise-logo-wall--mono" style="gap:1rem;margin-top:.5rem;">{cells}</div>'
 
 # ---------- global nav + footer ----------
@@ -62,7 +82,7 @@ def nav(active=""):
 </div>'''
     return section(band(inner, "ise-nav", pad=False))
 
-def footer():
+def footer_html():
     inner = f'''
 <div class="ise-container" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2rem;padding-block:3.5rem 2rem;">
   <div>
@@ -71,10 +91,13 @@ def footer():
   </div>
   <div><h3 style="color:#fff;font-size:1rem;">Explore</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/students">The Students</a><br><a href="/companies">The Companies</a><br><a href="/course">Course</a></p></div>
   <div><h3 style="color:#fff;font-size:1rem;">Apply</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">How to apply</a><br><a href="/why-ise">Why ISE</a><br><a href="/entrance-submission">Entrance submission</a><br><a href="/faq">FAQ</a></p></div>
-  <div><h3 style="color:#fff;font-size:1rem;">Connect</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/about">About us</a><br><a href="/companies">Partner with us</a><br><a href="/careers">Careers</a><br><a href="/team">Team</a><br><a href="/schools">For schools</a><br><a href="/profile">Student portal</a><br><a href="/my-applications">My applications</a><br><a href="/my-applicants">My applicants</a></p></div>
+  <div><h3 style="color:#fff;font-size:1rem;">Connect</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/about">About us</a><br><a href="/become-a-partner">Partner with us</a><br><a href="/careers">Careers</a><br><a href="/team">Team</a><br><a href="/schools">For schools</a></p></div>
 </div>
 <div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2027 University of Limerick</span><span><a href="/privacy">Privacy</a> · CAO code LM173 · software-engineering.ie</span></div></div>'''
-    return section('<div class="ise-footer">' + inner + '</div>')
+    return '<div class="ise-footer">' + inner + '</div>'
+
+def footer():
+    return section(footer_html())
 
 def hero(eyebrow, title, lead, buttons_html, max_title="17ch", bg_image=None):
     inner = f'''

@@ -5,10 +5,8 @@ import shared as _S
 
 ASSET = "/wp-content/themes/hello-elementor-child/assets"
 
-PARTNERS = ["Stripe","AWS","Intercom","OpenAI","Mastercard","Analog Devices"]
-PARTNER_LOGOS = ["stripe","aws","intercom","mastercard","intel","dell","workday","fiserv","jj","bd","gm","jlr","first-derivatives","keeper-sloutions","tines","teckro","kneat","payslip","macmarts","viotas","mbryonics","deveire","equal1","provizio","manna","bsci","transact","shannonside","ida","enterprise-ireland","ulatwork","dogpatch","frontline"]
-pill = lambda n: (f'<span style="font-family:var(--font-display);font-weight:700;'
-                  f'font-size:1.15rem;letter-spacing:.02em;color:#46514c;">{n}</span>')
+# Partner logos come from the shared list (S.partner_wall) so the homepage and the
+# rest of the site stay in sync; no local logo list to drift or misspell.
 
 
 def band(inner_html, klass="", pad=True):
@@ -70,13 +68,13 @@ students = f'''
 <div class="ise-container">
   <div style="max-width:54ch;margin-bottom:2.5rem;">
     <p class="ise-eyebrow">The Students</p>
-    <h2>The most capable cohort in the country</h2>
-    <p class="ise-lead">ISE admits a small, highly selective group each year, chosen for how they actually think and build. The result is a cohort that companies compete to work with.</p>
+    <h2>A small, highly selective cohort</h2>
+    <p class="ise-lead">ISE admits a small group each year, chosen for how they actually think and build. Students join partner engineering teams as paid contributors from early in the programme.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
     {card("Selected on substance","A highly selective intake focused on genuine ability, not points alone, we look for real builders.")}
     {card("Learning by shipping","Studio-based, project-driven and continuously assessed. Students build from week one.")}
-    {card("Ready for industry","Partners report students performing well beyond their years by their very first residency.")}
+    {card("Ready for industry","Students contribute to real engineering work from their very first residency, not shadowing from the sidelines.")}
   </div>
   <div style="margin-top:2rem;"><a class="ise-btn ise-btn--ghost" href="/students">Meet the students →</a></div>
 </div>'''
@@ -89,9 +87,7 @@ companies = f'''
     <h2 style="color:#fff;">You will work inside the best</h2>
     <p style="color:#d7e8df;font-size:var(--fs-lead);">Residencies are not shadowing. Students join world-leading engineering teams as paid contributors, from global platforms to Ireland's fastest-growing startups in fintech, medtech, robotics and quantum.</p>
   </div>
-  <div class="ise-logo-wall ise-logo-wall--mono" style="gap:1rem;margin-top:.5rem;">
-    {''.join(f'<div class="ise-logo-cell"><img src="/wp-content/themes/hello-elementor-child/assets/partners/{n}.png" alt="{n} logo"></div>' for n in PARTNER_LOGOS)}
-  </div>
+  {_S.partner_wall()}
   <blockquote style="margin:2.75rem 0 0;padding:0;border:0;">
     <p class="ise-serif" style="font-size:clamp(1.4rem,2.6vw,2rem);color:#fff;max-width:34ch;margin:0;line-height:1.3;">“Software engineering is a wonderful career.”</p>
     <footer style="font-family:var(--font-sans);font-size:1rem;color:#8fe3b0;margin-top:.85rem;">John Collison · co-founder, Stripe</footer>
@@ -126,22 +122,13 @@ cta = '''
   <p style="color:#e7f2ec;font-size:var(--fs-lead);">Apply through the CAO with code LM173, or talk to our team about residencies and partnerships.</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
     <a class="ise-btn ise-btn--on-dark" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply, LM173</a>
-    <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Become a partner</a>
+    <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/become-a-partner">Become a partner</a>
   </div>
 </div>'''
 
 # ---- FOOTER ----
-footer = '''
-<div class="ise-container" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2rem;padding-block:3.5rem 2rem;">
-  <div>
-    <img src="/wp-content/themes/hello-elementor-child/assets/ise-ul-logo.png" alt="ISE · University of Limerick" style="height:40px;width:auto;margin-bottom:.35rem;">
-    <p style="max-width:34ch;margin:.75rem 0 0;color:#a9c9bb;">Immersive Software Engineering, University of Limerick. A radically practical computer science degree.</p>
-  </div>
-  <div><h3 style="color:#fff;font-size:1rem;">Explore</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/students">The Students</a><br><a href="/companies">The Companies</a><br><a href="#course">Course</a></p></div>
-  <div><h3 style="color:#fff;font-size:1rem;">Apply</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">How to apply</a><br><a href="/why-ise">Why ISE</a><br><a href="/faq">FAQ</a></p></div>
-  <div><h3 style="color:#fff;font-size:1rem;">Connect</h3><p style="line-height:2;margin:.5rem 0 0;"><a href="/about">About us</a><br><a href="/companies">Partner with us</a><br><a href="/careers">Careers</a></p></div>
-</div>
-<div style="border-top:1px solid rgba(255,255,255,.12);"><div class="ise-container" style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.25rem;color:#a9c9bb;font-size:.9rem;"><span>© 2027 University of Limerick</span><span>CAO code LM173 · software-engineering.ie</span></div></div>'''
+# Uses the shared footer so the homepage matches every subpage (Privacy link,
+# spaced copyright line, no login-only portal links leaking into the public footer).
 
 
 # ---- TWO PATHS: student flow vs partner flow ----
@@ -177,6 +164,6 @@ sections = [
   section(band(how, "ise-band")),
   _S.testimonials("Student stories", "In their words", klass=""),
   section(band(cta, "ise-band--green")),
-  section('<div class="ise-footer">'+footer+'</div>'),
+  _S.footer(),
 ]
 upsert_page(100, "Home", "home", sections, template="elementor_canvas", front=True)

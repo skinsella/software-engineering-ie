@@ -3,6 +3,7 @@ section markup as the Elementor build) so it can be viewed without WordPress."""
 import os, sys, shutil
 sys.path.insert(0, os.path.dirname(__file__))
 import build_home as H  # running import builds the WP page too (idempotent)
+import shared as S
 
 CSS = open(os.path.join(os.path.dirname(__file__), "..",
       "theme-src/hello-elementor-child/style.css")).read()
@@ -16,7 +17,7 @@ blocks = [
     H.band(H.companies, "ise-band--heritage"),
     H.band(H.how, "ise-band"),
     H.band(H.cta, "ise-band--green"),
-    '<div class="ise-footer">' + H.footer + '</div>',
+    S.footer_html(),
 ]
 
 doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">

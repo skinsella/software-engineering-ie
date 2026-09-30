@@ -3,7 +3,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import shared as S
 from elementor_lib import section
 
-BTN_PARTNER = '<a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Become a residency partner</a>'
+BTN_PARTNER = '<a class="ise-btn ise-btn--primary" href="/become-a-partner">Become a residency partner</a>'
 BTN_CALL    = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>'
 
 hero = S.hero(
