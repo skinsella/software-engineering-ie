@@ -146,21 +146,32 @@ def portrait_cards(eyebrow, title, items, klass="ise-band"):
 
 # Illustrative student testimonials, PLACEHOLDER copy + names, to be replaced
 # with real, approved student quotes before publishing.
+# PLACEHOLDER testimonials. The previous entries were invented (fabricated names,
+# quotes and Stripe/Provizio/Intercom attributions with stock avatars) and must not
+# ship as if real. These neutral placeholders are safe to publish; replace the tuple
+# with genuine, consented student quotes + names + photos when supplied.
+# Tuple shape: (quote, name, project_line, avatar_filename_or_None).
 STUDENT_TESTIMONIALS = [
-    ("In my first residency I was shipping code to production within weeks, real features used by real customers. I learned more in three months than I thought was possible.",
-     "Aoife M.", "Residency at Stripe · payments dashboard", "avatar-2.jpg"),
-    ("I went from writing my first real program to building a computer-vision pipeline for a medtech company. ISE throws you in, then makes sure you can swim.",
-     "Cian D.", "Residency at Provizio · sensor data & ML", "avatar-1.jpg"),
-    ("The studio changed how I work. We build together, review each other's code and ship real things. By second year I already felt like an engineer.",
-     "Eoin R.", "Residency at Intercom · internal tooling", "avatar-3.jpg"),
+    ("Student testimonial to be added. Real, consented quotes from ISE students will appear here.",
+     "Student name to confirm", "Residency placement to confirm", None),
+    ("Student testimonial to be added. Real, consented quotes from ISE students will appear here.",
+     "Student name to confirm", "Residency placement to confirm", None),
+    ("Student testimonial to be added. Real, consented quotes from ISE students will appear here.",
+     "Student name to confirm", "Residency placement to confirm", None),
 ]
 
 def testimonials(eyebrow, title, items=None, klass="ise-band"):
-    """Grid of student testimonial cards: quote + avatar + name + project line."""
+    """Grid of student testimonial cards: quote + avatar + name + project line.
+    A falsy avatar renders a neutral placeholder disc (no stock photo of a real person)."""
     items = items or STUDENT_TESTIMONIALS
+    def avatar(av):
+        if av:
+            return f'<img src="{ASSET}/photos/{av}" alt="" loading="lazy" decoding="async">'
+        return ('<span aria-hidden="true" style="display:inline-block;width:40px;height:40px;'
+                'border-radius:50%;background:#cdd8d2;flex:0 0 auto;"></span>')
     cells = ''.join(
         f'<div class="ise-tcard"><p class="ise-tcard__quote">{q}</p>'
-        f'<div class="ise-tcard__who"><img src="{ASSET}/photos/{av}" alt="">'
+        f'<div class="ise-tcard__who">{avatar(av)}'
         f'<div><div class="ise-tcard__name">{name}</div>'
         f'<div class="ise-tcard__proj">{proj}</div></div></div></div>'
         for q, name, proj, av in items)

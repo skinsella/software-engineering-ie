@@ -369,9 +369,16 @@ add_shortcode( 'ise_partner_register', function () {
 		&& check_admin_referer( 'ise_rb_register', 'ise_rb_rnonce' ) ) {
 		$email = sanitize_email( wp_unslash( $_POST['reg_email'] ?? '' ) );
 		$pass  = (string) ( $_POST['reg_pass'] ?? '' );
+		$pass2 = (string) ( $_POST['reg_pass2'] ?? '' );
 		$company = sanitize_text_field( wp_unslash( $_POST['reg_company'] ?? '' ) );
+		$consent = ! empty( $_POST['reg_consent'] );
 		$spam = ise_rb_is_bot() || ! ise_rb_captcha_ok() || ! ise_rb_throttle( 'preg', 5 );
-		if ( ! $spam && $email && $pass && ! email_exists( $email ) ) {
+		$err = '';
+		if ( $pass !== $pass2 ) { $err = 'The two passwords do not match.'; }
+		elseif ( ! $consent ) { $err = 'Please confirm you have read the privacy notice.'; }
+		elseif ( $email && ise_rb_is_free_email( $email ) ) { $err = 'Please use your company (work) email address, not a personal free-mail account.'; }
+		elseif ( $email && email_exists( $email ) ) { $err = 'That email may already be in use.'; }
+		if ( ! $spam && ! $err && $email && $pass && ! email_exists( $email ) ) {
 			$uid = wp_insert_user( array(
 				'user_login'   => $email,
 				'user_email'   => $email,
@@ -386,7 +393,7 @@ add_shortcode( 'ise_partner_register', function () {
 				return ob_get_clean();
 			}
 		}
-		echo '<div class="ise-card" style="border-color:#c0392b;">Could not register, that email may already be in use.</div>';
+		echo '<div class="ise-card" style="border-color:#c0392b;">' . esc_html( $err ? $err : 'Could not register, please check your details and try again.' ) . '</div>';
 	}
 	?>
 	<form method="post" class="ise-form" style="max-width:520px;display:grid;gap:1rem;">
@@ -394,6 +401,7 @@ add_shortcode( 'ise_partner_register', function () {
 		<label>Company name<br><input name="reg_company" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
 		<label>Work email<br><input type="email" name="reg_email" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
 		<label>Password<br><input type="password" name="reg_pass" required minlength="8" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<?php echo ise_rb_confirm_field( 'reg_pass2' ); echo ise_rb_consent_field( 'I have read and understood how ISE will process my company\'s data.' ); ?>
 		<button class="ise-btn ise-btn--primary" name="ise_rb_register" value="1" type="submit">Register company</button>
 	</form>
 	<?php
@@ -570,8 +578,16 @@ add_shortcode( 'ise_student_register', function () {
 		$name  = sanitize_text_field( wp_unslash( $_POST['sr_name'] ?? '' ) );
 		$email = sanitize_email( wp_unslash( $_POST['sr_email'] ?? '' ) );
 		$pass  = (string) ( $_POST['sr_pass'] ?? '' );
+		$pass2 = (string) ( $_POST['sr_pass2'] ?? '' );
+		$consent = ! empty( $_POST['reg_consent'] );
+		$age_ok  = ! empty( $_POST['sr_age'] );
 		$spam = ise_rb_is_bot() || ! ise_rb_captcha_ok() || ! ise_rb_throttle( 'sreg', 5 );
-		if ( ! $spam && $email && $pass && ! email_exists( $email ) ) {
+		$err = '';
+		if ( $pass !== $pass2 ) { $err = 'The two passwords do not match.'; }
+		elseif ( ! $age_ok ) { $err = 'Please confirm you are 18 or older (or have a parent/guardian\'s consent).'; }
+		elseif ( ! $consent ) { $err = 'Please confirm you have read the privacy notice.'; }
+		elseif ( $email && email_exists( $email ) ) { $err = 'That email may already be in use.'; }
+		if ( ! $spam && ! $err && $email && $pass && ! email_exists( $email ) ) {
 			$uid = wp_insert_user( array( 'user_login' => $email, 'user_email' => $email, 'user_pass' => $pass, 'display_name' => $name, 'role' => ISE_RB_STUDENT ) );
 			if ( ! is_wp_error( $uid ) ) {
 				wp_set_current_user( $uid ); wp_set_auth_cookie( $uid );
@@ -580,7 +596,7 @@ add_shortcode( 'ise_student_register', function () {
 				echo '</div>'; return ob_get_clean();
 			}
 		}
-		echo '<div class="ise-card" style="border-color:#c0392b;">Could not register, that email may already be in use.</div>';
+		echo '<div class="ise-card" style="border-color:#c0392b;">' . esc_html( $err ? $err : 'Could not register, please check your details and try again.' ) . '</div>';
 	}
 	?>
 	<form method="post" class="ise-form" style="display:grid;gap:1rem;">
@@ -588,6 +604,9 @@ add_shortcode( 'ise_student_register', function () {
 		<label>Full name<br><input name="sr_name" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
 		<label>Email<br><input type="email" name="sr_email" required style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
 		<label>Password<br><input type="password" name="sr_pass" required minlength="8" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>
+		<?php echo ise_rb_confirm_field( 'sr_pass2' ); ?>
+		<label style="display:flex;gap:.6rem;align-items:flex-start;font-size:.92rem;line-height:1.4;"><input type="checkbox" name="sr_age" value="1" required style="margin-top:.25rem;"> <span>I am 18 or older, or I have a parent/guardian's consent to create this account.</span></label>
+		<?php echo ise_rb_consent_field( 'I have read and understood how ISE will process my personal data.' ); ?>
 		<button class="ise-btn ise-btn--primary" name="ise_sr" value="1" type="submit">Create student account</button>
 	</form>
 	<?php
@@ -612,11 +631,12 @@ add_shortcode( 'ise_student_profile', function () {
 		update_user_meta( $uid, '_sp_cv',       esc_url_raw( wp_unslash( $_POST['sp_cv'] ?? '' ) ) );
 		update_user_meta( $uid, '_sp_website',  esc_url_raw( wp_unslash( $_POST['sp_website'] ?? '' ) ) );
 		update_user_meta( $uid, '_sp_github',   esc_url_raw( wp_unslash( $_POST['sp_github'] ?? '' ) ) );
-		if ( ! empty( $_FILES['sp_photo']['name'] ) && 0 === strpos( (string) $_FILES['sp_photo']['type'], 'image/' ) ) {
+		$img_types = array( 'jpg|jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp' );
+		if ( ise_rb_upload_ok( 'sp_photo', $img_types, 5 * MB_IN_BYTES ) ) {
 			require_once ABSPATH . 'wp-admin/includes/image.php';
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 			require_once ABSPATH . 'wp-admin/includes/media.php';
-			$att = media_handle_upload( 'sp_photo', 0 );
+			$att = media_handle_upload( 'sp_photo', 0, array(), array( 'mimes' => $img_types ) );
 			if ( ! is_wp_error( $att ) ) { update_user_meta( $uid, '_sp_photo', $att ); }
 		}
 		echo '<div class="ise-card" style="border-color:var(--ul-green-modern);margin-bottom:1.5rem;"><strong>Profile saved.</strong></div>';
@@ -799,11 +819,13 @@ add_action( 'wp_ajax_ise_apply', function () {
 	update_post_meta( $id, '_ra_job', $job );
 	update_post_meta( $id, '_ra_message', $msg );
 	update_post_meta( $id, '_ra_status', 'pending' );
-	if ( ! empty( $_FILES['cv']['name'] ) && 0 === (int) $_FILES['cv']['error'] ) {
+	$cv_types = array( 'pdf' => 'application/pdf', 'doc' => 'application/msword',
+		'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' );
+	if ( ise_rb_upload_ok( 'cv', $cv_types, 8 * MB_IN_BYTES ) ) {
 		require_once ABSPATH . 'wp-admin/includes/image.php';
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/media.php';
-		$att = media_handle_upload( 'cv', 0 );
+		$att = media_handle_upload( 'cv', 0, array(), array( 'mimes' => $cv_types ) );
 		if ( ! is_wp_error( $att ) ) { update_post_meta( $id, '_ra_cv', $att ); }
 	}
 	$champ = get_post_meta( $job, '_rj_champion', true );
@@ -1116,6 +1138,86 @@ function ise_rb_captcha_ok() {
 	$b = json_decode( wp_remote_retrieve_body( $r ), true );
 	return ! empty( $b['success'] );
 }
+
+/* Registration-form helpers: consent checkbox (with privacy link), confirm-password
+ * field, and a work-email (free-mail domain) check for partner sign-up. */
+function ise_rb_privacy_url() { return home_url( '/privacy/' ); }
+function ise_rb_consent_field( $label ) {
+	return '<label style="display:flex;gap:.6rem;align-items:flex-start;font-size:.92rem;line-height:1.4;">'
+		. '<input type="checkbox" name="reg_consent" value="1" required style="margin-top:.25rem;"> '
+		. '<span>' . $label . ' See our <a href="' . esc_url( ise_rb_privacy_url() ) . '">privacy notice</a>.</span></label>';
+}
+function ise_rb_confirm_field( $name ) {
+	return '<label>Confirm password<br><input type="password" name="' . esc_attr( $name )
+		. '" required minlength="8" style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"></label>';
+}
+function ise_rb_is_free_email( $email ) {
+	$free = array( 'gmail.com', 'googlemail.com', 'outlook.com', 'hotmail.com', 'live.com', 'yahoo.com',
+		'yahoo.co.uk', 'icloud.com', 'me.com', 'aol.com', 'proton.me', 'protonmail.com', 'gmx.com', 'mail.com' );
+	$domain = strtolower( substr( strrchr( (string) $email, '@' ), 1 ) );
+	return in_array( $domain, $free, true );
+}
+
+/* Server-side upload validation: confirm the real type by contents (not the
+ * client-supplied MIME) and enforce a size cap. $allowed maps ext => mime. */
+function ise_rb_upload_ok( $key, $allowed, $max_bytes ) {
+	if ( empty( $_FILES[ $key ]['name'] ) || 0 !== (int) $_FILES[ $key ]['error'] ) { return false; }
+	if ( (int) $_FILES[ $key ]['size'] > $max_bytes ) { return false; }
+	$check = wp_check_filetype_and_ext( $_FILES[ $key ]['tmp_name'], $_FILES[ $key ]['name'], $allowed );
+	return ! empty( $check['ext'] ) && ! empty( $check['type'] );
+}
+
+/* ===========================================================================
+ * Pre-deployment hardening (code-level items from the security review).
+ * Host/infra-only items (HSTS at the edge, a tuned CSP, UL SSO, MFA, a WAF,
+ * self-hosting Google Fonts in Elementor) are listed in docs/SECURITY.md.
+ * ========================================================================= */
+
+// Disable XML-RPC (pingback / brute-force amplification surface).
+add_filter( 'xmlrpc_enabled', '__return_false' );
+
+// Strip version, RSD, WLW manifest and oEmbed discovery from <head>.
+remove_action( 'wp_head', 'wp_generator' );
+remove_action( 'wp_head', 'rsd_link' );
+remove_action( 'wp_head', 'wlwmanifest_link' );
+remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
+add_filter( 'the_generator', '__return_empty_string' );
+
+// Block REST user enumeration for anonymous visitors; logged-in access is unchanged.
+add_filter( 'rest_endpoints', function ( $endpoints ) {
+	if ( is_user_logged_in() ) { return $endpoints; }
+	foreach ( array( '/wp/v2/users', '/wp/v2/users/(?P<id>[\\d]+)' ) as $route ) {
+		unset( $endpoints[ $route ] );
+	}
+	return $endpoints;
+} );
+
+// Block ?author=N enumeration redirects for anonymous visitors.
+add_action( 'template_redirect', function () {
+	if ( is_admin() || is_user_logged_in() ) { return; }
+	if ( isset( $_GET['author'] ) && ! is_author() ) {
+		wp_safe_redirect( home_url( '/' ), 301 ); exit;
+	}
+} );
+
+// Baseline security headers. HSTS only over HTTPS; the host should still set its
+// own HSTS and a tuned Content-Security-Policy at the edge in production.
+add_action( 'send_headers', function () {
+	header( 'X-Content-Type-Options: nosniff' );
+	header( 'X-Frame-Options: SAMEORIGIN' );
+	header( 'Referrer-Policy: strict-origin-when-cross-origin' );
+	header( 'Permissions-Policy: geolocation=(), microphone=(), camera=()' );
+	if ( is_ssl() ) {
+		header( 'Strict-Transport-Security: max-age=15552000; includeSubDomains' );
+	}
+} );
+
+// Keep the pre-launch/test site out of search engines. Set option
+// 'ise_rb_production' = 1 (or define ISE_RB_PRODUCTION) when the real site is live.
+add_action( 'wp_head', function () {
+	$is_prod = ( defined( 'ISE_RB_PRODUCTION' ) && ISE_RB_PRODUCTION ) || get_option( 'ise_rb_production' );
+	if ( ! $is_prod ) { echo '<meta name="robots" content="noindex,nofollow">' . "\n"; }
+}, 1 );
 
 /* ===========================================================================
  * PHASE B, single-role pages, Google JobPosting schema
