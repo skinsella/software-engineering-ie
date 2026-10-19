@@ -146,18 +146,23 @@ def portrait_cards(eyebrow, title, items, klass="ise-band"):
 
 # Illustrative student testimonials, PLACEHOLDER copy + names, to be replaced
 # with real, approved student quotes before publishing.
-# PLACEHOLDER testimonials. The previous entries were invented (fabricated names,
-# quotes and Stripe/Provizio/Intercom attributions with stock avatars) and must not
-# ship as if real. These neutral placeholders are safe to publish; replace the tuple
-# with genuine, consented student quotes + names + photos when supplied.
-# Tuple shape: (quote, name, project_line, avatar_filename_or_None).
+# Real, approved student quotes from the ISE/Stripe graduation press pack
+# ("Quotes for Stripe Press Release", approved) and Justyna's ISE reflection.
+# Tuple shape: (quote, name, project_line, avatar_filename_or_None). Photos can be
+# added later by dropping a file in assets/photos and setting the 4th field.
 STUDENT_TESTIMONIALS = [
-    ("Student testimonial to be added. Real, consented quotes from ISE students will appear here.",
-     "Student name to confirm", "Residency placement to confirm", None),
-    ("Student testimonial to be added. Real, consented quotes from ISE students will appear here.",
-     "Student name to confirm", "Residency placement to confirm", None),
-    ("Student testimonial to be added. Real, consented quotes from ISE students will appear here.",
-     "Student name to confirm", "Residency placement to confirm", None),
+    ("When I first arrived in Ireland, I couldn't speak English. A few years later, I am graduating with first-class honours through a course that completely changed the direction of my career.",
+     "Desiree Charles Dos Santos", "MSc, now a Software Engineer at Analog Devices", None),
+    ("I was the only one in my school year of 300 who went to UL. I feel so proud of the leap I took, and who I've become.",
+     "Josh Sloggett", "BSc, residencies at AWS, Intercom and Stripe; returning to Stripe", None),
+    ("I'm adding 'researcher' to the list of things I never thought I'd achieve when I started ISE.",
+     "Justyna", "Residencies at Stripe, Analog Devices, AWS and Virtu; now at Stripe", None),
+    ("I completed four residencies at a diverse range of companies, which is my favourite aspect of the course. It helped me develop both as a programmer and a team member.",
+     "Ruairi Glackin", "BSc, residencies at Transact, AWS and BD; returning to AWS", None),
+    ("The programme gave me exactly what I was looking for: the opportunity to learn by building, solve real engineering problems alongside industry, and graduate ready to make an impact from day one.",
+     "Adam Byrne", "MSc, residencies at Analog Devices, Provizio and Johnson & Johnson", None),
+    ("We were taught the way students want to be taught: through assignments instead of big exams, with the freedom to build alongside companies and bring what we learned back to class.",
+     "Michelle Vaz", "BSc, residencies at AWS and Fin; returning to AWS", None),
 ]
 
 def testimonials(eyebrow, title, items=None, klass="ise-band"):
@@ -167,7 +172,7 @@ def testimonials(eyebrow, title, items=None, klass="ise-band"):
     def avatar(av):
         if av:
             return f'<img src="{ASSET}/photos/{av}" alt="" loading="lazy" decoding="async">'
-        return ('<span aria-hidden="true" style="display:inline-block;width:40px;height:40px;'
+        return ('<span aria-hidden="true" style="display:inline-block;width:54px;height:54px;'
                 'border-radius:50%;background:#cdd8d2;flex:0 0 auto;"></span>')
     cells = ''.join(
         f'<div class="ise-tcard"><p class="ise-tcard__quote">{q}</p>'
