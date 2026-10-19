@@ -88,11 +88,7 @@ companies = f'''
     <p style="color:#d7e8df;font-size:var(--fs-lead);">Residencies are not shadowing. Students join world-leading engineering teams as paid contributors, from global platforms to Ireland's fastest-growing startups in fintech, medtech, robotics and quantum.</p>
   </div>
   {_S.partner_wall()}
-  <blockquote style="margin:2.75rem 0 0;padding:0;border:0;">
-    <p class="ise-serif" style="font-size:clamp(1.4rem,2.6vw,2rem);color:#fff;max-width:34ch;margin:0;line-height:1.3;">“Software engineering is a wonderful career.”</p>
-    <footer style="font-family:var(--font-sans);font-size:1rem;color:#8fe3b0;margin-top:.85rem;">John Collison · co-founder, Stripe</footer>
-  </blockquote>
-  <div style="margin-top:2rem;"><a class="ise-btn ise-btn--on-dark" href="/companies">See partner companies →</a></div>
+  <div style="margin-top:2.5rem;"><a class="ise-btn ise-btn--on-dark" href="/companies">See partner companies →</a></div>
 </div>'''
 
 # ---- HOW IT WORKS ----

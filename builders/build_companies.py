@@ -48,10 +48,6 @@ why = section(S.band(f'''
     {S.card("Build your pipeline","Residencies are the strongest possible route to hiring, you have already worked together.")}
     {S.card("Fresh capability","Motivated students bring current skills, energy and new perspectives to your team.")}
   </div>
-  <blockquote style="margin:2.5rem 0 0;padding:0;border:0;">
-    <p class="ise-serif" style="font-size:clamp(1.3rem,2.4vw,1.9rem);color:var(--ul-green-heritage);max-width:40ch;margin:0;line-height:1.3;">“Software engineering is a wonderful career.”</p>
-    <footer style="font-family:var(--font-sans);font-size:1rem;color:var(--ink-70);margin-top:.75rem;">John Collison · co-founder, Stripe</footer>
-  </blockquote>
 </div>''', "ise-band"))
 
 cta = section(S.cta("Become a residency partner",

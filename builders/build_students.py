@@ -45,10 +45,6 @@ partners_say = section(S.band(f'''
     <h2 style="color:#fff;">Beyond their years</h2>
     <p style="color:#d7e8df;font-size:var(--fs-lead);">Residency partners consistently report ISE students contributing like engineers with far more experience, shipping real work inside their teams.</p>
   </div>
-  <blockquote style="margin:0;padding:0;border:0;">
-    <p class="ise-serif" style="font-size:clamp(1.4rem,2.6vw,2rem);color:#fff;max-width:34ch;margin:0;line-height:1.3;">“Software engineering is a wonderful career.”</p>
-    <footer style="font-family:var(--font-sans);font-size:1rem;color:#8fe3b0;margin-top:.85rem;">John Collison · co-founder, Stripe</footer>
-  </blockquote>
 </div>''', "ise-band--heritage"))
 
 where = section(S.band(f'''
