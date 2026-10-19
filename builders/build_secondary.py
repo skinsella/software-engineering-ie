@@ -106,9 +106,16 @@ about_prose = sec('''
   <p>The programme is delivered in partnership with a network of leading technology companies and Irish start-ups, and is part of the University of Limerick.</p>
   <p style="margin-top:1.25rem;"><a class="ise-btn ise-btn--ghost" href="https://www.ul.ie" rel="noopener">University of Limerick →</a></p>
 </div>''', "ise-band")
+about_quote = sec('''
+<div class="ise-container" style="text-align:center;max-width:760px;">
+  <blockquote style="margin:0;padding:0;border:0;">
+    <p class="ise-serif" style="font-size:clamp(1.5rem,3vw,2.1rem);color:#fff;line-height:1.35;margin:0;">“Working with the staff and students of ISE over the past two years has been an incredibly rewarding journey. Seeing our first MSc graduating class preparing to cross the stage is the ultimate validation of our curriculum, proving the immersive teaching model delivers exactly what we set out to achieve.”</p>
+    <footer style="font-family:var(--font-sans);font-size:1rem;color:#8fe3b0;margin-top:1.25rem;">Dr Mark Burkley · Course Director, Immersive Software Engineering</footer>
+  </blockquote>
+</div>''', "ise-band--heritage")
 about_cta = section(S.cta("Join the next cohort","Applications for 2027 are open through the CAO with code LM173.",
   '<a class="ise-btn ise-btn--on-dark" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply, LM173</a> ' + CALL))
-S.assemble(106, "About", "about", [about_hero, about_prose, about_cta], menu_order=6)
+S.assemble(106, "About", "about", [about_hero, about_prose, about_quote, about_cta], menu_order=6)
 
 # ============================== FAQ (107) ==============================
 faqs = [
