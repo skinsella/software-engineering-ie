@@ -82,12 +82,23 @@ Order matters. Steps 1-3 are the infra session; 4-6 the WordPress side.
 5. [ ] **Plugin + permalinks on the new site:** confirm `ise-residency-board` is
       active, then `wp rewrite flush` so the residency routes (`/residency/...`)
       resolve.
+      - **Header logo:** the new site's nav/footer use the theme asset
+        `ise-ul-logo.png` (now `[ISE] @ University of Limerick`), so no action
+        needed as shipped. **But** the old production site rendered its header as
+        an Elementor Theme Builder *global header* (template #11086) with two
+        separate media-library logo images. If the new site's header is converted
+        to an Elementor global header during import, the logo comes from the
+        widget, not the theme file: either upload the new combined
+        `ise-ul-logo.png`, or (cleaner) keep the two marks as separate Image
+        widgets and drop a text widget with `@` between them.
 6. [ ] **Flip to production:** `wp option update ise_rb_production 1`.
       This does two things at once: removes the site-wide `noindex,nofollow`, and
       **auto-closes the portal**. Do **not** set `ise_rb_signup_open` yet.
 
 ### Phase 1 smoke tests
 - [ ] Apex and www both load the new site over HTTPS; no mixed-content warnings.
+- [ ] Header logo reads `[ISE] @ University of Limerick` (see step 5 if the header
+      was converted to an Elementor global template).
 - [ ] `old.software-engineering.ie` loads the old site, posts/media intact.
 - [ ] View source on a new-site page: **no** `noindex` meta; Open Graph + meta
       description present (SEO plugin working).
