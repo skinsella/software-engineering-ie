@@ -152,17 +152,17 @@ def portrait_cards(eyebrow, title, items, klass="ise-band"):
 # added later by dropping a file in assets/photos and setting the 4th field.
 STUDENT_TESTIMONIALS = [
     ("When I first arrived in Ireland, I couldn't speak English. A few years later, I am graduating with first-class honours through a course that completely changed the direction of my career.",
-     "Desiree Charles Dos Santos", "MSc, now a Software Engineer at Analog Devices", None),
+     "Desiree Charles Dos Santos", "MSc, now a Software Engineer at Analog Devices", "student-desiree.jpg"),
     ("I was the only one in my school year of 300 who went to UL. I feel so proud of the leap I took, and who I've become.",
-     "Josh Sloggett", "BSc, residencies at AWS, Intercom and Stripe; returning to Stripe", None),
+     "Josh Sloggett", "BSc, residencies at AWS, Intercom and Stripe; returning to Stripe", "student-josh.jpg"),
     ("I'm adding 'researcher' to the list of things I never thought I'd achieve when I started ISE.",
-     "Justyna", "Residencies at Stripe, Analog Devices, AWS and Virtu; now at Stripe", None),
+     "Justyna", "Residencies at Stripe, Analog Devices, AWS and Virtu; now at Stripe", "student-justyna.jpg"),
     ("I completed four residencies at a diverse range of companies, which is my favourite aspect of the course. It helped me develop both as a programmer and a team member.",
-     "Ruairi Glackin", "BSc, residencies at Transact, AWS and BD; returning to AWS", None),
+     "Ruairi Glackin", "BSc, residencies at Transact, AWS and BD; returning to AWS", "student-ruairi.jpg"),
     ("The programme gave me exactly what I was looking for: the opportunity to learn by building, solve real engineering problems alongside industry, and graduate ready to make an impact from day one.",
-     "Adam Byrne", "MSc, residencies at Analog Devices, Provizio and Johnson & Johnson", None),
+     "Adam Byrne", "MSc, residencies at Analog Devices, Provizio and Johnson & Johnson", "student-adam.jpg"),
     ("We were taught the way students want to be taught: through assignments instead of big exams, with the freedom to build alongside companies and bring what we learned back to class.",
-     "Michelle Vaz", "BSc, residencies at AWS and Fin; returning to AWS", None),
+     "Michelle Vaz", "BSc, residencies at AWS and Fin; returning to AWS", "student-michelle.jpg"),
 ]
 
 def testimonials(eyebrow, title, items=None, klass="ise-band"):
