@@ -19,6 +19,15 @@ configured on the production host or by UL IT.
 - **noindex until launch**: every page carries `noindex,nofollow` until the site is
   marked live. Flip it on for production by setting option `ise_rb_production = 1`
   **or** defining `ISE_RB_PRODUCTION` true in `wp-config.php`.
+- **Portal / registration kill-switch**: the whole two-sided portal (student &
+  partner sign-up, the job board, profiles, the student directory, applications)
+  is **open on staging** but **closes automatically the moment the site is in
+  production** (`ise_rb_production`), so the marketing site can go live without
+  collecting any personal data. Closed portal pages show a "portal opening soon"
+  notice and the apply endpoint is rejected server-side. **Open the portal only
+  once the privacy notice and DPIA are in place**: set option
+  `ise_rb_signup_open = 1` (or define `ISE_RB_SIGNUP_OPEN` true). Setting it to `0`
+  force-closes it anywhere, regardless of production mode.
 - **Registration forms hardened**: confirm-password field, a required consent
   checkbox linking the privacy notice, work-email (free-mail domain) rejection for
   partners, and an 18+/guardian-consent checkbox for students. (Honeypot, optional

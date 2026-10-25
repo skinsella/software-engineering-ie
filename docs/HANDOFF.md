@@ -104,6 +104,13 @@ Verified end-to-end locally (pending hidden, approved shown).
   The notification address defaults to the site admin email — override with the
   `ise_rb_notify_email` filter. Email needs a mail-capable host (SMTP) to deliver.
 
+**Launch gating (portal kill-switch)**
+- The portal (sign-up, board, profiles, directory, applications) is **open on
+  staging** and **auto-closes in production** so the marketing site can launch
+  with the portal dark. At cutover, set `ise_rb_production = 1` (removes the
+  staging noindex and closes the portal). Open the portal only after the privacy
+  notice and DPIA are in place: set `ise_rb_signup_open = 1`. See `docs/SECURITY.md`.
+
 **Further hardening to consider**
 - Add spam protection (honeypot/CAPTCHA) to the public register/submit forms.
 - Optionally email the ISE team on each new pending submission.

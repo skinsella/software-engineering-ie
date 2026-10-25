@@ -147,6 +147,7 @@ add_action( 'save_post_' . ISE_RB_CPT, function () {
  * [ise_residency_board], public board grouped by round, with per-round search
  * ------------------------------------------------------------------------- */
 add_shortcode( 'ise_residency_board', function () {
+	$gate = ise_rb_portal_gate(); if ( $gate ) { return $gate; }
 	ob_start();
 	if ( ! is_user_logged_in() ) {
 		echo '<div class="ise-container" style="padding-block:4rem 5rem;max-width:640px;">';
@@ -292,6 +293,7 @@ add_shortcode( 'ise_residency_board', function () {
  * Creates a PENDING residency_job for ISE to review.
  * ------------------------------------------------------------------------- */
 add_shortcode( 'ise_residency_submit', function () {
+	$gate = ise_rb_portal_gate(); if ( $gate ) { return $gate; }
 	ob_start();
 	if ( ! is_user_logged_in() ) {
 		echo '<div class="ise-card" style="max-width:520px;"><h3>Partner sign-in required</h3>'
@@ -359,6 +361,7 @@ add_shortcode( 'ise_residency_submit', function () {
  * (MVP: creates the account immediately. For production add admin approval.)
  * ------------------------------------------------------------------------- */
 add_shortcode( 'ise_partner_register', function () {
+	$gate = ise_rb_portal_gate(); if ( $gate ) { return $gate; }
 	ob_start();
 	echo '<div id="register"></div>';
 	if ( is_user_logged_in() ) {
@@ -567,6 +570,7 @@ function ise_rb_render_profile( $user, $compact = false ) {
 
 /* [ise_student_register], student self-registration (immediate). */
 add_shortcode( 'ise_student_register', function () {
+	$gate = ise_rb_portal_gate(); if ( $gate ) { return $gate; }
 	ob_start();
 	echo '<div class="ise-container" style="max-width:560px;padding-block:3rem 4rem;">';
 	if ( is_user_logged_in() ) {
@@ -615,6 +619,7 @@ add_shortcode( 'ise_student_register', function () {
 
 /* [ise_student_profile], edit + preview your own profile (gated). */
 add_shortcode( 'ise_student_profile', function () {
+	$gate = ise_rb_portal_gate(); if ( $gate ) { return $gate; }
 	ob_start();
 	echo '<div class="ise-container" style="max-width:900px;padding-block:3rem 4rem;">';
 	if ( ! is_user_logged_in() ) {
@@ -665,6 +670,7 @@ add_shortcode( 'ise_student_profile', function () {
 
 /* [ise_student_directory], signed-in partners/students browse student profiles. */
 add_shortcode( 'ise_student_directory', function () {
+	$gate = ise_rb_portal_gate(); if ( $gate ) { return $gate; }
 	ob_start();
 	echo '<div class="ise-container" style="padding-block:3rem 4rem;">';
 	if ( ! is_user_logged_in() ) {
@@ -800,6 +806,7 @@ function ise_ra_has_applied( $student_id, $job_id ) {
 
 add_action( 'wp_ajax_ise_apply', function () {
 	check_ajax_referer( 'ise_ajax', 'nonce' );
+	if ( ! ise_rb_signup_open() ) { wp_send_json_error( 'The residency portal is not open yet.', 403 ); }
 	$user = wp_get_current_user();
 	if ( ! ise_rb_is_student( $user ) ) { wp_send_json_error( 'Students only.', 403 ); }
 	if ( ! ise_rb_throttle( 'apply', 30, HOUR_IN_SECONDS ) ) { wp_send_json_error( 'Too many applications, please slow down.', 429 ); }
@@ -892,6 +899,7 @@ function ise_ra_badge( $status ) {
 
 /* [ise_my_applications], a student's own applications. */
 add_shortcode( 'ise_my_applications', function () {
+	$gate = ise_rb_portal_gate(); if ( $gate ) { return $gate; }
 	ob_start();
 	echo '<div class="ise-container" style="max-width:820px;padding-block:3rem 4rem;">';
 	if ( ! is_user_logged_in() ) {
@@ -915,6 +923,7 @@ add_shortcode( 'ise_my_applications', function () {
 
 /* [ise_my_applicants], applications to the current partner's residencies. */
 add_shortcode( 'ise_my_applicants', function () {
+	$gate = ise_rb_portal_gate(); if ( $gate ) { return $gate; }
 	ob_start();
 	echo '<div class="ise-container" style="max-width:900px;padding-block:3rem 4rem;">';
 	$user = wp_get_current_user();
@@ -1000,6 +1009,7 @@ add_action( 'wp_ajax_ise_bookmark', function () {
 
 /* [ise_my_bookmarks], a student's saved residencies. */
 add_shortcode( 'ise_my_bookmarks', function () {
+	$gate = ise_rb_portal_gate(); if ( $gate ) { return $gate; }
 	ob_start();
 	echo '<div class="ise-container" style="max-width:820px;padding-block:1rem 3rem;">';
 	if ( ! is_user_logged_in() ) { echo '</div>'; return ob_get_clean(); }
@@ -1212,11 +1222,41 @@ add_action( 'send_headers', function () {
 	}
 } );
 
-// Keep the pre-launch/test site out of search engines. Set option
-// 'ise_rb_production' = 1 (or define ISE_RB_PRODUCTION) when the real site is live.
+/* ---------------------------------------------------------------------------
+ * Launch gating
+ * - Production mode: set option 'ise_rb_production' = 1 (or define
+ *   ISE_RB_PRODUCTION) when the real site is live. Removes the staging noindex.
+ * - Portal / registration kill-switch: the two-sided portal (student & partner
+ *   sign-up, the job board, profiles, the student directory and applications) is
+ *   OPEN on a staging/test site and CLOSED automatically once the site is in
+ *   production, so the marketing site can go live WITHOUT collecting any personal
+ *   data. Open it only once the privacy notice and DPIA are in place:
+ *   set option 'ise_rb_signup_open' = 1 (or define ISE_RB_SIGNUP_OPEN true).
+ *   Setting it to 0 force-closes the portal anywhere.
+ * ------------------------------------------------------------------------- */
+function ise_rb_is_production() {
+	return ( defined( 'ISE_RB_PRODUCTION' ) && ISE_RB_PRODUCTION ) || (bool) get_option( 'ise_rb_production' );
+}
+function ise_rb_signup_open() {
+	if ( defined( 'ISE_RB_SIGNUP_OPEN' ) ) { return (bool) ISE_RB_SIGNUP_OPEN; }
+	$opt = get_option( 'ise_rb_signup_open', null );
+	if ( null !== $opt && false !== $opt ) { return (bool) $opt; } // explicitly set to 1 or 0
+	return ! ise_rb_is_production();                               // default: open on staging, closed in production
+}
+/* Returns a "portal opening soon" notice (string) when the portal is closed, or
+ * an empty string when it is open. Each public portal shortcode returns this
+ * first, so nothing that collects data or exposes profiles renders while closed. */
+function ise_rb_portal_gate() {
+	if ( ise_rb_signup_open() ) { return ''; }
+	return '<div class="ise-container" style="max-width:640px;padding-block:3rem 4rem;">'
+		. '<div class="ise-card"><h3 style="margin-top:0;">The residency portal is opening soon</h3>'
+		. '<p style="color:var(--ink-70);margin-bottom:0;">Student and partner accounts are not open yet. In the meantime, see how residencies work on <a href="' . esc_url( home_url( '/companies/' ) ) . '">the companies page</a>, or <a href="' . esc_url( home_url( '/become-a-partner/' ) ) . '">talk to us about partnering</a>.</p>'
+		. '</div></div>';
+}
+
+// Keep the pre-launch/test site out of search engines until production.
 add_action( 'wp_head', function () {
-	$is_prod = ( defined( 'ISE_RB_PRODUCTION' ) && ISE_RB_PRODUCTION ) || get_option( 'ise_rb_production' );
-	if ( ! $is_prod ) { echo '<meta name="robots" content="noindex,nofollow">' . "\n"; }
+	if ( ! ise_rb_is_production() ) { echo '<meta name="robots" content="noindex,nofollow">' . "\n"; }
 }, 1 );
 
 /* ===========================================================================
