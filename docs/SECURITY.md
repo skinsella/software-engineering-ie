@@ -35,7 +35,16 @@ configured on the production host or by UL IT.
   already present.)
 - **Upload validation**: CV (pdf/doc/docx, ≤8 MB) and profile photo
   (jpg/png/webp, ≤5 MB) are validated by real file contents (`wp_check_filetype_and_ext`),
-  not the client-supplied MIME type, and `media_handle_upload` is restricted to those types.
+  not the client-supplied MIME type.
+- **Protected file serving (CVs + photos)**: uploaded CVs and photos are personal
+  data, so they are **not** stored as public WordPress attachments. They are kept in
+  `uploads/ise-private/` (outside the browsable media tree, with an Apache deny
+  `.htaccess` as defence-in-depth) and served only through
+  `admin-post.php?action=ise_rb_file`, which checks the requester before streaming:
+  a CV is viewable only by the applying student, the partner who owns that role, or
+  an admin; a photo only by the owner or a directory-eligible viewer. Each link
+  carries a nonce bound to that specific file. Verified: unauthenticated and
+  nonce-mismatched requests return 403; there is no public URL to the file.
 
 ## Must be configured on the host / by UL IT
 

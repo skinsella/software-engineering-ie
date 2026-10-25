@@ -526,8 +526,7 @@ add_action( 'init', function () {
 /* Render one student profile card (photo/initials + details). */
 function ise_rb_render_profile( $user, $compact = false ) {
 	$uid = $user->ID;
-	$photo = ise_sp_get( $uid, 'photo' );
-	$img   = $photo ? wp_get_attachment_image_url( $photo, 'medium' ) : '';
+	$img   = get_user_meta( $uid, '_sp_photo_file', true ) ? ise_rb_file_url( 'photo', $uid ) : '';
 	$name  = $user->display_name ? $user->display_name : $user->user_login;
 	$initials = strtoupper( mb_substr( $name, 0, 1 ) );
 	$head  = ise_sp_get( $uid, 'headline' );
@@ -637,13 +636,8 @@ add_shortcode( 'ise_student_profile', function () {
 		update_user_meta( $uid, '_sp_website',  esc_url_raw( wp_unslash( $_POST['sp_website'] ?? '' ) ) );
 		update_user_meta( $uid, '_sp_github',   esc_url_raw( wp_unslash( $_POST['sp_github'] ?? '' ) ) );
 		$img_types = array( 'jpg|jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp' );
-		if ( ise_rb_upload_ok( 'sp_photo', $img_types, 5 * MB_IN_BYTES ) ) {
-			require_once ABSPATH . 'wp-admin/includes/image.php';
-			require_once ABSPATH . 'wp-admin/includes/file.php';
-			require_once ABSPATH . 'wp-admin/includes/media.php';
-			$att = media_handle_upload( 'sp_photo', 0, array(), array( 'mimes' => $img_types ) );
-			if ( ! is_wp_error( $att ) ) { update_user_meta( $uid, '_sp_photo', $att ); }
-		}
+		$photo_base = ise_rb_store_private( 'sp_photo', $img_types, 5 * MB_IN_BYTES );
+		if ( $photo_base ) { update_user_meta( $uid, '_sp_photo_file', $photo_base ); }
 		echo '<div class="ise-card" style="border-color:var(--ul-green-modern);margin-bottom:1.5rem;"><strong>Profile saved.</strong></div>';
 	}
 	$u = wp_get_current_user();
@@ -828,13 +822,8 @@ add_action( 'wp_ajax_ise_apply', function () {
 	update_post_meta( $id, '_ra_status', 'pending' );
 	$cv_types = array( 'pdf' => 'application/pdf', 'doc' => 'application/msword',
 		'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' );
-	if ( ise_rb_upload_ok( 'cv', $cv_types, 8 * MB_IN_BYTES ) ) {
-		require_once ABSPATH . 'wp-admin/includes/image.php';
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-		require_once ABSPATH . 'wp-admin/includes/media.php';
-		$att = media_handle_upload( 'cv', 0, array(), array( 'mimes' => $cv_types ) );
-		if ( ! is_wp_error( $att ) ) { update_post_meta( $id, '_ra_cv', $att ); }
-	}
+	$cv_base = ise_rb_store_private( 'cv', $cv_types, 8 * MB_IN_BYTES );
+	if ( $cv_base ) { update_post_meta( $id, '_ra_cv_file', $cv_base ); }
 	$champ = get_post_meta( $job, '_rj_champion', true );
 	if ( $champ ) {
 		wp_mail( $champ, '[ISE Jobs] New application: ' . get_the_title( $job ),
@@ -962,7 +951,7 @@ add_shortcode( 'ise_my_applicants', function () {
 			. ( $msg ? '<p style="color:var(--ink-70);margin:.75rem 0 0;">' . esc_html( $msg ) . '</p>' : '' )
 			. '<div class="ra-actions" data-app="' . (int) $a->ID . '" style="margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap;">'
 			. ( $sid ? '<a class="ise-btn ise-btn--ghost" href="' . esc_url( add_query_arg( 'student', $sid, home_url( '/students-directory/' ) ) ) . '">View profile</a>' : '' )
-			. ( ( $cvatt = (int) get_post_meta( $a->ID, '_ra_cv', true ) ) ? '<a class="ise-btn ise-btn--ghost" href="' . esc_url( wp_get_attachment_url( $cvatt ) ) . '" target="_blank" rel="noopener">CV</a>' : '' )
+			. ( get_post_meta( $a->ID, '_ra_cv_file', true ) ? '<a class="ise-btn ise-btn--ghost" href="' . esc_url( ise_rb_file_url( 'cv', $a->ID ) ) . '" target="_blank" rel="noopener">CV</a>' : '' )
 			. ( ( $ghl = $sid ? ise_sp_get( $sid, 'github' ) : '' ) ? '<a class="ise-btn ise-btn--ghost" href="' . esc_url( $ghl ) . '" target="_blank" rel="noopener">GitHub</a>' : '' )
 			. '<button class="ise-btn ise-btn--ghost ra-set" data-status="shortlisted">Shortlist</button>'
 			. '<button class="ise-btn ise-btn--ghost ra-set" data-status="interview">Interview</button>'
@@ -1176,6 +1165,97 @@ function ise_rb_upload_ok( $key, $allowed, $max_bytes ) {
 	$check = wp_check_filetype_and_ext( $_FILES[ $key ]['tmp_name'], $_FILES[ $key ]['name'], $allowed );
 	return ! empty( $check['ext'] ) && ! empty( $check['type'] );
 }
+
+/* ---------------------------------------------------------------------------
+ * Protected file storage + serving (CVs and profile photos)
+ * Uploaded CVs and photos are personal data and must never sit at a public URL.
+ * They are stored OUTSIDE the public media tree (uploads/ise-private, which is
+ * never referenced by a browsable URL) and served only through
+ * admin-post.php?action=ise_rb_file, which checks the requester is allowed to
+ * see that specific file. No WordPress attachment is created, so nothing is
+ * reachable via wp-content/uploads or the media library.
+ * ------------------------------------------------------------------------- */
+function ise_rb_private_dir() {
+	$up  = wp_upload_dir();
+	$dir = trailingslashit( $up['basedir'] ) . 'ise-private';
+	if ( ! is_dir( $dir ) ) {
+		wp_mkdir_p( $dir );
+		// Defence in depth on Apache; the PHP handler never relies on this.
+		@file_put_contents( $dir . '/.htaccess', "Require all denied\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n" );
+		@file_put_contents( $dir . '/index.html', '' );
+	}
+	return $dir;
+}
+
+/* Move a validated upload into the private dir; returns the stored basename or false. */
+function ise_rb_store_private( $key, $allowed, $max_bytes ) {
+	if ( ! ise_rb_upload_ok( $key, $allowed, $max_bytes ) ) { return false; }
+	$dir  = ise_rb_private_dir();
+	$ext  = strtolower( pathinfo( $_FILES[ $key ]['name'], PATHINFO_EXTENSION ) );
+	$base = wp_unique_filename( $dir, uniqid( 'f', true ) . ( $ext ? '.' . $ext : '' ) );
+	$dest = trailingslashit( $dir ) . $base;
+	if ( ! @move_uploaded_file( $_FILES[ $key ]['tmp_name'], $dest ) ) { return false; }
+	@chmod( $dest, 0640 );
+	return $base;
+}
+
+/* Can this user see the student directory (and therefore student photos)? */
+function ise_rb_can_view_directory( $user ) {
+	if ( ! $user || ! $user->ID ) { return false; }
+	return in_array( ISE_RB_STUDENT, (array) $user->roles, true )
+		|| in_array( ISE_RB_ROLE, (array) $user->roles, true )
+		|| user_can( $user, 'edit_posts' );
+}
+
+/* Authenticated URL for a protected file (nonce bound to the viewing user). */
+function ise_rb_file_url( $type, $id ) {
+	return wp_nonce_url(
+		admin_url( 'admin-post.php?action=ise_rb_file&t=' . $type . '&id=' . (int) $id ),
+		'ise_rb_file_' . $type . '_' . (int) $id
+	);
+}
+
+/* The serving endpoint. Logged-in only (no nopriv handler); streams a private
+ * file solely to viewers allowed to see it. */
+add_action( 'admin_post_ise_rb_file', function () {
+	$type = isset( $_GET['t'] ) ? sanitize_key( $_GET['t'] ) : '';
+	$id   = isset( $_GET['id'] ) ? (int) $_GET['id'] : 0;
+	$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'ise_rb_file_' . $type . '_' . $id ) ) { wp_die( 'Invalid or expired link.', '', array( 'response' => 403 ) ); }
+	$user = wp_get_current_user();
+	if ( ! $user->ID ) { auth_redirect(); }
+
+	$base = '';
+	if ( 'cv' === $type ) {                         // id = application post id
+		$student = (int) get_post_meta( $id, '_ra_student', true );
+		$job     = (int) get_post_meta( $id, '_ra_job', true );
+		$jp      = $job ? get_post( $job ) : null;
+		$owner   = $jp ? (int) $jp->post_author : 0;
+		if ( $user->ID !== $student && $user->ID !== $owner && ! current_user_can( 'edit_others_posts' ) ) {
+			wp_die( 'You are not allowed to view this file.', '', array( 'response' => 403 ) );
+		}
+		$base = (string) get_post_meta( $id, '_ra_cv_file', true );
+	} elseif ( 'photo' === $type ) {                // id = user id
+		if ( $user->ID !== $id && ! ise_rb_can_view_directory( $user ) ) {
+			wp_die( 'You are not allowed to view this file.', '', array( 'response' => 403 ) );
+		}
+		$base = (string) get_user_meta( $id, '_sp_photo_file', true );
+	} else {
+		wp_die( 'Unknown file.', '', array( 'response' => 400 ) );
+	}
+	if ( ! $base ) { wp_die( 'File not found.', '', array( 'response' => 404 ) ); }
+
+	$path = trailingslashit( ise_rb_private_dir() ) . basename( $base ); // basename() blocks traversal
+	if ( ! is_file( $path ) ) { wp_die( 'File not found.', '', array( 'response' => 404 ) ); }
+	$ft = wp_check_filetype( $path );
+	nocache_headers();
+	header( 'Content-Type: ' . ( $ft['type'] ? $ft['type'] : 'application/octet-stream' ) );
+	header( 'Content-Length: ' . filesize( $path ) );
+	header( 'X-Content-Type-Options: nosniff' );
+	header( 'Content-Disposition: inline; filename="' . $type . '.' . ( $ft['ext'] ? $ft['ext'] : 'bin' ) . '"' );
+	readfile( $path );
+	exit;
+} );
 
 /* ===========================================================================
  * Pre-deployment hardening (code-level items from the security review).
