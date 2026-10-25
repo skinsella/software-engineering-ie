@@ -93,10 +93,10 @@ companies = f'''
 
 # ---- HOW IT WORKS ----
 years = [
-  ("Year 1","Foundations","Studio-based fundamentals, programming, systems and maths, building real projects in small teams."),
-  ("Year 2","First residencies","Paid residencies begin. Students join partner engineering teams for three to six months at a time."),
-  ("Year 3","Depth & specialism","Deeper residencies paired with advanced coursework in a chosen area of software engineering."),
-  ("Year 4","Master's project","A capstone master's project, often with an industry partner, completing the integrated MSc."),
+  ("Year 1","Foundations and Residency 1","Studio-based fundamentals in programming, systems and maths, then your first paid residency in the summer."),
+  ("Year 2","Residencies 2 and 3","Human-centric computing and security alongside two more paid residencies inside partner engineering teams."),
+  ("Year 3","Specialism and Residency 4","Scaling, reliability and a larger immersive software-project residency. Exit here with a BSc (Hons), or continue."),
+  ("Year 4","Integrated MSc","AI and machine learning, advanced modules and a research-project residency, completing the integrated MSc."),
 ]
 timeline = ''.join(
   f'<div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">{y}</p>'

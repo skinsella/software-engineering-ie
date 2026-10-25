@@ -35,21 +35,124 @@ apply_cta = section(S.cta("Ready to apply?","Add CAO code LM173 to your applicat
 S.assemble(103, "Apply", "apply", [apply_hero, apply_how, apply_facts, apply_cta], menu_order=5)
 
 # ============================== COURSE (104) ==============================
-years = [
-  ("Year 1","Foundations","Studio-based fundamentals, programming, systems and maths, building real projects in small teams."),
-  ("Year 2","First residencies","Paid residencies begin. Students join partner engineering teams for three to six months at a time."),
-  ("Year 3","Depth &amp; specialism","Deeper residencies paired with advanced coursework in a chosen area of software engineering."),
-  ("Year 4","Master's project","A capstone master's project, often with an industry partner, completing the integrated MSc."),
+# Content sourced from the live UL/ISE course page (/what-you-need-to-know/).
+course_hero = S.hero("The Course","Four years. Five paid residencies. An integrated MSc.",
+  "ISE is a computer science degree where you learn by doing. You graduate with an integrated BSc and MSc, with the option to exit after three years with a BSc (Hons).",
+  S.BTN_APPLY + ' ' + CALL, max_title="22ch")
+
+course_intro = sec('''
+<div class="ise-container ise-prose" style="max-width:64ch;">
+  <p class="ise-eyebrow">Course details</p>
+  <h2>You learn software engineering by doing it</h2>
+  <p>ISE is a computer science degree where you learn by doing, and you graduate with an integrated bachelor's and master's qualification. You spend half your time learning on campus under continuous assessment, and the other half getting paid to solve real problems on residencies in leading companies.</p>
+  <p>Over your four years you complete five paid residencies, spending more than 40 weeks each year learning in a personalised, highly interactive environment, working in small groups with your peers and mentors.</p>
+  <p style="font-family:var(--font-serif);font-size:1.3rem;color:var(--ul-green-heritage);margin-top:1.5rem;">Award codes: LM173 BSc and LK315 MSc in Immersive Software Engineering.</p>
+</div>''')
+
+# ---- themed course-structure graphic (4 years, 5 residencies) ----
+_struct = [
+  ("Year 1","BSc, LM173",[("Sem 1","On campus",0),("Sem 2","On campus",0),("Sem 3","Residency 1",1)]),
+  ("Year 2","BSc, LM173",[("Sem 1","Residency 2",1),("Sem 2","On campus",0),("Sem 3","Residency 3",1)]),
+  ("Year 3","BSc, LM173",[("Sem 1","On campus",0),("Sem 2","Residency 4",1)]),
+  ("Year 4","MSc, LK315",[("Sem 1","On campus",0),("Sem 2","Residency 5",1)]),
 ]
-timeline = ''.join(f'<div class="ise-card"><p class="ise-eyebrow" style="margin-bottom:.4rem;">{y}</p><h3 style="margin:0 0 .5rem;">{t}</h3><p style="margin:0;color:var(--ink-70);">{b}</p></div>' for y,t,b in years)
-course_hero = S.hero("The Course","Four years. One master's. Five residencies.",
-  "ISE is a four-year MSc in software engineering (with a BSc exit option after three years) where you learn by doing, in studios and inside real companies.",
-  S.BTN_APPLY + ' ' + CALL, max_title="20ch")
-course_tl = sec(f'''
+_sv = ['<svg viewBox="0 0 980 300" role="img" aria-label="ISE course structure: four years with five paid residencies, a BSc after Year 3 or an integrated MSc after Year 4" style="width:100%;height:auto;max-width:980px;display:block;margin:0 auto;font-family:Inter,sans-serif;">']
+for _i,(_yr,_aw,_blocks) in enumerate(_struct):
+    _x = 12 + _i*239
+    _cw = 215
+    _sv.append(f'<text x="{_x}" y="22" font-size="17" font-weight="700" fill="#003726">{_yr}</text>')
+    _sv.append(f'<text x="{_x}" y="42" font-size="12" fill="#4a5a52" letter-spacing=".04em">{_aw}</text>')
+    for _j,(_sem,_label,_res) in enumerate(_blocks):
+        _by = 60 + _j*76
+        _fill = "#00B140" if _res else "#e8f1ec"
+        _tc   = "#ffffff" if _res else "#0a3f2c"
+        _sc   = "#eafff2" if _res else "#4a5a52"
+        _sub  = "paid residency" if _res else "continuously assessed"
+        _mid  = _x + _cw//2
+        _sv.append(f'<rect x="{_x}" y="{_by}" width="{_cw}" height="64" rx="12" fill="{_fill}"></rect>')
+        _sv.append(f'<text x="{_x+14}" y="{_by+21}" font-size="11" fill="{_sc}" letter-spacing=".04em">{_sem}</text>')
+        _sv.append(f'<text x="{_mid}" y="{_by+40}" text-anchor="middle" font-size="16" font-weight="700" fill="{_tc}">{_label}</text>')
+        _sv.append(f'<text x="{_mid}" y="{_by+55}" text-anchor="middle" font-size="11" fill="{_sc}">{_sub}</text>')
+_sv.append('</svg>')
+course_struct = sec(f'''
 <div class="ise-container">
-  <div style="max-width:52ch;margin-bottom:2rem;"><p class="ise-eyebrow">Year by year</p><h2>How the four years fit together</h2></div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;">{timeline}</div>
+  <div style="max-width:54ch;margin-bottom:1.75rem;"><p class="ise-eyebrow">The shape of the degree</p><h2>Four years, five paid residencies</h2></div>
+  {''.join(_sv)}
+  <p style="margin:1.5rem auto 0;max-width:72ch;text-align:center;color:var(--ink-70);">Roughly half the degree is spent on paid residency. Exit with a BSc (Hons) after Year 3, or continue to the integrated MSc in Year 4.</p>
 </div>''', "ise-band")
+
+# ---- full curriculum, year by year (from the live course page) ----
+_curr = [
+  ("Year 1","BSc, LM173",[
+    ("Semester 1",["CS4421 Problem Solving with Computers","CS4431 Effectively Building Software with Others"]),
+    ("Semester 2",["CS4422 Data Centric Computing","CS4431 Computation and Architecture Part 1"]),
+    ("Semester 3",["CS4443 Computation and Architecture Part 2","CS4453 Residency 1: Software Systems / Dev Part 1"]),
+  ]),
+  ("Year 2","BSc, LM173",[
+    ("Semester 1",["CS4444 Residency 2: Software Systems / Dev Part 2"]),
+    ("Semester 2",["CS4445 Human Centric Computing","CS4455 Ethical Hacking and Security Part 1","CS4436 Ethical Hacking and Security Part 2"]),
+    ("Semester 3",["CS4446 Residency 3: User Interaction in Practice"]),
+  ]),
+  ("Year 3","BSc, LM173",[
+    ("Semester 1",["CS4437 Scaling for Reliability and Performance","CS4447 Computational Thinking"]),
+    ("Semester 2",["CS4448 Residency 4: Immersive Software Project"]),
+  ]),
+  ("Year 4","MSc, LK315",[
+    ("From Year 3, Semester 3",["CS6513 Research Methods"]),
+    ("Semester 1",["CS6514 Artificial Intelligence and Machine Learning","CS6524 Software meets World"]),
+    ("Semester 2",["CS6515 Residency 5a: ISE Research Project Part 1","CS6525 Residency 5b: ISE Research Project Part 2"]),
+  ]),
+]
+def _mods(ms):
+    out = ''
+    for m in ms:
+        style = 'font-weight:600;color:var(--ul-green);' if 'Residency' in m else 'color:var(--ink-70);'
+        out += f'<li style="margin:0 0 .4rem;{style}">{m}</li>'
+    return out
+_curr_cards = ''
+for _yr,_aw,_sems in _curr:
+    _inner = f'<p class="ise-eyebrow" style="margin:0 0 .15rem;">{_yr}</p><h3 style="margin:0;font-size:1.05rem;color:var(--ul-green-heritage);">{_aw}</h3>'
+    for _sem,_ms in _sems:
+        _inner += (f'<p style="font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:#77857e;margin:1rem 0 .4rem;">{_sem}</p>'
+                   f'<ul style="margin:0;padding-left:1.1rem;font-size:.9rem;line-height:1.35;">{_mods(_ms)}</ul>')
+    _curr_cards += f'<div class="ise-card">{_inner}</div>'
+course_curriculum = sec(f'''
+<div class="ise-container">
+  <div style="max-width:54ch;margin-bottom:2rem;"><p class="ise-eyebrow">What you will study</p><h2>Modules, year by year</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;align-items:start;">{_curr_cards}</div>
+</div>''')
+
+# ---- entry + key facts (from the live course page) ----
+_facts = [
+  ("Award","LM173 BSc and LK315 MSc in Immersive Software Engineering."),
+  ("Duration","Four years, an integrated BSc/MSc at level 9 on the NFQ, with an exit opportunity after Year 3 with a BSc (Hons) at level 8."),
+  ("Subject area","Engineering and Science."),
+  ("CAO points","Entry in 2025 required 651 points. Points combine the Leaving Certificate (up to 625) with the Entrance Submission (up to 200)."),
+  ("Leaving Certificate","A Leaving Certificate, or an approved equivalent, with at least two H5 grades and four O6 grades, or four H7 grades."),
+  ("Subjects","A minimum grade H4 in Mathematics, plus Irish or another language, and English. Contact UL admissions for full details."),
+  ("Course fees","ISE fees are the same as for any other BSc in the UL Faculty of Science and Engineering."),
+]
+_facts_html = ''
+for _lab,_val in _facts:
+    _facts_html += f'<div class="ise-card"><p class="ise-eyebrow" style="margin:0 0 .35rem;">{_lab}</p><p style="margin:0;color:var(--ink-70);">{_val}</p></div>'
+course_facts = sec(f'''
+<div class="ise-container">
+  <div style="max-width:54ch;margin-bottom:2rem;"><p class="ise-eyebrow">What you need to know</p><h2>Entry and key facts</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;">{_facts_html}</div>
+</div>''', "ise-band")
+
+course_entry = sec(f'''
+<div class="ise-container">
+  <div style="max-width:54ch;margin-bottom:2rem;"><p class="ise-eyebrow">Applying</p><h2>Entrance submission and routes in</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;">
+    {S.card("Entrance submission","Applicants submit either Route A or Route B. You may also be invited to an interview to discuss your submission.")}
+    {S.card("Special Mathematics Examination","A Special Mathematics Examination is offered at UL after the Leaving Certificate results if you did not meet the Mathematics requirement.")}
+    {S.card("Mature students","Applications from mature students are welcome, through the CAO. See UL's Mature Student Guide and the Mature Student Office.")}
+    {S.card("International applicants","Details for international applicants are available through the University of Limerick International Students pages.")}
+  </div>
+  <div style="margin-top:1.75rem;"><a class="ise-btn ise-btn--ghost" href="/entrance-submission">Entrance submission details →</a></div>
+</div>''')
+
 course_teach = sec(f'''
 <div class="ise-container">
   <div style="max-width:52ch;margin-bottom:2.25rem;"><p class="ise-eyebrow">How you're taught</p><h2>Learning by doing</h2></div>
@@ -63,14 +166,16 @@ course_teach = sec(f'''
     <div>{S.stat("5","paid residencies")}</div>
     <div>{S.stat("MSc","or BSc after 3 years")}</div>
   </div>
-</div>''')
+</div>''', "ise-band")
 course_cta = section(S.cta("Apply for 2027","Add CAO code LM173 to your application.",
   '<a class="ise-btn ise-btn--on-dark" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply, LM173</a> ' + CALL))
 course_split = S.split("course-teach.jpg", "Inside ISE",
   "Where the learning happens",
   "<p class=\"ise-lead\">Studios, whiteboards and real projects, students work through problems together, closer to an engineering floor than a classroom.</p>")
 
-S.assemble(104, "Course", "course", [course_hero, course_tl, course_split, course_teach, course_cta], menu_order=3)
+S.assemble(104, "Course", "course",
+  [course_hero, course_intro, course_struct, course_curriculum, course_facts, course_entry, course_split, course_teach, course_cta],
+  menu_order=3)
 
 # ============================== WHY ISE (105) ==============================
 why_hero = S.hero("Why ISE","A different kind of computer science degree",

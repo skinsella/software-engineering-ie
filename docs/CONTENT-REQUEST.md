@@ -4,24 +4,33 @@ Everything here is fact or copy only you/UL can provide. Nothing has been invent
 Send me the details and I'll place them; where something is currently a placeholder,
 the site says so plainly so it's safe if it deploys early.
 
-## Decisions to confirm (3)
+## Resolved from the live course page (/what-you-need-to-know/)
 
-1. **First-residency timing.** The review says the first residency is in the **summer
-   of Year 1**, but the "How it works" timeline currently shows residencies beginning
-   in **Year 2**. Confirm the correct structure and I'll fix the homepage and /course
-   timeline (and the "Year 1 / Foundations" card).
-2. **Stripe / John Collison quote** ("Software engineering is a wonderful career") —
-   it appears on three pages, isn't about ISE, and reads as an implied endorsement.
-   Keep it (with permission + clearer framing) or remove it?
-3. **Partner logos** (~66 companies). Confirm (a) you have permission to display each
+Imported into /course on 2026-10-25: award codes (LM173 BSc, LK315 MSc), duration and
+NFQ levels, subject area, 2025 CAO points (651), Leaving Certificate requirements, the
+H4 Mathematics subject requirement, the fees basis, the full year-by-year curriculum,
+entrance-submission routes, and the mature/international/special-maths notes. The
+first-residency-timing question is also resolved: Residency 1 sits in Year 1,
+Semester 3 (summer), so the homepage and /course timelines were corrected.
+**Please confirm these figures are current for the 2027 intake** (the live page cited
+2025 points and 2023/24-2024/25 fees), and send the exact 2027 fee amount if you want a
+number shown rather than "same as any other BSc in the Faculty".
+
+## Decisions to confirm
+
+1. **Partner logos** (~66 companies). Confirm (a) you have permission to display each
    logo, and (b) the single accurate claim to use. The same set is currently labelled
    three different ways: "where students reside" (/companies), "companies students
    have worked with" (/careers), "our network of partners" (/become-a-partner).
    Tell me the true relationship and I'll use one consistent, accurate label.
 
-## Testimonials (placeholder now)
+(The Stripe/Collison quote decision is closed: it was removed from all pages. Real
+student testimonials and Dr Mark Burkley's quote are now in place.)
 
-The previous testimonials were invented and have been replaced with safe placeholders.
+## Testimonials (now real)
+
+The invented testimonials were replaced with six real, approved quotes from the
+ISE/Stripe graduation pack plus Justyna's reflection. Photos can still be added later.
 For each of 3 (or more) real students, send: the quote, name (and how they want to be
 credited), residency/company, and a photo — **with the student's consent to publish**.
 
