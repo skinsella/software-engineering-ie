@@ -118,7 +118,7 @@ for _yr,_aw,_sems in _curr:
     _curr_cards += f'<div class="ise-card">{_inner}</div>'
 course_curriculum = sec(f'''
 <div class="ise-container">
-  <div style="max-width:54ch;margin-bottom:2rem;"><p class="ise-eyebrow">What you will study</p><h2>Modules, year by year</h2></div>
+  <div style="max-width:54ch;margin-bottom:2rem;"><p class="ise-eyebrow">What you will study</p><h2>Blocks, year by year</h2></div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;align-items:start;">{_curr_cards}</div>
 </div>''')
 
@@ -158,7 +158,7 @@ course_teach = sec(f'''
   <div style="max-width:52ch;margin-bottom:2.25rem;"><p class="ise-eyebrow">How you're taught</p><h2>Learning by doing</h2></div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
     {S.card("Studio-based","Small teams in a studio, closer to a real engineering floor than a classroom.")}
-    {S.card("Project-driven","Every module is anchored in building something real.")}
+    {S.card("Project-driven","Every block is anchored in building something real.")}
     {S.card("Continuously assessed","Progress is measured through the work itself, not end-of-year exams alone.")}
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;">
