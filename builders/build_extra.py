@@ -116,44 +116,136 @@ team_cta=section(S.cta("Talk to the ISE team","Book a call about the programme, 
 S.assemble(122,"Team","team",[team_hero,team_body,team_cta],menu_order=15)
 
 # ===================== ENTRANCE SUBMISSION (123) =====================
+# Content from software-engineering.ie/about-the-ise-entrance-submission/,
+# with the timeline graphic recreated in the site's own format.
 es_hero=S.hero("Applying","The ISE entrance submission",
-  "ISE looks beyond points. Alongside your CAO application you complete an entrance submission, worth up to 200 points, so we can see how you think and build.",
-  '<a class="ise-btn ise-btn--primary" href="https://www.software-engineering.ie/about-the-ise-entrance-submission/" target="_blank" rel="noopener">Read the full brief</a>', max_title="18ch")
+  "ISE looks beyond points. Alongside your CAO application you complete an entrance submission, worth up to 200 points, so we can see how you think and build. Please read this page carefully before you begin.",
+  S.BTN_APPLY + ' <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="mailto:ISE@ul.ie">Email ISE@ul.ie</a>', max_title="18ch")
 
+es_intro=sec('''
+<div class="ise-container ise-prose" style="max-width:64ch;">
+  <p class="ise-eyebrow">Please read carefully</p>
+  <h2>Two options, both worth up to 200 points</h2>
+  <p>The ISE entrance submission has two options, each worth a maximum of 200 points. It applies to CAO (Leaving Certificate), mature and international applicants to Immersive Software Engineering, CAO code LM173. We are interested in many kinds of students, so show us your skills and interests in science, technology, engineering, maths and innovation, in a way that connects with you.</p>
+  <p>Once you select LM173 on the CAO you will receive an email with a link to the submission portal. International applicants apply directly to UL and receive the same link. If you have any questions, email <a href="mailto:ISE@ul.ie">ISE@ul.ie</a>.</p>
+</div>''')
+
+# route comparison table (Option A vs Option B)
+_cmp = [
+  ("Graded questions","One written report","Respond to three of four questions"),
+  ("Word limit","Up to 800 words","Up to 400 words per response"),
+  ("Question type","Essay","Shorter narrative"),
+  ("Main focus","Creative use of technology","Personal characteristics and achievements"),
+  ("Evidence","Yes","Yes"),
+  ("Points","200","200"),
+  ("Submission","Upload a single document to the portal","Enter responses in the portal"),
+]
+_rows = ''.join(
+  f'<tr><td style="padding:.7rem 1rem;border-bottom:1px solid var(--line);font-weight:700;">{lab}</td>'
+  f'<td style="padding:.7rem 1rem;border-bottom:1px solid var(--line);color:var(--ink-70);">{a}</td>'
+  f'<td style="padding:.7rem 1rem;border-bottom:1px solid var(--line);color:var(--ink-70);">{b}</td></tr>'
+  for lab,a,b in _cmp)
+_table = (f'<table style="width:100%;border-collapse:collapse;font-size:.95rem;min-width:560px;background:#fff;">'
+          f'<thead><tr>'
+          f'<th style="text-align:left;padding:.75rem 1rem;border-bottom:2px solid var(--ul-green);"></th>'
+          f'<th style="text-align:left;padding:.75rem 1rem;border-bottom:2px solid var(--ul-green);color:var(--ul-green-heritage);">Route A<br>Technology Project</th>'
+          f'<th style="text-align:left;padding:.75rem 1rem;border-bottom:2px solid var(--ul-green);color:var(--ul-green-heritage);">Route B<br>Personal Profile</th>'
+          f'</tr></thead><tbody>{_rows}</tbody></table>')
 es_routes=sec(f'''
 <div class="ise-container">
-  <div style="max-width:58ch;margin-bottom:2rem;"><p class="ise-eyebrow">How it works</p><h2>Two routes, one submission</h2>
-  <p class="ise-lead">Choose one of two routes. Both carry equal marks and are worth up to 200 points. Pick the one that lets you best show your skills and interests in science, technology, engineering, maths and innovation.</p></div>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;">
-    {S.card("Route A · Technology Project","Up to 800 words on a project where you used technology to do something interesting. Tell us what you did and, just as important, how you did it. Add screenshots, links to repositories or sites, and short explained code fragments, plus the impact of the work and what you would do differently.")}
-    {S.card("Route B · Personal Profile","Answer three of four set questions, up to 400 words each, with one optional supporting link per answer. This route suits applicants with or without hands-on software experience and lets you showcase achievements and identity beyond grades.")}
+  <div style="max-width:58ch;margin-bottom:2rem;"><p class="ise-eyebrow">Choose one route</p><h2>Two routes, one submission</h2>
+  <p class="ise-lead">Choose one of two routes. Both carry equal marks and are worth up to 200 points. Pick the one that lets you best show your skills and interests.</p></div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-bottom:2rem;">
+    {S.card("Route A · Technology Project","Up to 800 words on a project where you used technology to do something interesting. Tell us what you did and how you did it, with evidence.")}
+    {S.card("Route B · Personal Profile","Respond to three of four questions, up to 400 words each. A shorter, narrative route that suits applicants with or without hands-on software experience.")}
   </div>
+  <div style="overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--line);">{_table}</div>
 </div>''', "ise-band")
 
-es_process=sec(f'''
+es_steps=sec(f'''
 <div class="ise-container">
-  <div style="max-width:56ch;margin-bottom:2rem;"><p class="ise-eyebrow">Who and how</p><h2>Applying and getting access</h2></div>
+  <div style="max-width:56ch;margin-bottom:2rem;"><p class="ise-eyebrow">The submission</p><h2>Three steps</h2></div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
-    {S.card("Who it is for","CAO (Leaving Certificate), mature and international applicants to Immersive Software Engineering, CAO code LM173.")}
-    {S.card("Getting the portal link","Select LM173 on your CAO application and you will be emailed a link to the submission portal. International applicants apply directly to UL and receive the same link.")}
-    {S.card("Evidence is welcome","Screenshots, repositories, portfolios, website links and commented code all help, as long as you explain them in your writing.")}
+    {S.card("1 · Personal details","Not graded. Your name, email, CAO number if applicable, and mobile number. Use the email from your original CAO or UL application, and give your mobile with the country code in 00 format, not +.")}
+    {S.card("2 · Choose your route","Choose Route A or Route B. Both carry equal marks and are worth up to 200 points. Pick the one that best represents you.")}
+    {S.card("3 · Final stage and submission","Not graded. Sign an honour pledge that the work is your own and that all sources are acknowledged. Your work can be part of a team project, but the submission must focus on your own contribution. Anything found not to be your own work leads to rejection of the whole submission.")}
   </div>
 </div>''')
 
-es_timeline=sec('''
+es_routeA=sec(f'''
 <div class="ise-container">
-  <div style="max-width:56ch;margin-bottom:1.5rem;"><p class="ise-eyebrow">Timeline</p><h2>When you will hear from us</h2></div>
-  <div class="ise-faq" style="max-width:820px;">
-    <details open><summary>CAO application by 1 February</summary><p>You will be emailed in early to mid March with details of the entrance submission process.</p></details>
-    <details><summary>CAO application after 1 February, up to 1 May</summary><p>You will be emailed by mid May with the same details.</p></details>
-    <details><summary>CAO Change of Mind up to 1 July</summary><p>If you add LM173 through Change of Mind, you will be emailed by mid July. Dates may differ for international applicants; contact UL Admissions.</p></details>
+  <div style="max-width:62ch;margin-bottom:2rem;"><p class="ise-eyebrow">Route A guidance</p><h2>The Technology Project</h2>
+  <p class="ise-lead">Up to 800 words, submitted as a single document through the portal. Using technology does not have to mean writing a program; it can be any situation where you used technology to do something interesting. We want to know what you did, and just as much, how you did it.</p></div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;">
+    {S.card("Overview of your work","What did you do? Include screenshots, photos and links to repositories, websites or other illustrations. If you wrote code, add short fragments with a brief explanation of what they do, and link to the full implementation.")}
+    {S.card("Project impact","Why did you do it? Were you solving a problem or learning something new? What was the impact, and did anyone use it? What are you most proud of, and what would you do differently next time?")}
   </div>
+  <div style="margin-top:1.5rem;">{S.card("A few notes","Team projects are fine, but be clear about the parts you did yourself. Leaving Certificate or other coursework projects are allowed if you improve on them and explain how. Always provide and explain your evidence. If you are unsure whether an idea fits, it probably does, but you can email ISE@ul.ie to check.")}</div>
 </div>''', "ise-band")
 
-es_cta=section(S.cta("Questions about the submission?",
-  "Read the full brief, including the current questions and video guidance, or contact the ISE admissions team.",
-  '<a class="ise-btn ise-btn--on-dark" href="https://www.software-engineering.ie/about-the-ise-entrance-submission/" target="_blank" rel="noopener">Entrance submission brief</a>'))
+# ---- timeline graphic, recreated in the site's format ----
+_tl = [
+  ("1","Apply by","1 February","Emailed early to mid March"),
+  ("2","After 1 Feb,","up to 1 May","Emailed by mid May"),
+  ("3","Change of Mind,","up to 1 July","Emailed by mid July"),
+]
+_cx = [160, 480, 800]
+_svg = ['<svg viewBox="0 0 960 230" role="img" aria-label="Entrance submission timeline: when applicants hear from ISE based on when LM173 is selected on the CAO" style="width:100%;height:auto;max-width:960px;display:block;margin:0 auto;font-family:Inter,sans-serif;">']
+_svg.append('<line x1="130" y1="112" x2="830" y2="112" stroke="#cfe0d6" stroke-width="3"></line>')
+for _i,(_n,_l1,_l2,_note) in enumerate(_tl):
+    _x = _cx[_i]
+    _svg.append(f'<rect x="{_x-112}" y="20" width="224" height="64" rx="14" fill="#e8f1ec"></rect>')
+    _svg.append(f'<text x="{_x}" y="48" text-anchor="middle" font-size="15" font-weight="700" fill="#0a3f2c">{_l1}</text>')
+    _svg.append(f'<text x="{_x}" y="68" text-anchor="middle" font-size="15" font-weight="700" fill="#0a3f2c">{_l2}</text>')
+    _svg.append(f'<circle cx="{_x}" cy="112" r="16" fill="#005335"></circle>')
+    _svg.append(f'<text x="{_x}" y="117" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">{_n}</text>')
+    _svg.append(f'<text x="{_x}" y="158" text-anchor="middle" font-size="11" fill="#77857e" letter-spacing=".06em">THEN</text>')
+    _svg.append(f'<text x="{_x}" y="180" text-anchor="middle" font-size="13" font-weight="600" fill="#0a6b3b">{_note}</text>')
+_svg.append('</svg>')
+es_timeline=sec(f'''
+<div class="ise-container">
+  <div style="max-width:56ch;margin-bottom:1.75rem;"><p class="ise-eyebrow">Timeline</p><h2>When you will hear from us</h2>
+  <p class="ise-lead">When you hear from us depends on when you select LM173 on the CAO.</p></div>
+  {''.join(_svg)}
+  <p style="margin:1.25rem auto 0;max-width:70ch;text-align:center;color:var(--ink-70);">Dates may differ for international applicants; contact UL Admissions for details.</p>
+</div>''', "ise-band")
 
-S.assemble(123,"Entrance submission","entrance-submission",[es_hero,es_routes,es_process,es_timeline,es_cta],menu_order=16)
+es_additional=sec(f'''
+<div class="ise-container">
+  <div style="max-width:56ch;margin-bottom:2rem;"><p class="ise-eyebrow">Good to know</p><h2>Before you submit</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+    {S.card("You may be invited to talk","You may be called for a short online discussion to clarify parts of your submission. You will hear more when you receive your portal link.")}
+    {S.card("Everyone submits","Mature and international applicants complete the submission too. Mature applicants also send a short motivation letter; email ISE@ul.ie for instructions.")}
+    {S.card("Watch the workshop","For a full walkthrough, watch the ISE Entrance Submission Workshop on the ISE YouTube channel.")}
+  </div>
+  <div style="margin-top:1.75rem;"><a class="ise-btn ise-btn--ghost" href="https://www.youtube.com/@immersiveSE" target="_blank" rel="noopener">ISE on YouTube →</a> <a class="ise-btn ise-btn--ghost" href="mailto:ISE@ul.ie">Email ISE@ul.ie</a></div>
+</div>''')
+
+_faqs = [
+  ("What are the differences between the Technology Project and the Personal Profile?","Route A (Technology Project) is a single written report of up to 800 words focused on creative use of technology. Route B (Personal Profile) asks you to respond to three of four questions, up to 400 words each, as shorter narratives focused on your personal characteristics and achievements. Both carry 200 points and both require evidence. Route B opens the course to students who may not have an extensive technical background."),
+  ("Can I gain a place on ISE without completing an entrance submission?","No. All applicants, through the CAO or by direct application to UL, must submit either Route A or Route B."),
+  ("What are the minimum requirements aside from the entrance submission?","Full course entry requirements are on the University of Limerick website."),
+  ("Can I make changes after I have submitted?","No, changes cannot be made once you send your submission through the portal. Email ISE@ul.ie with any queries."),
+  ("I have not received the link to complete my submission. What should I do?","Check your spam or junk folder first. If you still cannot find the email, contact ISE@ul.ie."),
+  ("I am a mature student. Do I need to complete an entrance submission?","Yes. Mature students also submit a short motivation letter outlining why they would like a place on ISE. Email ISE@ul.ie for instructions on submitting it."),
+  ("I am an international student. Do I need to complete the entrance submission?","Yes. All applicants complete either Route A or Route B."),
+  ("Can I choose both Route A and Route B?","No, choose only one. Pick the option that best represents you."),
+  ("Is ISE a restricted course?","No. ISE can be selected in each of the three submission windows (normal CAO, late applications and Change of Mind), unlike restricted courses such as Medicine."),
+  ("Can I use a Leaving Certificate project?","Yes, if it meets the criteria. Try to make it unique and add something to it, especially if other students may have similar projects."),
+  ("Can I use a group project?","Yes, but clearly specify which parts you worked on, as you may be called for an interview to discuss it further."),
+]
+_faq_html = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q,a in _faqs)
+es_faq=sec(f'''
+<div class="ise-container">
+  <div style="max-width:56ch;margin-bottom:1.5rem;"><p class="ise-eyebrow">FAQ</p><h2>Frequently asked questions</h2></div>
+  <div class="ise-faq" style="max-width:820px;">{_faq_html}</div>
+</div>''')
+
+es_cta=section(S.cta("Questions about the submission?",
+  "Email the ISE admissions team, or apply through the CAO with code LM173.",
+  S.BTN_APPLY + ' <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="mailto:ISE@ul.ie">Email ISE@ul.ie</a>'))
+
+S.assemble(123,"Entrance submission","entrance-submission",
+  [es_hero,es_intro,es_routes,es_steps,es_routeA,es_timeline,es_additional,es_faq,es_cta],menu_order=16)
 
 print("team + entrance-submission pages added")
