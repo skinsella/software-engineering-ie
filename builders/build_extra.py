@@ -1,7 +1,7 @@
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 import shared as S
-from elementor_lib import section
+from elementor_lib import section, shortcode_widget, section_of
 CALL='<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>'
 def sec(inner, klass=""): return section(S.band(inner, klass))
 
@@ -79,16 +79,12 @@ sch_who=sec(f'''
   <div style="margin-top:1.75rem;"><a class="ise-btn ise-btn--ghost" href="/course">Course details →</a> <a class="ise-btn ise-btn--ghost" href="/entrance-submission">Entrance submission →</a> <a class="ise-btn ise-btn--ghost" href="/why-ise">Why ISE →</a></div>
 </div>''')
 
-sch_booking=sec(f'''
+sch_booking=sec('''
 <div class="ise-container">
-  <div style="max-width:60ch;margin-bottom:1.5rem;"><p class="ise-eyebrow">Book an activity</p><h2>Arrange a talk, workshop or visit</h2>
-  <p class="ise-lead">To enquire about an information session or workshop, contact our Public Engagement Officer, Gillian Place. A few details help us tailor the session to your students.</p></div>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;">
-    {S.card("What to tell us","Your name and school, where you are based, the year group (Transition Year, fifth or sixth year, or a mix), the format you would like, and roughly how many students will take part.")}
-    {S.card("What you can ask about","A talk at your school, an online session, or a class visit to ISE. We can focus on ISE alone or cover the wider UL computer science options.")}
-  </div>
-  <div style="margin-top:1.75rem;"><a class="ise-btn ise-btn--primary" href="{_SCH_BOOK}">Email to book</a></div>
+  <div style="max-width:60ch;"><p class="ise-eyebrow">Book an activity</p><h2>Arrange a talk, workshop or visit</h2>
+  <p class="ise-lead">To enquire about an information session or workshop, fill in the form below. It reaches our Public Engagement Officer, Gillian Place, and a few details help us tailor the session to your students.</p></div>
 </div>''', "ise-band")
+sch_form=section_of(shortcode_widget("[ise_schools_form]"), css_classes="ise-band")
 
 sch_visit=sec('''
 <div class="ise-container">
@@ -102,7 +98,7 @@ sch_cta=section(S.cta("Invite ISE to your school","Arrange a talk, an online ses
   f'<a class="ise-btn ise-btn--on-dark" href="{_SCH_BOOK}">Book an outreach activity</a>'))
 
 S.assemble(111,"For Schools","schools",
-  [sch_hero,sch_intro,sch_ways,sch_who,sch_booking,sch_visit,sch_cta],menu_order=12)
+  [sch_hero,sch_intro,sch_ways,sch_who,sch_booking,sch_form,sch_visit,sch_cta],menu_order=12)
 
 # ===================== BECOME A PARTNER (112) =====================
 par_hero=S.hero("Partner with ISE","Become a residency partner",

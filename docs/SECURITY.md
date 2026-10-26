@@ -20,8 +20,9 @@ configured on the production host or by UL IT.
   marked live. Flip it on for production by setting option `ise_rb_production = 1`
   **or** defining `ISE_RB_PRODUCTION` true in `wp-config.php`.
 - **Portal / registration kill-switch**: the whole two-sided portal (student &
-  partner sign-up, the job board, profiles, the student directory, applications)
-  is **open on staging** but **closes automatically the moment the site is in
+  partner sign-up, the job board, profiles, the student directory, applications,
+  and the schools outreach booking form) is **open on staging** but **closes
+  automatically the moment the site is in
   production** (`ise_rb_production`), so the marketing site can go live without
   collecting any personal data. Closed portal pages show a "portal opening soon"
   notice and the apply endpoint is rejected server-side. **Open the portal only

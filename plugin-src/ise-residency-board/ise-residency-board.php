@@ -1334,6 +1334,114 @@ function ise_rb_portal_gate() {
 		. '</div></div>';
 }
 
+/* ---------------------------------------------------------------------------
+ * Schools outreach booking form, behind the same privacy gate as the portal.
+ * It gathers personal data (including from students who may be minors), so it
+ * is CLOSED whenever the portal is closed and shows an email fallback instead.
+ * Open it with the portal (option ise_rb_signup_open = 1) once the privacy
+ * notice and DPIA are in place. Enquiries are stored privately (post type
+ * ise_sch_enq) and emailed to ISE@ul.ie.
+ * ------------------------------------------------------------------------- */
+add_action( 'init', function () {
+	register_post_type( 'ise_sch_enq', array(
+		'labels'          => array( 'name' => 'School enquiries', 'singular_name' => 'School enquiry' ),
+		'public'          => false,
+		'show_ui'         => true,
+		'show_in_menu'    => true,
+		'menu_icon'       => 'dashicons-welcome-learn-more',
+		'supports'        => array( 'title' ),
+		'capability_type' => 'post',
+		'map_meta_cap'    => true,
+	) );
+} );
+
+function ise_sch_fallback() {
+	return '<div class="ise-container" style="max-width:640px;padding-block:0 3rem;"><div class="ise-card"><h3 style="margin-top:0;">Booking opens soon</h3>'
+		. '<p style="color:var(--ink-70);margin-bottom:0;">Online booking is not open yet. In the meantime, email our Public Engagement Officer, Gillian Place, at '
+		. '<a href="mailto:ISE@ul.ie?subject=Schools%20outreach%20enquiry">ISE@ul.ie</a> to arrange a talk, an online session or a studio visit.</p></div></div>';
+}
+
+add_shortcode( 'ise_schools_form', function () {
+	if ( ! ise_rb_signup_open() ) { return ise_sch_fallback(); }
+
+	$ABOUT   = array( 'Online talk', 'ISE visit to your school', 'Class visit to ISE' );
+	$ROLES   = array( 'Teacher or Principal', 'Student', 'Parent' );
+	$GROUPS  = array( 'Transition Year', 'Fifth Year', 'Sixth Year', 'Multiple classes', 'Other' );
+	$COURSES = array( 'ISE only', 'All UL Computer Science options' );
+	$ok = false; $err = '';
+
+	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['ise_sch'] )
+		&& check_admin_referer( 'ise_sch', 'ise_sch_nonce' ) ) {
+		$name    = sanitize_text_field( wp_unslash( $_POST['sf_name'] ?? '' ) );
+		$email   = sanitize_email( wp_unslash( $_POST['sf_email'] ?? '' ) );
+		$role    = sanitize_text_field( wp_unslash( $_POST['sf_role'] ?? '' ) );
+		$school  = sanitize_text_field( wp_unslash( $_POST['sf_school'] ?? '' ) );
+		$loc     = sanitize_text_field( wp_unslash( $_POST['sf_location'] ?? '' ) );
+		$about   = array_values( array_intersect( $ABOUT, array_map( 'sanitize_text_field', (array) ( $_POST['sf_about'] ?? array() ) ) ) );
+		$course  = sanitize_text_field( wp_unslash( $_POST['sf_courses'] ?? '' ) );
+		$group   = sanitize_text_field( wp_unslash( $_POST['sf_group'] ?? '' ) );
+		$count   = (int) ( $_POST['sf_count'] ?? 0 );
+		$info    = sanitize_textarea_field( wp_unslash( $_POST['sf_info'] ?? '' ) );
+		$consent = ! empty( $_POST['reg_consent'] );
+		$spam    = ise_rb_is_bot() || ! ise_rb_captcha_ok() || ! ise_rb_throttle( 'sch', 5 );
+
+		if ( ! $consent ) { $err = 'Please confirm you have read the privacy notice.'; }
+		elseif ( ! $name || ! $email || ! $school ) { $err = 'Please fill in your name, email and school.'; }
+
+		if ( ! $spam && ! $err ) {
+			$id = wp_insert_post( array(
+				'post_type'   => 'ise_sch_enq',
+				'post_status' => 'private',
+				'post_title'  => $name . ' - ' . ( $school ? $school : 'school enquiry' ),
+			) );
+			if ( ! is_wp_error( $id ) && $id ) {
+				foreach ( array(
+					'_sf_email' => $email, '_sf_role' => $role, '_sf_school' => $school,
+					'_sf_location' => $loc, '_sf_about' => implode( ', ', $about ),
+					'_sf_courses' => $course, '_sf_group' => $group, '_sf_count' => $count, '_sf_info' => $info,
+				) as $k => $v ) { update_post_meta( $id, $k, $v ); }
+				$body = "New schools outreach enquiry.\n\n"
+					. "Name: $name\nEmail: $email\nRole: $role\nSchool: $school\nLocation: $loc\n"
+					. 'Interested in: ' . implode( ', ', $about ) . "\nCourses: $course\nClass group: $group\n"
+					. "Approx students: $count\n\n$info\n";
+				wp_mail( apply_filters( 'ise_sch_notify_email', 'ISE@ul.ie' ), '[ISE Schools] New outreach enquiry', $body );
+				$ok = true;
+			} else { $err = 'Something went wrong, please try again or email ISE@ul.ie.'; }
+		} elseif ( ! $err ) { $err = 'Something went wrong, please try again or email ISE@ul.ie.'; }
+	}
+
+	$inp = 'style="width:100%;padding:.7rem;border:1px solid var(--line);border-radius:8px;"';
+	ob_start();
+	echo '<div class="ise-container" style="max-width:680px;padding-block:0 3rem;">';
+	if ( $ok ) {
+		echo '<div class="ise-card" style="border-color:var(--ul-green-modern);"><strong>Thanks, your enquiry has been sent.</strong><br>We will be in touch to arrange your session.</div></div>';
+		return ob_get_clean();
+	}
+	if ( $err ) { echo '<div class="ise-card" style="border-color:#c0392b;margin-bottom:1rem;">' . esc_html( $err ) . '</div>'; }
+	?>
+	<form method="post" class="ise-form" style="display:grid;gap:1rem;">
+		<?php wp_nonce_field( 'ise_sch', 'ise_sch_nonce' ); echo ise_rb_hp_field() . ise_rb_captcha_field(); ?>
+		<label>Your name<br><input name="sf_name" required <?php echo $inp; ?>></label>
+		<label>Your email<br><input type="email" name="sf_email" required <?php echo $inp; ?>></label>
+		<label>I am a<br><select name="sf_role" <?php echo $inp; ?>><?php foreach ( $ROLES as $r ) { echo '<option>' . esc_html( $r ) . '</option>'; } ?></select></label>
+		<label>School name<br><input name="sf_school" required <?php echo $inp; ?>></label>
+		<label>Where is your school<br><input name="sf_location" placeholder="Town or county" <?php echo $inp; ?>></label>
+		<fieldset style="border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;display:grid;gap:.4rem;">
+			<legend style="padding:0 .4rem;font-size:.85rem;color:var(--ink-70);">What would you like to enquire about</legend>
+			<?php foreach ( $ABOUT as $a ) { echo '<label style="display:flex;gap:.5rem;align-items:center;font-weight:400;"><input type="checkbox" name="sf_about[]" value="' . esc_attr( $a ) . '"> ' . esc_html( $a ) . '</label>'; } ?>
+		</fieldset>
+		<label>Which courses are you interested in<br><select name="sf_courses" <?php echo $inp; ?>><?php foreach ( $COURSES as $c ) { echo '<option>' . esc_html( $c ) . '</option>'; } ?></select></label>
+		<label>Class group<br><select name="sf_group" <?php echo $inp; ?>><?php foreach ( $GROUPS as $g ) { echo '<option>' . esc_html( $g ) . '</option>'; } ?></select></label>
+		<label>Approx. number of students<br><input type="number" name="sf_count" min="1" <?php echo $inp; ?>></label>
+		<label>Additional information<br><textarea name="sf_info" rows="3" <?php echo $inp; ?>></textarea></label>
+		<?php echo ise_rb_consent_field( 'I have read and understood how ISE will process this enquiry.' ); ?>
+		<button class="ise-btn ise-btn--primary" name="ise_sch" value="1" type="submit">Send enquiry</button>
+	</form>
+	<?php
+	echo '</div>';
+	return ob_get_clean();
+} );
+
 // Keep the pre-launch/test site out of search engines until production.
 add_action( 'wp_head', function () {
 	if ( ! ise_rb_is_production() ) { echo '<meta name="robots" content="noindex,nofollow">' . "\n"; }
