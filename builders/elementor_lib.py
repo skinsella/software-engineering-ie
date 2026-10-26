@@ -21,7 +21,7 @@ def section(inner_html, css_classes="", settings=None):
            "settings": {"_column_size": 100, "_inline_size": None,
                         "padding": {"unit":"px","top":"0","right":"0","bottom":"0","left":"0","isLinked":True}, "margin": {"unit":"px","top":"0","right":"0","bottom":"0","left":"0","isLinked":True}},
            "elements": [html_widget(inner_html)]}
-    st = {"content_width": "full", "gap": "no",
+    st = {"layout": "full_width", "gap": "no",
           "padding": {"unit":"px","top":"0","right":"0","bottom":"0","left":"0","isLinked":True}, "margin": {"unit":"px","top":"0","right":"0","bottom":"0","left":"0","isLinked":True},
           "structure": "10"}
     if settings:
@@ -72,7 +72,7 @@ def section_of(widget, css_classes="", settings=None):
     col = {"id": eid(), "elType": "column",
            "settings": {"_column_size": 100, "_inline_size": None, "padding": zero, "margin": zero},
            "elements": [widget]}
-    st = {"content_width": "full", "gap": "no", "padding": zero, "margin": zero, "structure": "10"}
+    st = {"layout": "full_width", "gap": "no", "padding": zero, "margin": zero, "structure": "10"}
     if settings: st.update(settings)
     if css_classes: st["_css_classes"] = css_classes
     return {"id": eid(), "elType": "section", "settings": st, "elements": [col]}

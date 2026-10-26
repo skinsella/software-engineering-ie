@@ -91,8 +91,8 @@ _curr = [
   ]),
   ("Year 2","BSc, LM173",[
     ("Semester 1",["CS4444 Residency 2: Software Systems / Dev Part 2"]),
-    ("Semester 2",["CS4445 Human Centric Computing","CS4455 Ethical Hacking and Security Part 1","CS4436 Ethical Hacking and Security Part 2"]),
-    ("Semester 3",["CS4446 Residency 3: User Interaction in Practice"]),
+    ("Semester 2",["CS4445 Human Centric Computing","CS4455 Ethical Hacking and Security Part 1"]),
+    ("Semester 3",["CS4436 Ethical Hacking and Security Part 2","CS4446 Residency 3: User Interaction in Practice"]),
   ]),
   ("Year 3","BSc, LM173",[
     ("Semester 1",["CS4437 Scaling for Reliability and Performance","CS4447 Computational Thinking"]),
