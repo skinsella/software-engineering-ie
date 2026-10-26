@@ -204,13 +204,54 @@ S.assemble(105, "Why ISE", "why-ise", [why_hero, why_cards, why_split, why_cta],
 about_hero = S.hero("About","Immersive Software Engineering at UL",
   "ISE is a radically practical computer science degree at the University of Limerick, built with industry to change how software engineers are trained.",
   S.BTN_APPLY + ' ' + CALL, max_title="20ch")
-about_prose = sec('''
-<div class="ise-container ise-prose">
-  <div style="max-width:52ch;margin-bottom:1.5rem;"><p class="ise-eyebrow">Our approach</p><h2>Trained like engineers, not just taught about engineering</h2></div>
-  <p>ISE was designed around a simple idea: the best way to become a great software engineer is to do the work, supported by great teaching. Students split their time between studio-based learning at UL and paid residencies inside real companies, building a portfolio, a network and a master's degree along the way.</p>
-  <p>The programme is delivered in partnership with a network of leading technology companies and Irish start-ups, and is part of the University of Limerick.</p>
-  <p style="margin-top:1.25rem;"><a class="ise-btn ise-btn--ghost" href="https://www.ul.ie" rel="noopener">University of Limerick →</a></p>
+about_why = sec('''
+<div class="ise-container ise-prose" style="max-width:64ch;">
+  <p class="ise-eyebrow">Our story</p>
+  <h2>Why ISE exists</h2>
+  <p>Software runs the modern economy, but the way we train software engineers has barely changed in decades. Ireland's technology companies consistently say they cannot hire enough skilled engineers, and that the gap holds them back. More than three quarters of Irish tech firms report that the shortage costs them money. Immersive Software Engineering was built to close that gap.</p>
+  <p>ISE started from a simple conviction. The best way to become a great software engineer is to do the work, supported by great teaching. So instead of four years of lectures and then a first job, ISE students spend about half the degree inside real engineering teams, on paid residencies, from first year. The idea is borrowed from medicine, where residencies have long turned students into practitioners, and brought to computer science.</p>
+  <p>The programme was designed at the University of Limerick together with the companies that go on to hire its students, Stripe among them as a founding partner, so that what students learn and what industry needs are the same thing. It was also built to widen who sees software engineering as a path for them, and to bring more students, and more young women, into the field.</p>
+  <p>The result is a degree built around real-world complexity rather than the lecture hall, and graduates who reach industry already knowing how to build.</p>
+</div>''')
+
+about_industry = sec(f'''
+<div class="ise-container">
+  <div style="max-width:58ch;margin-bottom:2rem;"><p class="ise-eyebrow">The coalition</p><h2>Built with industry, not just for it</h2>
+  <p class="ise-lead">ISE was created with the companies that hire its graduates, not at a distance from them. Stripe helped shape the curriculum and the residency model from the start, and Analog Devices was there at the launch.</p></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+    {S.card("More than 70 partners","From global platforms to Ireland's fastest growing startups, including four of the country's nine unicorns.")}
+    {S.card("Real residencies","Partners host students on paid residencies and mentor them on real engineering work.")}
+    {S.card("Industry scholarships","Partners fund scholarships that widen access to the programme, including an equity, diversity and inclusion award.")}
+  </div>
 </div>''', "ise-band")
+
+_milestones = [
+  ("2021","The idea","UL, Stripe and Analog Devices set out to build a new kind of computer science degree, designed around paid residencies in industry."),
+  ("2022","First cohort","The first ISE students start at UL, and AWS funds a Global Fellowships programme for the course."),
+  ("2023","Recognised","ISE wins the Technology Ireland Outstanding Academic Achievement award."),
+  ("2026","First MSc class","Sixteen students graduate with an integrated master's and move into roles at companies like Stripe, Fin, Analog Devices and AWS."),
+]
+_ms_cards = ''.join(
+  f'<div class="ise-card"><p class="ise-eyebrow" style="margin:0 0 .3rem;color:var(--ul-green-modern);">{y}</p>'
+  f'<h3 style="margin:0 0 .5rem;font-size:1.05rem;">{t}</h3><p style="margin:0;color:var(--ink-70);">{b}</p></div>'
+  for y,t,b in _milestones)
+about_story = sec(f'''
+<div class="ise-container">
+  <div style="max-width:52ch;margin-bottom:2rem;"><p class="ise-eyebrow">Milestones</p><h2>The story so far</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;">{_ms_cards}</div>
+</div>''')
+
+about_scale = sec(f'''
+<div class="ise-container">
+  <div style="max-width:52ch;margin-bottom:2rem;"><p class="ise-eyebrow">Where it stands now</p><h2>A growing programme</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;">
+    <div>{S.stat("~60","students a year")}</div>
+    <div>{S.stat("70+","partner organisations")}</div>
+    <div>{S.stat("5","paid residencies")}</div>
+    <div>{S.stat("16","first MSc graduates in 2026")}</div>
+  </div>
+</div>''', "ise-band")
+
 about_quote = sec('''
 <div class="ise-container" style="text-align:center;max-width:760px;">
   <blockquote style="margin:0;padding:0;border:0;">
@@ -218,9 +259,24 @@ about_quote = sec('''
     <footer style="font-family:var(--font-sans);font-size:1rem;color:#8fe3b0;margin-top:1.25rem;">Dr Mark Burkley · Course Director, Immersive Software Engineering</footer>
   </blockquote>
 </div>''', "ise-band--heritage")
+about_follow = sec('''
+<div class="ise-container" style="text-align:center;max-width:720px;">
+  <p class="ise-eyebrow">Follow ISE</p>
+  <h2>See it for yourself</h2>
+  <p class="ise-lead" style="margin-left:auto;margin-right:auto;">The everyday of ISE, from residencies to student projects, lives on our channels.</p>
+  <div style="display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+    <a class="ise-btn ise-btn--ghost" href="https://www.instagram.com/immersivesoftwareengineering/" target="_blank" rel="noopener">Instagram →</a>
+    <a class="ise-btn ise-btn--ghost" href="https://www.tiktok.com/@immersivesoftwareeng" target="_blank" rel="noopener">TikTok →</a>
+    <a class="ise-btn ise-btn--ghost" href="https://www.youtube.com/@immersiveSE" target="_blank" rel="noopener">YouTube →</a>
+    <a class="ise-btn ise-btn--ghost" href="https://www.linkedin.com/company/ise-ul/" target="_blank" rel="noopener">LinkedIn →</a>
+  </div>
+</div>''')
+
 about_cta = section(S.cta("Join the next cohort","Applications for 2027 are open through the CAO with code LM173.",
   '<a class="ise-btn ise-btn--on-dark" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply, LM173</a> ' + CALL))
-S.assemble(106, "About", "about", [about_hero, about_prose, about_quote, about_cta], menu_order=6)
+S.assemble(106, "About", "about",
+  [about_hero, about_why, about_industry, about_story, about_scale, about_quote, about_follow, about_cta],
+  menu_order=6)
 
 # ============================== FAQ (107) ==============================
 faqs = [
