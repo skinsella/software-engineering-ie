@@ -156,6 +156,8 @@ a:hover { color: var(--ul-green-modern); }
 .ise-footer { background: var(--ul-green-heritage); color: #cfe3da; }
 .ise-footer a { color: #fff; }
 .ise-footer a:hover { color: var(--ul-green-modern); }
+.ise-footer .ise-social { color: #a9c9bb; display: inline-flex; transition: color .15s ease; }
+.ise-footer .ise-social:hover, .ise-footer .ise-social:focus-visible { color: var(--ul-green-modern); }
 
 /* --- Brand header/footer with the official white ISE·UL lockup on dark green --- */
 .ise-nav { background: var(--ul-green-heritage); }
