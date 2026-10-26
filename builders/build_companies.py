@@ -8,7 +8,7 @@ BTN_CALL    = '<a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://
 
 hero = S.hero(
   "The Companies",
-  "Work with the best engineers, early",
+  "Work with ambitious engineers, early",
   "Residencies place ISE students inside your engineering team as paid contributors for three to six months at a time, real work, real impact, with academic mentoring alongside.",
   BTN_PARTNER + ' ' + BTN_CALL,
   max_title="20ch", bg_image="companies-hero.jpg")
@@ -41,11 +41,11 @@ why = section(S.band(f'''
 <div class="ise-container">
   <div style="max-width:54ch;margin-bottom:2.25rem;">
     <p class="ise-eyebrow">Why partner with ISE</p>
-    <h2>Meet exceptional engineers before anyone else</h2>
+    <h2>Meet outstanding engineers early</h2>
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
     {S.card("Access talent early","Work with a highly selective cohort years before they reach the graduate market.")}
-    {S.card("Build your pipeline","Residencies are the strongest possible route to hiring, you have already worked together.")}
+    {S.card("Build your pipeline","Residencies are one of the best ways to hire, because you have already worked together.")}
     {S.card("Fresh capability","Motivated students bring current skills, energy and new perspectives to your team.")}
   </div>
 </div>''', "ise-band"))

@@ -188,7 +188,7 @@ why_cards = sec(f'''
     {S.card("Learn by doing","Studios and real projects instead of lecture-hall-only terms, you build from week one.")}
     {S.card("Paid residencies","Spend half the degree contributing inside real engineering teams, and get paid for it.")}
     {S.card("Graduate with a master's","Four years to a master's (MSc), a faster route to a postgraduate qualification.")}
-    {S.card("Work with the best","Residencies with world-leading companies and Ireland's fastest-growing startups.")}
+    {S.card("Work with the best","Residencies with leading companies and Ireland's fastest-growing startups.")}
   </div>
 </div>''', "ise-band")
 why_cta = section(S.cta("See if ISE is for you","Applications for 2027 are open through the CAO with code LM173.",
@@ -285,7 +285,7 @@ faqs = [
   ("Do I get paid during residencies?","Yes. Residencies are paid, students join partner engineering teams as paid contributors, typically for three to six months at a time."),
   ("How many residencies are there?","Up to five residencies across the programme, making up roughly 50% of your time."),
   ("What is the CAO code?","LM173. List it on your CAO application to apply."),
-  ("Which companies take part?","A network of world-leading technology companies and Ireland's fastest-growing start-ups across fintech, medtech, robotics, quantum and more."),
+  ("Which companies take part?","A network of leading technology companies and Ireland's fastest-growing start-ups across fintech, medtech, robotics, quantum and more."),
   ("Are there scholarships?","Yes, a number of €10,000 Equity, Diversity &amp; Inclusion scholarships are available each year."),
   ("Where is it based?","At the University of Limerick, Ireland."),
 ]

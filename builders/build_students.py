@@ -42,8 +42,8 @@ partners_say = section(S.band(f'''
 <div class="ise-container" style="display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:center;">
   <div>
     <p class="ise-eyebrow" style="color:#8fe3b0;">What partners say</p>
-    <h2 style="color:#fff;">Beyond their years</h2>
-    <p style="color:#d7e8df;font-size:var(--fs-lead);">Residency partners consistently report ISE students contributing like engineers with far more experience, shipping real work inside their teams.</p>
+    <h2 style="color:#fff;">Ready for real work</h2>
+    <p style="color:#d7e8df;font-size:var(--fs-lead);">Partners tell us ISE students take on genuine engineering work early in their residencies, inside real teams.</p>
   </div>
 </div>''', "ise-band--heritage"))
 

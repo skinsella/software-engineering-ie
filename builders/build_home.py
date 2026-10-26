@@ -44,8 +44,8 @@ nav = '''
 hero = '''
 <div class="ise-container" style="min-height:clamp(560px,78vh,720px);display:flex;flex-direction:column;justify-content:center;padding-block:6rem 5rem;">
   <p class="ise-eyebrow" style="color:#8fe3b0;">Immersive Software Engineering · University of Limerick</p>
-  <h1 style="color:#fff;font-size:var(--fs-hero);margin:.6rem 0 1.25rem;max-width:17ch;">Exceptional students. World-class companies.</h1>
-  <p style="font-size:var(--fs-lead);color:#e7f2ec;max-width:60ch;">A four-year integrated MSc, with the option to exit after three years with a BSc, where you learn by doing and spend half your degree in paid residencies with the best software companies in the world.</p>
+  <h1 style="color:#fff;font-size:var(--fs-hero);margin:.6rem 0 1.25rem;max-width:17ch;">Learn by building. Work with the best.</h1>
+  <p style="font-size:var(--fs-lead);color:#e7f2ec;max-width:60ch;">A four-year integrated MSc, with the option to exit after three years with a BSc, where you learn by doing and spend half your degree in paid residencies with leading software companies.</p>
   <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem;">
     <a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply now, CAO LM173</a>
     <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>
@@ -84,8 +84,8 @@ companies = f'''
 <div class="ise-container">
   <div style="max-width:58ch;margin-bottom:2.5rem;">
     <p class="ise-eyebrow" style="color:#8fe3b0;">The Companies</p>
-    <h2 style="color:#fff;">You will work inside the best</h2>
-    <p style="color:#d7e8df;font-size:var(--fs-lead);">Residencies are not shadowing. Students join world-leading engineering teams as paid contributors, from global platforms to Ireland's fastest-growing startups in fintech, medtech, robotics and quantum.</p>
+    <h2 style="color:#fff;">You will work inside real engineering teams</h2>
+    <p style="color:#d7e8df;font-size:var(--fs-lead);">Residencies are not shadowing. Students join leading engineering teams as paid contributors, from global platforms to Ireland's fastest-growing startups in fintech, medtech, robotics and quantum.</p>
   </div>
   {_S.partner_wall()}
   <div style="margin-top:2.5rem;"><a class="ise-btn ise-btn--on-dark" href="/companies">See partner companies →</a></div>
@@ -138,13 +138,13 @@ two_paths = '''
     <div class="ise-path">
       <p class="ise-eyebrow">Future students</p>
       <h3>Join the next cohort</h3>
-      <p>Learn by doing, get paid to work with world-class companies, and graduate with a master\'s in four years.</p>
+      <p>Learn by doing, get paid to work with leading companies, and graduate with a master\'s in four years.</p>
       <div class="row"><a class="ise-btn ise-btn--primary" href="/students">Explore the programme →</a><a href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener" style="font-weight:600;">or apply now · LM173</a></div>
     </div>
     <div class="ise-path ise-path--dark">
       <p class="ise-eyebrow">Companies &amp; partners</p>
       <h3>Host an ISE resident</h3>
-      <p>Meet exceptional engineers early, host paid residents on your team, and build your hiring pipeline.</p>
+      <p>Meet ambitious engineers early, host paid residents on your team, and build your hiring pipeline.</p>
       <div class="row"><a class="ise-btn ise-btn--on-dark" href="/companies">How residencies work →</a><a href="/become-a-partner" style="color:#8fe3b0;font-weight:600;">or become a partner</a></div>
     </div>
   </div>

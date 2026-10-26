@@ -8,7 +8,7 @@ def sec(inner, klass=""): return section(S.band(inner, klass))
 # ===================== GLOBAL FELLOWSHIPS (109) =====================
 # NOTE: framing copy, confirm programme specifics with the ISE team before publishing.
 fel_hero=S.hero("Global Fellowships","The Global Fellowships Programme",
-  "A programme that extends the ISE model beyond Ireland, connecting exceptional students with leading engineering teams internationally.",
+  "A programme that extends the ISE model beyond Ireland, connecting ambitious students with leading engineering teams internationally.",
   S.BTN_APPLY+' '+CALL, max_title="18ch")
 fel_body=sec(f'''
 <div class="ise-container">
@@ -61,16 +61,16 @@ S.assemble(111,"For Schools","schools",[sch_hero,sch_body,sch_cta],menu_order=12
 
 # ===================== BECOME A PARTNER (112) =====================
 par_hero=S.hero("Partner with ISE","Become a residency partner",
-  "Host ISE students as paid contributors on your engineering team, and meet exceptional talent years before the graduate market does.",
+  "Host ISE students as paid contributors on your engineering team, and meet ambitious talent years before the graduate market does.",
   '<a class="ise-btn ise-btn--primary" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a> <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">How residencies work</a>',
   max_title="18ch")
 par_body=sec(f'''
 <div class="ise-container">
-  <div style="max-width:52ch;margin-bottom:2.25rem;"><p class="ise-eyebrow">Why partner</p><h2>The strongest route to great engineers</h2></div>
+  <div style="max-width:52ch;margin-bottom:2.25rem;"><p class="ise-eyebrow">Why partner</p><h2>A strong route to great engineers</h2></div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
     {S.card("Real contribution","Students join your team as paid contributors on real work for three to six months.")}
     {S.card("Fully supported","Academic mentors and a learning framework wrap around every placement.")}
-    {S.card("Build your pipeline","Residencies are the strongest possible route to hiring, you've already worked together.")}
+    {S.card("Build your pipeline","Residencies are one of the best ways to hire, because you've already worked together.")}
   </div>
 </div>''', "ise-band")
 par_wall=sec(f'''

@@ -28,7 +28,7 @@ UPDATE wp_options SET option_value='hello-elementor'       WHERE option_name='te
 UPDATE wp_options SET option_value='hello-elementor-child' WHERE option_name='stylesheet';
 UPDATE wp_options SET option_value='a:1:{i:0;s:23:"elementor/elementor.php";}' WHERE option_name='active_plugins';
 UPDATE wp_options SET option_value='Immersive Software Engineering' WHERE option_name='blogname';
-UPDATE wp_options SET option_value='Exceptional students. World-class companies.' WHERE option_name='blogdescription';
+UPDATE wp_options SET option_value='Learn by building. Work with the best.' WHERE option_name='blogdescription';
 UPDATE wp_options SET option_value='/%postname%/' WHERE option_name='permalink_structure';
 DELETE FROM wp_options WHERE option_name='rewrite_rules';
 SQL
