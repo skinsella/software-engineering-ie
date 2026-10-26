@@ -35,7 +35,7 @@ nav = '''
     <a href="#course" style="text-decoration:none;">Course</a>
     <a href="/jobs" style="text-decoration:none;">Jobs</a>
     <a href="/about" style="text-decoration:none;">About</a>
-    <a href="/become-a-partner" style="text-decoration:none;">For partners</a>
+    <a href="/schools" style="text-decoration:none;">For schools</a>
     <a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
   </nav>
 </div>'''
@@ -148,6 +148,7 @@ two_paths = '''
       <div class="row"><a class="ise-btn ise-btn--on-dark" href="/companies">How residencies work →</a><a href="/become-a-partner" style="color:#8fe3b0;font-weight:600;">or become a partner</a></div>
     </div>
   </div>
+  <p style="margin-top:1.75rem;text-align:center;color:var(--ink-70);">Teacher or guidance counsellor? <a href="/schools" style="color:var(--ul-green);font-weight:600;">For schools →</a></p>
 </div>'''
 
 sections = [
