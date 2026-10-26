@@ -226,6 +226,10 @@ a:hover { color: var(--ul-green-modern); }
 .ise-tcard__who { display: flex; align-items: center; gap: .85rem; margin-top: auto; }
 .ise-tcard__who img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; object-position: top center; flex: none; }
 .ise-tcard__name { font-weight: 700; font-family: var(--font-sans); color: var(--ink); line-height: 1.2; }
+a.ise-tcard__name { display: inline-flex; align-items: center; text-decoration: none; }
+a.ise-tcard__name svg { color: #86938c; transition: color .15s ease; }
+a.ise-tcard__name:hover, a.ise-tcard__name:focus-visible { color: var(--ul-green-modern); text-decoration: underline; }
+a.ise-tcard__name:hover svg, a.ise-tcard__name:focus-visible svg { color: var(--ul-green-modern); }
 .ise-tcard__proj { font-size: .85rem; color: var(--ink-70); }
 @media (max-width: 820px){ .ise-tcards { grid-template-columns: 1fr; } }
 

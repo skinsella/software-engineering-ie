@@ -152,17 +152,17 @@ def portrait_cards(eyebrow, title, items, klass="ise-band"):
 # added later by dropping a file in assets/photos and setting the 4th field.
 STUDENT_TESTIMONIALS = [
     ("When I first arrived in Ireland, I couldn't speak English. A few years later, I am graduating with first-class honours through a course that completely changed the direction of my career.",
-     "Desiree Charles Dos Santos", "MSc, now a Software Engineer at Analog Devices", "student-desiree.jpg"),
+     "Desiree Charles Dos Santos", "MSc, now a Software Engineer at Analog Devices", "student-desiree.jpg", "https://www.linkedin.com/in/desirèe-charles-b0a4b316b/"),
     ("I was the only one in my school year of 300 who went to UL. I feel so proud of the leap I took, and who I've become.",
-     "Josh Sloggett", "BSc, residencies at AWS, Intercom and Stripe; returning to Stripe", "student-josh.jpg"),
+     "Josh Sloggett", "BSc, residencies at AWS, Intercom and Stripe; returning to Stripe", "student-josh.jpg", "https://www.linkedin.com/in/joshsloggett/"),
     ("I'm adding 'researcher' to the list of things I never thought I'd achieve when I started ISE.",
-     "Justyna", "Residencies at Stripe, Analog Devices, AWS and Virtu; now at Stripe", "student-justyna.jpg"),
+     "Justyna Przyborska", "Residencies at Stripe, Analog Devices, AWS and Virtu; now at Stripe", "student-justyna.jpg", "https://www.linkedin.com/in/justyna-przy/"),
     ("I completed four residencies at a diverse range of companies, which is my favourite aspect of the course. It helped me develop both as a programmer and a team member.",
-     "Ruairi Glackin", "BSc, residencies at Transact, AWS and BD; returning to AWS", "student-ruairi.jpg"),
+     "Ruairi Glackin", "BSc, residencies at Transact, AWS and BD; returning to AWS", "student-ruairi.jpg", "https://www.linkedin.com/in/ruairíglackin/"),
     ("The programme gave me exactly what I was looking for: the opportunity to learn by building, solve real engineering problems alongside industry, and graduate ready to make an impact from day one.",
-     "Adam Byrne", "MSc, residencies at Analog Devices, Provizio and Johnson & Johnson", "student-adam.jpg"),
+     "Adam Byrne", "MSc, residencies at Analog Devices, Provizio and Johnson & Johnson", "student-adam.jpg", "https://www.linkedin.com/in/bxrne/"),
     ("We were taught the way students want to be taught: through assignments instead of big exams, with the freedom to build alongside companies and bring what we learned back to class.",
-     "Michelle Vaz", "BSc, residencies at AWS and Fin; returning to AWS", "student-michelle.jpg"),
+     "Michelle Vaz", "BSc, residencies at AWS and Fin; returning to AWS", "student-michelle.jpg", "https://www.linkedin.com/in/michelle-vaz/"),
 ]
 
 def testimonials(eyebrow, title, items=None, klass="ise-band"):
@@ -174,12 +174,20 @@ def testimonials(eyebrow, title, items=None, klass="ise-band"):
             return f'<img src="{ASSET}/photos/{av}" alt="" loading="lazy" decoding="async">'
         return ('<span aria-hidden="true" style="display:inline-block;width:54px;height:54px;'
                 'border-radius:50%;background:#cdd8d2;flex:0 0 auto;"></span>')
+    _li_icon = ('<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false" '
+                'style="vertical-align:-2px;margin-left:.35rem;fill:currentColor;">'
+                '<path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .78 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .78 23.2 0 22.22 0z"/></svg>')
+    def who(name, li):
+        if li:
+            return (f'<a class="ise-tcard__name" href="{li}" target="_blank" rel="noopener" '
+                    f'aria-label="{name} on LinkedIn">{name}{_li_icon}</a>')
+        return f'<div class="ise-tcard__name">{name}</div>'
     cells = ''.join(
-        f'<div class="ise-tcard"><p class="ise-tcard__quote">{q}</p>'
-        f'<div class="ise-tcard__who">{avatar(av)}'
-        f'<div><div class="ise-tcard__name">{name}</div>'
-        f'<div class="ise-tcard__proj">{proj}</div></div></div></div>'
-        for q, name, proj, av in items)
+        f'<div class="ise-tcard"><p class="ise-tcard__quote">{item[0]}</p>'
+        f'<div class="ise-tcard__who">{avatar(item[3])}'
+        f'<div>{who(item[1], item[4] if len(item) > 4 else None)}'
+        f'<div class="ise-tcard__proj">{item[2]}</div></div></div></div>'
+        for item in items)
     inner = (f'<div class="ise-container"><div style="max-width:54ch;margin-bottom:2rem;">'
              f'<p class="ise-eyebrow">{eyebrow}</p><h2>{title}</h2></div>'
              f'<div class="ise-tcards">{cells}</div></div>')
