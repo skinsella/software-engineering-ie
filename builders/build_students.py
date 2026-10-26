@@ -5,8 +5,8 @@ from elementor_lib import section
 
 hero = S.hero(
   "The Students",
-  "A cohort companies compete for",
-  "ISE takes a small, highly selective intake each year and teaches them to build. By their first residency, partner engineering teams describe them as performing well beyond their years.",
+  "Chosen for how they build",
+  "ISE takes a small, highly selective intake each year, chosen for genuine ability, and teaches them to build through studios and paid residencies from early in the programme.",
   S.BTN_APPLY + ' <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call</a>',
   max_title="18ch", bg_image="students-hero.jpg")
 
