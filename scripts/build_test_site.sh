@@ -13,7 +13,7 @@
 set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-TEST_DOMAIN="skinsella-test.software-engineering.ie"
+TEST_DOMAIN="software-engineering.ie"
 DOCROOT="/var/www/html/skinsella-test"
 WP_BIN="$HOME/.local/bin/wp"
 
@@ -124,7 +124,7 @@ for p in manifest["pages"]:
     path = "/" if p["front_page"] else f"/{p['slug']}/"
     url = f"https://{host}{path}"
     code = subprocess.run(
-        ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
+        ["curl", "-sk", "-o", "/dev/null", "-w", "%{http_code}",
          "--resolve", f"{host}:443:127.0.0.1", url],
         capture_output=True, text=True
     ).stdout
