@@ -50,8 +50,31 @@ why = section(S.band(f'''
   </div>
 </div>''', "ise-band"))
 
+# Partner and industry testimonials (same card format as the student testimonials).
+# Tuple shape: (quote, name, role, avatar=None).
+PARTNER_TESTIMONIALS = [
+  ("Software engineering is a wonderful career. Immersive Software Engineering gets students writing code in the real world as quickly as possible, so they're ready to join today's leading companies or start Ireland's next breakout startup.",
+   "John Collison", "Entrepreneur, co-founder of Stripe", None),
+  ("We gave them something that we thought would take them three months and they finished in three weeks. That was the incredible nature of what they were able to achieve, because of the talent, because of the training they got and because of the immersion in industry.",
+   "Mike Morrissey", "Catalyst Director, Analog Devices", None),
+  ("Our ISE student was operating at a level that we would expect to see from a graduate, and he had only completed his first year.",
+   "Professor Geraldine Boylan", "Director of the Irish Centre for Maternal & Child Health Research, University College Cork", None),
+  ("We take ISE students because we see the attitude. They embrace the culture, they embrace the environment. We know that they are great technologists, but it's actually the ability and the trajectory that has completely changed the perception of interns at Intercom.",
+   "Oisín Hurley", "Senior Engineering Manager, Intercom", None),
+  ("The whole set-up has been second to none. The programme team communication was fantastic, and the students' organisation and ability to deliver is actually far superior to where they should be right now.",
+   "Lorraine Curham", "NDRC Head of Operations, Dogpatch Labs", None),
+  ("Some of our ISE students have worked on projects that are incredibly critical for us here in J&J, and they have delivered beyond all expectations.",
+   "James Walsh", "Senior Software Development Manager, MLL Platforms, at Johnson & Johnson Technology Services", None),
+  ("This is exactly what I wanted when I was in college.",
+   "Marc Andreessen", "Inventor of the web browser", None),
+  ("This is a phenomenal way to learn the skills you need to build the next Instagram.",
+   "Mike Krieger", "Co-founder of Instagram", None),
+]
+voices = S.testimonials("What partners say", "Real-world, hands-on experience",
+  items=PARTNER_TESTIMONIALS, klass="")
+
 cta = section(S.cta("Become a residency partner",
   "Tell us about your engineering team and we'll find the right residency fit.",
   '<a class="ise-btn ise-btn--on-dark" href="https://outlook.office365.com/owa/calendar/ISERPCallBookingPage@ulcampus.onmicrosoft.com/bookings/" target="_blank" rel="noopener">Book a call with our team</a>'))
 
-S.assemble(102, "The Companies", "companies", [hero, wall, what, why, cta], menu_order=2)
+S.assemble(102, "The Companies", "companies", [hero, wall, what, why, voices, cta], menu_order=2)

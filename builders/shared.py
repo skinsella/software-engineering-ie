@@ -170,10 +170,11 @@ def testimonials(eyebrow, title, items=None, klass="ise-band"):
     A falsy avatar renders a neutral placeholder disc (no stock photo of a real person)."""
     items = items or STUDENT_TESTIMONIALS
     def avatar(av):
-        if av:
-            return f'<img src="{ASSET}/photos/{av}" alt="" loading="lazy" decoding="async">'
-        return ('<span aria-hidden="true" style="display:inline-block;width:54px;height:54px;'
-                'border-radius:50%;background:#cdd8d2;flex:0 0 auto;"></span>')
+        # Photo when supplied; otherwise no avatar element at all (used for partner
+        # quotes, which come without photos) so the card stays clean.
+        if not av:
+            return ''
+        return f'<img src="{ASSET}/photos/{av}" alt="" loading="lazy" decoding="async">'
     _li_icon = ('<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false" '
                 'style="vertical-align:-2px;margin-left:.35rem;fill:currentColor;">'
                 '<path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .78 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .78 23.2 0 22.22 0z"/></svg>')
