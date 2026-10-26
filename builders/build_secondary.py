@@ -79,6 +79,7 @@ course_struct = sec(f'''
   <div style="max-width:54ch;margin-bottom:1.75rem;"><p class="ise-eyebrow">The shape of the degree</p><h2>Four years, five paid residencies</h2></div>
   {''.join(_sv)}
   <p style="margin:1.5rem auto 0;max-width:72ch;text-align:center;color:var(--ink-70);">Roughly half the degree is spent on paid residency. Exit with a BSc (Hons) after Year 3, or continue to the integrated MSc in Year 4.</p>
+  <p style="margin:1.5rem auto 0;text-align:center;"><a class="ise-btn ise-btn--ghost" href="/jobs">Browse the residency board →</a></p>
 </div>''', "ise-band")
 
 # ---- full curriculum, year by year (from the live course page) ----

@@ -30,12 +30,11 @@ nav = '''
 <div class="ise-container" style="display:flex;align-items:center;justify-content:space-between;padding-block:1.15rem;gap:1rem;flex-wrap:wrap;">
   <a href="/" style="display:inline-flex;align-items:center;"><img src="/wp-content/themes/hello-elementor-child/assets/ise-ul-logo.png" alt="Immersive Software Engineering · University of Limerick" style="height:40px;width:auto;"></a>
   <nav style="display:flex;gap:1.6rem;align-items:center;font-weight:500;flex-wrap:wrap;">
-    <a href="/students" style="text-decoration:none;">The Students</a>
-    <a href="/companies" style="text-decoration:none;">The Companies</a>
-    <a href="#course" style="text-decoration:none;">Course</a>
-    <a href="/jobs" style="text-decoration:none;">Jobs</a>
+    <a href="/students" style="text-decoration:none;">For Students</a>
+    <a href="/companies" style="text-decoration:none;">For Companies</a>
+    <a href="/schools" style="text-decoration:none;">For Schools</a>
+    <a href="#course" style="text-decoration:none;">The Course</a>
     <a href="/about" style="text-decoration:none;">About</a>
-    <a href="/schools" style="text-decoration:none;">For schools</a>
     <a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
   </nav>
 </div>'''

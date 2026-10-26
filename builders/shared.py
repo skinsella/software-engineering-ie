@@ -69,14 +69,16 @@ def partner_wall():
 
 # ---------- global nav + footer ----------
 def nav(active=""):
+    # `active` is the current page's href (e.g. "/students") so the matching
+    # nav item highlights regardless of its label.
     def link(href, label):
-        cur = ' style="text-decoration:none;font-weight:700;"' if label == active else ' style="text-decoration:none;"'
+        cur = ' style="text-decoration:none;font-weight:700;"' if href == active else ' style="text-decoration:none;"'
         return f'<a href="{href}"{cur}>{label}</a>'
     inner = f'''
 <div class="ise-container" style="display:flex;align-items:center;justify-content:space-between;padding-block:1.1rem;gap:1rem;flex-wrap:wrap;">
   <a href="/" style="display:inline-flex;align-items:center;"><img src="{ASSET}/ise-ul-logo.png" alt="Immersive Software Engineering · University of Limerick" style="height:40px;width:auto;"></a>
   <nav style="display:flex;gap:1.6rem;align-items:center;font-weight:500;flex-wrap:wrap;">
-    {link("/students","The Students")}{link("/companies","The Companies")}{link("/course","Course")}{link("/jobs","Jobs")}{link("/about","About")}{link("/schools","For schools")}
+    {link("/students","For Students")}{link("/companies","For Companies")}{link("/schools","For Schools")}{link("/course","The Course")}{link("/about","About")}
     <a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener" style="padding:.55rem 1.05rem;background:var(--ul-green-modern);color:#04231a;">Apply · LM173</a>
   </nav>
 </div>'''
@@ -217,6 +219,6 @@ def testimonials(eyebrow, title, items=None, klass="ise-band"):
 
 def assemble(page_id, title, slug, content_sections, menu_order=0, front=False):
     """Wrap page-specific sections between the global nav and footer, then upsert."""
-    sections = [nav(active=title if title in ("The Students","The Companies") else "")] \
+    sections = [nav(active="/" + slug)] \
                + content_sections + [footer()]
     upsert_page(page_id, title, slug, sections, front=front, menu_order=menu_order)
