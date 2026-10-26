@@ -1282,13 +1282,15 @@ add_filter( 'rest_endpoints', function ( $endpoints ) {
 	return $endpoints;
 } );
 
-// Block ?author=N enumeration redirects for anonymous visitors.
+// Block author-archive enumeration for anonymous visitors (?author=N and
+// /author/<login>/ otherwise disclose usernames). Priority 0 so this runs before
+// WordPress's own canonical redirect; a marketing site has no author archives.
 add_action( 'template_redirect', function () {
 	if ( is_admin() || is_user_logged_in() ) { return; }
-	if ( isset( $_GET['author'] ) && ! is_author() ) {
+	if ( is_author() || isset( $_GET['author'] ) ) {
 		wp_safe_redirect( home_url( '/' ), 301 ); exit;
 	}
-} );
+}, 0 );
 
 // Baseline security headers. HSTS only over HTTPS; the host should still set its
 // own HSTS and a tuned Content-Security-Policy at the edge in production.
