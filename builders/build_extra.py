@@ -43,21 +43,66 @@ edi_cta=section(S.cta("Apply for ISE","Add CAO code LM173 to your application, a
 S.assemble(110,"EDI Scholarships","edi-scholarships",[edi_hero,edi_body,edi_cta],menu_order=11)
 
 # ===================== SCHOOLS (111) =====================
-sch_hero=S.hero("For Schools","Guidance counsellors & teachers",
-  "Everything you need to tell students about Immersive Software Engineering, a new route into a software career through the University of Limerick.",
-  '<a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Book a school talk</a> '+CALL, max_title="18ch")
-sch_body=sec(f'''
+# Content from software-engineering.ie/schools/ (schools and outreach programme).
+_SCH_BOOK = 'mailto:ISE@ul.ie?subject=Schools%20outreach%20enquiry'
+sch_hero=S.hero("For Schools","Schools and outreach",
+  "We run talks, workshops and activities for second-level students, teachers and guidance counsellors, giving students a real sense of what a career in software engineering looks like and how ISE gets them there.",
+  f'<a class="ise-btn ise-btn--primary" href="{_SCH_BOOK}">Book an outreach activity</a> <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/course">Course details</a>',
+  max_title="18ch")
+
+sch_intro=sec('''
+<div class="ise-container ise-prose" style="max-width:64ch;">
+  <p class="ise-eyebrow">What we do</p>
+  <h2>Bringing software engineering to your classroom</h2>
+  <p>At Immersive Software Engineering we have built a set of bespoke talks, workshops and activities for second-level students, teachers and guidance counsellors. The aim is to show students what a career in software engineering really involves, and how ISE can start them on that path through learning by doing.</p>
+  <p>We are happy to come to you, run a session online, or host your class at the ISE studio at the University of Limerick, where your students can meet our staff and the students already on the programme.</p>
+</div>''')
+
+sch_ways=sec(f'''
 <div class="ise-container">
-  <div style="max-width:52ch;margin-bottom:2.25rem;"><p class="ise-eyebrow">For schools</p><h2>Help your students find ISE</h2></div>
+  <div style="max-width:54ch;margin-bottom:2rem;"><p class="ise-eyebrow">Three ways to get involved</p><h2>Whatever suits your school</h2></div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
-    {S.card("What ISE is","A four-year MSc (or a three-year BSc) where students learn by doing, in studios and paid company residencies. CAO code LM173.")}
-    {S.card("Who it suits","Curious, motivated students who like building things, not only those with the highest points.")}
-    {S.card("Book a talk","We're happy to speak with your students, in person or online, about the programme and how to apply.")}
+    {S.card("We visit your school","An in-person talk or workshop for your students and teachers, built around what a software engineering career looks like today.")}
+    {S.card("An online session","A live online session for students and teachers, easy to fit into a class period from anywhere in the country.")}
+    {S.card("Visit the ISE studio","Bring a class to the ISE studio at UL to meet our staff and current students and see how the programme works.")}
   </div>
 </div>''', "ise-band")
-sch_cta=section(S.cta("Invite us to your school","Get in touch to arrange a talk or request materials.",
-  '<a class="ise-btn ise-btn--on-dark" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Book a school talk</a>'))
-S.assemble(111,"For Schools","schools",[sch_hero,sch_body,sch_cta],menu_order=12)
+
+sch_who=sec(f'''
+<div class="ise-container">
+  <div style="max-width:54ch;margin-bottom:2rem;"><p class="ise-eyebrow">Who it's for</p><h2>Students, teachers and guidance counsellors</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+    {S.card("Second-level students","Transition Year, fifth year and sixth year students who are curious about building software, whatever their points.")}
+    {S.card("Teachers and guidance counsellors","A clear picture of the programme and the entrance submission, so you can guide students who would thrive on it.")}
+    {S.card("Sixth years applying","For students applying this year we can walk through the CAO route, the entrance submission and what we look for.")}
+  </div>
+  <div style="margin-top:1.75rem;"><a class="ise-btn ise-btn--ghost" href="/course">Course details →</a> <a class="ise-btn ise-btn--ghost" href="/entrance-submission">Entrance submission →</a> <a class="ise-btn ise-btn--ghost" href="/why-ise">Why ISE →</a></div>
+</div>''')
+
+sch_booking=sec(f'''
+<div class="ise-container">
+  <div style="max-width:60ch;margin-bottom:1.5rem;"><p class="ise-eyebrow">Book an activity</p><h2>Arrange a talk, workshop or visit</h2>
+  <p class="ise-lead">To enquire about an information session or workshop, contact our Public Engagement Officer, Gillian Place. A few details help us tailor the session to your students.</p></div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;">
+    {S.card("What to tell us","Your name and school, where you are based, the year group (Transition Year, fifth or sixth year, or a mix), the format you would like, and roughly how many students will take part.")}
+    {S.card("What you can ask about","A talk at your school, an online session, or a class visit to ISE. We can focus on ISE alone or cover the wider UL computer science options.")}
+  </div>
+  <div style="margin-top:1.75rem;"><a class="ise-btn ise-btn--primary" href="{_SCH_BOOK}">Email to book</a></div>
+</div>''', "ise-band")
+
+sch_visit=sec('''
+<div class="ise-container">
+  <div style="max-width:54ch;margin-bottom:1.5rem;"><p class="ise-eyebrow">Where we are</p><h2>Visit the ISE studio at UL</h2>
+  <p class="ise-lead">The ISE studio is at the University of Limerick in Castletroy. We would be glad to host your class.</p></div>
+  <p style="color:var(--ink-70);">University of Limerick, Castletroy, Limerick, V94 Y985.</p>
+  <div style="margin-top:1rem;"><a class="ise-btn ise-btn--ghost" href="https://maps.google.com/?q=University+of+Limerick" target="_blank" rel="noopener">Get directions →</a></div>
+</div>''')
+
+sch_cta=section(S.cta("Invite ISE to your school","Arrange a talk, an online session or a studio visit for your students.",
+  f'<a class="ise-btn ise-btn--on-dark" href="{_SCH_BOOK}">Book an outreach activity</a>'))
+
+S.assemble(111,"For Schools","schools",
+  [sch_hero,sch_intro,sch_ways,sch_who,sch_booking,sch_visit,sch_cta],menu_order=12)
 
 # ===================== BECOME A PARTNER (112) =====================
 par_hero=S.hero("Partner with ISE","Become a residency partner",
