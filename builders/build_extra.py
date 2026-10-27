@@ -165,16 +165,16 @@ _FACULTY=[
   ("Eoin O'Brien",None,"https://www.linkedin.com/in/eoin-obrien/","team-eoin-obrien.jpg"),
 ]
 _STAFF=[
-  ("Alison McDevitt",None,"https://www.linkedin.com/in/alison-mcdevitt-ba402264/","team-alison-mcdevitt.jpg"),
-  ("Ellen Fitzgerald",None,"https://www.linkedin.com/in/ellen-fitzgerald-b0139a27a/","team-ellen-fitzgerald.jpg"),
+  ("Alison McDevitt","Senior Administrator","https://www.linkedin.com/in/alison-mcdevitt-ba402264/","team-alison-mcdevitt.jpg"),
+  ("Ellen Fitzgerald","Administrator","https://www.linkedin.com/in/ellen-fitzgerald-b0139a27a/","team-ellen-fitzgerald.jpg"),
 ]
+_PROFESSIONAL = _RESIDENCY + _STAFF
 team_director=sec(S.people("Leadership","Programme Director",_DIRECTOR,cols3=True))
 team_faculty=sec(S.people("Teaching and research","Faculty",_FACULTY),"ise-band")
-team_residency=sec(S.people("Residencies","Residency Team",_RESIDENCY,cols3=True))
-team_staff=sec(S.people("Operations","Professional Staff",_STAFF,cols3=True),"ise-band")
+team_professional=sec(S.people("Residencies and operations","Professional Team",_PROFESSIONAL,cols3=True))
 team_cta=section(S.cta("Talk to the ISE team","Book a call about the programme, residencies or partnerships.",
   '<a class="ise-btn ise-btn--on-dark" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Contact via ul.ie</a>'))
-S.assemble(122,"Team","team",[team_hero,team_director,team_faculty,team_residency,team_staff,team_cta],menu_order=15)
+S.assemble(122,"Team","team",[team_hero,team_director,team_faculty,team_professional,team_cta],menu_order=15)
 
 # ===================== ENTRANCE SUBMISSION (123) =====================
 # Content from software-engineering.ie/about-the-ise-entrance-submission/,
