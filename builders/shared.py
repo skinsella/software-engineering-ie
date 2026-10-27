@@ -217,6 +217,42 @@ def testimonials(eyebrow, title, items=None, klass="ise-band"):
              f'<div class="ise-tcards">{cells}</div></div>')
     return section(band(inner, klass))
 
+_LI_ICON = ('<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false" '
+            'style="fill:currentColor;">'
+            '<path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .78 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .78 23.2 0 22.22 0z"/></svg>')
+
+def _initials(name):
+    parts = [p for p in name.replace("Prof.", "").replace("Prof", "").replace("Dr", "")
+             .replace("O'", "O").split() if p]
+    letters = [p[0] for p in parts if p[0].isalpha()]
+    return (letters[0] + letters[-1]).upper() if len(letters) >= 2 else (letters[0].upper() if letters else "?")
+
+def people(eyebrow, title, members, intro=None, cols3=False):
+    """A titled block of team-member cards. members = [(name, role_or_None,
+    linkedin_or_None, photo_or_None)]. Missing photo -> initials monogram."""
+    def photo(name, ph):
+        if ph:
+            return f'<img class="ise-person__photo" src="{ASSET}/photos/{ph}" alt="{name}" loading="lazy" decoding="async">'
+        return f'<div class="ise-person__ph" aria-hidden="true">{_initials(name)}</div>'
+    def heading(name, li):
+        if li:
+            return (f'<h3><a href="{li}" target="_blank" rel="noopener" '
+                    f'aria-label="{name} on LinkedIn">{name}{_LI_ICON}</a></h3>')
+        return f'<h3>{name}</h3>'
+    cards = ''.join(
+        f'<div class="ise-person">{photo(m[0], m[3] if len(m) > 3 else None)}'
+        f'{heading(m[0], m[2] if len(m) > 2 else None)}'
+        + (f'<p>{m[1]}</p>' if len(m) > 1 and m[1] else '')
+        + '</div>'
+        for m in members)
+    head = f'<p class="ise-eyebrow">{eyebrow}</p><h2>{title}</h2>'
+    if intro:
+        head += f'<p class="ise-lead">{intro}</p>'
+    grid_cls = "ise-people ise-people--3" if cols3 else "ise-people"
+    inner = (f'<div class="ise-container"><div style="max-width:54ch;margin-bottom:2rem;">'
+             f'{head}</div><div class="{grid_cls}">{cards}</div></div>')
+    return inner
+
 def assemble(page_id, title, slug, content_sections, menu_order=0, front=False):
     """Wrap page-specific sections between the global nav and footer, then upsert."""
     sections = [nav(active="/" + slug)] \

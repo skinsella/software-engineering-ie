@@ -138,23 +138,39 @@ S.assemble(113,"Privacy","privacy",[pri_hero,pri_body],menu_order=20)
 print("extra pages built: global-fellowships, edi-scholarships, schools, become-a-partner, privacy")
 
 # ===================== TEAM (122) =====================
-# NOTE: placeholder, add real ISE team names, roles, photos and a booking/contact link.
 team_hero=S.hero("The team","Meet the ISE team",
   "The people behind Immersive Software Engineering, teaching, mentoring and connecting students with residency partners.",
   '<a class="ise-btn ise-btn--primary" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Programme details on ul.ie</a>', max_title="18ch")
-team_body=sec(f'''
-<div class="ise-container">
-  <div style="max-width:54ch;margin-bottom:2rem;"><p class="ise-eyebrow">Placeholder</p><h2>Team profiles</h2>
-  <p class="ise-lead">Team member names, roles and photos will appear here. Add them from the ISE team.</p></div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
-    {S.card("Programme Director","Name and bio to be added.")}
-    {S.card("Residency Lead","Name and bio to be added.")}
-    {S.card("Studio Faculty","Name and bio to be added.")}
-  </div>
-</div>''', "ise-band")
+
+# Tuple shape: (name, role_or_None, linkedin_or_None, photo_or_None).
+# Photos live in assets/photos as team-<slug>.jpg; a missing photo renders an
+# initials monogram until the headshot is supplied.
+_DIRECTOR=[
+  ("Prof Mark Burkley","Programme Director","https://www.linkedin.com/in/mark-burkley-a881925/","team-mark-burkley.jpg"),
+]
+_RESIDENCY=[
+  ("Philip Clarke","Business Development Manager","https://www.linkedin.com/in/philipclarke2/",None),
+  ("Mark O'Neill",None,"https://www.linkedin.com/in/mark-o-neill-256a02129/","team-mark-oneill.jpg"),
+]
+_FACULTY=[
+  ("Prof. Colin Venters",None,None,None),
+  ("Prof. Birgit Penzenstadler",None,"https://www.linkedin.com/in/birgit-penzenstadler/",None),
+  ("Prof. Roisin Lyons",None,"https://www.linkedin.com/in/roislyons/","team-roisin-lyons.jpg"),
+  ("Prof. Salaheddin Alakkari",None,"https://www.linkedin.com/in/salaheddin-alakkari-7147a269/","team-salaheddin-alakkari.jpg"),
+  ("Dr Marie Travers",None,None,"team-marie-travers.jpg"),
+  ("Dr James Patten",None,"https://www.linkedin.com/in/jamesvpatten/","team-james-patten.jpg"),
+]
+_STAFF=[
+  ("Alison McDevitt",None,"https://www.linkedin.com/in/alison-mcdevitt-ba402264/","team-alison-mcdevitt.jpg"),
+  ("Ellen Fitzgerald",None,"https://www.linkedin.com/in/ellen-fitzgerald-b0139a27a/","team-ellen-fitzgerald.jpg"),
+]
+team_director=sec(S.people("Leadership","Programme Director",_DIRECTOR,cols3=True))
+team_residency=sec(S.people("Residencies","Residency Team",_RESIDENCY,cols3=True),"ise-band")
+team_faculty=sec(S.people("Teaching and research","Faculty",_FACULTY))
+team_staff=sec(S.people("Operations","Professional Staff",_STAFF,cols3=True),"ise-band")
 team_cta=section(S.cta("Talk to the ISE team","Book a call about the programme, residencies or partnerships.",
   '<a class="ise-btn ise-btn--on-dark" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Contact via ul.ie</a>'))
-S.assemble(122,"Team","team",[team_hero,team_body,team_cta],menu_order=15)
+S.assemble(122,"Team","team",[team_hero,team_director,team_residency,team_faculty,team_staff,team_cta],menu_order=15)
 
 # ===================== ENTRANCE SUBMISSION (123) =====================
 # Content from software-engineering.ie/about-the-ise-entrance-submission/,
