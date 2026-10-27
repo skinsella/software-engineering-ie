@@ -150,8 +150,8 @@ _DIRECTOR=[
 ]
 _RESIDENCY=[
   ("Philip Clarke","Business Development Manager","https://www.linkedin.com/in/philipclarke2/","team-philip-clarke.jpg"),
-  ("Mark O'Neill","Industry Coordinator","https://www.linkedin.com/in/mark-o-neill-256a02129/","team-mark-oneill.jpg"),
   ("Gillian (Bromell) Place","Public Engagement Officer","https://www.linkedin.com/in/gillian-place-0855549/","team-gillian-place.jpg"),
+  ("Mark O'Neill","Industry Coordinator","https://www.linkedin.com/in/mark-o-neill-256a02129/","team-mark-oneill.jpg"),
 ]
 _FACULTY=[
   ("Prof. Birgit Penzenstadler",None,"https://www.linkedin.com/in/birgit-penzenstadler/","team-birgit-penzenstadler.jpg"),
