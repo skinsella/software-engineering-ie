@@ -154,11 +154,11 @@ _RESIDENCY=[
   ("Mark O'Neill","Industry Coordinator","https://www.linkedin.com/in/mark-o-neill-256a02129/","team-mark-oneill.jpg"),
 ]
 _FACULTY=[
-  ("Prof. Birgit Penzenstadler",None,"https://www.linkedin.com/in/birgit-penzenstadler/","team-birgit-penzenstadler.jpg"),
-  ("Prof. Roisin Lyons",None,"https://www.linkedin.com/in/roislyons/","team-roisin-lyons.jpg"),
+  ("Dr Birgit Penzenstadler",None,"https://www.linkedin.com/in/birgit-penzenstadler/","team-birgit-penzenstadler.jpg"),
+  ("Dr Roisin Lyons",None,"https://www.linkedin.com/in/roislyons/","team-roisin-lyons.jpg"),
   ("Prof. Chris Exton",None,None,"team-chris-exton.jpg"),
-  ("Prof. Colin Venters",None,None,"team-colin-venters.jpg"),
-  ("Prof. Salaheddin Alakkari",None,"https://www.linkedin.com/in/salaheddin-alakkari-7147a269/","team-salaheddin-alakkari.jpg"),
+  ("Dr Colin Venters",None,None,"team-colin-venters.jpg"),
+  ("Dr Salaheddin Alakkari",None,"https://www.linkedin.com/in/salaheddin-alakkari-7147a269/","team-salaheddin-alakkari.jpg"),
   ("Dr Marie Travers",None,None,"team-marie-travers.jpg"),
   ("Dr James Patten",None,"https://www.linkedin.com/in/jamesvpatten/","team-james-patten.jpg"),
   ("Prof. John Savage",None,"https://www.linkedin.com/in/johnsavage-softwarestrategist/","team-john-savage.jpg"),
