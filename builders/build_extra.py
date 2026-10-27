@@ -151,7 +151,7 @@ _DIRECTOR=[
 _RESIDENCY=[
   ("Philip Clarke","Business Development Manager","https://www.linkedin.com/in/philipclarke2/","team-philip-clarke.jpg"),
   ("Mark O'Neill","Industry Coordinator","https://www.linkedin.com/in/mark-o-neill-256a02129/","team-mark-oneill.jpg"),
-  ("Gillian (Bromell) Place","Public Engagement Officer","https://www.linkedin.com/in/gillian-place-0855549/",None),
+  ("Gillian (Bromell) Place","Public Engagement Officer","https://www.linkedin.com/in/gillian-place-0855549/","team-gillian-place.jpg"),
 ]
 _FACULTY=[
   ("Prof. Chris Exton",None,None,"team-chris-exton.jpg"),
@@ -161,8 +161,8 @@ _FACULTY=[
   ("Prof. Salaheddin Alakkari",None,"https://www.linkedin.com/in/salaheddin-alakkari-7147a269/","team-salaheddin-alakkari.jpg"),
   ("Dr Marie Travers",None,None,"team-marie-travers.jpg"),
   ("Dr James Patten",None,"https://www.linkedin.com/in/jamesvpatten/","team-james-patten.jpg"),
-  ("Prof. John Savage",None,"https://www.linkedin.com/in/johnsavage-softwarestrategist/",None),
-  ("Eoin O'Brien",None,"https://www.linkedin.com/in/eoin-obrien/",None),
+  ("Prof. John Savage",None,"https://www.linkedin.com/in/johnsavage-softwarestrategist/","team-john-savage.jpg"),
+  ("Eoin O'Brien",None,"https://www.linkedin.com/in/eoin-obrien/","team-eoin-obrien.jpg"),
 ]
 _STAFF=[
   ("Alison McDevitt",None,"https://www.linkedin.com/in/alison-mcdevitt-ba402264/","team-alison-mcdevitt.jpg"),
