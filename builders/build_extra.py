@@ -162,7 +162,7 @@ _FACULTY=[
   ("Dr Marie Travers",None,None,"team-marie-travers.jpg"),
   ("Dr James Patten",None,"https://www.linkedin.com/in/jamesvpatten/","team-james-patten.jpg"),
   ("Prof. John Savage",None,"https://www.linkedin.com/in/johnsavage-softwarestrategist/","team-john-savage.jpg"),
-  ("Eoin O'Brien",None,"https://www.linkedin.com/in/eoin-obrien/","team-eoin-obrien.jpg"),
+  ("Dr Eoin O'Brien",None,"https://www.linkedin.com/in/eoin-obrien/","team-eoin-obrien.jpg"),
 ]
 _STAFF=[
   ("Alison McDevitt","Senior Administrator","https://www.linkedin.com/in/alison-mcdevitt-ba402264/","team-alison-mcdevitt.jpg"),
