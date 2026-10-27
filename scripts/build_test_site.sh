@@ -99,6 +99,21 @@ RewriteRule . /index.php [L]
 HTACCESS
 fi
 
+echo "-> ensuring custom redirects block in .htaccess (idempotent)"
+# UL's own course page links to this old slug and can't be changed on their
+# end; redirect it to the current entrance-submission page. Lives outside
+# WordPress's own BEGIN/END markers so `wp rewrite flush` never touches it.
+if ! grep -q '# BEGIN custom redirects' "$DOCROOT/.htaccess"; then
+  REDIRECTS=$(cat <<'HTACCESS'
+# BEGIN custom redirects
+RedirectMatch 301 ^/about-the-ise-entrance-submission/?$ https://software-engineering.ie/entrance-submission/
+# END custom redirects
+
+HTACCESS
+)
+  printf '%s' "$REDIRECTS" | cat - "$DOCROOT/.htaccess" > "$DOCROOT/.htaccess.tmp" && mv "$DOCROOT/.htaccess.tmp" "$DOCROOT/.htaccess"
+fi
+
 echo "-> clearing stale Elementor caches (per-page CSS + per-element render cache) so content updates actually show"
 # _elementor_element_cache holds rendered HTML fragments and is NOT
 # invalidated just by updating _elementor_data, so a content-only upstream
