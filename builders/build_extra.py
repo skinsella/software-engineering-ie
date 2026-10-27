@@ -76,7 +76,7 @@ sch_who=sec(f'''
     {S.card("Teachers and guidance counsellors","A clear picture of the programme and the entrance submission, so you can guide students who would thrive on it.")}
     {S.card("Sixth years applying","For students applying this year we can walk through the CAO route, the entrance submission and what we look for.")}
   </div>
-  <div style="margin-top:1.75rem;"><a class="ise-btn ise-btn--ghost" href="/course">Course details →</a> <a class="ise-btn ise-btn--ghost" href="/entrance-submission">Entrance submission →</a> <a class="ise-btn ise-btn--ghost" href="/why-ise">Why ISE →</a></div>
+  <div style="margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:.75rem;"><a class="ise-btn ise-btn--ghost" href="/course">Course details →</a> <a class="ise-btn ise-btn--ghost" href="/entrance-submission">Entrance submission →</a> <a class="ise-btn ise-btn--ghost" href="/why-ise">Why ISE →</a></div>
 </div>''')
 
 sch_booking=sec('''
@@ -259,7 +259,7 @@ es_additional=sec(f'''
     {S.card("Everyone submits","Mature and international applicants complete the submission too. Mature applicants also send a short motivation letter; email ISE@ul.ie for instructions.")}
     {S.card("Watch the workshop","For a full walkthrough, watch the ISE Entrance Submission Workshop on the ISE YouTube channel.")}
   </div>
-  <div style="margin-top:1.75rem;"><a class="ise-btn ise-btn--ghost" href="https://www.youtube.com/@immersiveSE" target="_blank" rel="noopener">ISE on YouTube →</a> <a class="ise-btn ise-btn--ghost" href="mailto:ISE@ul.ie">Email ISE@ul.ie</a></div>
+  <div style="margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:.75rem;"><a class="ise-btn ise-btn--ghost" href="https://www.youtube.com/@immersiveSE" target="_blank" rel="noopener">ISE on YouTube →</a> <a class="ise-btn ise-btn--ghost" href="mailto:ISE@ul.ie">Email ISE@ul.ie</a></div>
 </div>''')
 
 _faqs = [

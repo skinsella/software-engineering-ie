@@ -313,7 +313,7 @@ careers_out = sec(f'''
 </div>''', "ise-band")
 careers_wall = sec(f'''
 <div class="ise-container">
-  <div style="max-width:56ch;margin-bottom:1.5rem;"><p class="ise-eyebrow" style="color:#8fe3b0;">Residency partners</p><h2 style="color:#fff;">Companies students have worked with</h2></div>
+  <div style="max-width:56ch;margin-bottom:1.5rem;"><p class="ise-eyebrow" style="color:#8fe3b0;">Residency partners</p><h2 style="color:#fff;">Companies across the ISE network</h2></div>
   {S.partner_wall()}
 </div>''', "ise-band--heritage")
 careers_cta = section(S.cta("Start your ISE journey","Applications for 2027 are open through the CAO with code LM173.",

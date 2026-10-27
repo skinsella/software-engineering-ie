@@ -67,9 +67,9 @@ cta = section(S.cta("Think you could be one of them?",
   '<a class="ise-btn ise-btn--on-dark" href="https://www.ul.ie/study/undergraduate/immersive-software-engineering-bsc-or-msc" target="_blank" rel="noopener">Apply, LM173</a> <a class="ise-btn ise-btn--ghost ise-btn--on-dark" href="/companies">Talk to us</a>'))
 
 cohort = S.portrait_cards("Meet the cohort", "Real students, real projects",
-  [("cohort-1.jpg", "Built from day one", "Studio to residency"),
+  [("cohort-1.jpg", "Build from day one", "Studio to residency"),
    ("cohort-2.jpg", "Selected on substance", "Chosen for how they build"),
-   ("cohort-3.jpg", "Ready for industry", "Beyond their years")], klass="")
+   ("cohort-3.jpg", "Ready for industry", "Real work, early")], klass="")
 
 stories = S.testimonials("Student stories", "Real projects, in their words", klass="")
 
