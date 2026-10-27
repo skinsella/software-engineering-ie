@@ -154,10 +154,10 @@ _RESIDENCY=[
   ("Gillian (Bromell) Place","Public Engagement Officer","https://www.linkedin.com/in/gillian-place-0855549/","team-gillian-place.jpg"),
 ]
 _FACULTY=[
-  ("Prof. Chris Exton",None,None,"team-chris-exton.jpg"),
-  ("Prof. Colin Venters",None,None,"team-colin-venters.jpg"),
   ("Prof. Birgit Penzenstadler",None,"https://www.linkedin.com/in/birgit-penzenstadler/","team-birgit-penzenstadler.jpg"),
   ("Prof. Roisin Lyons",None,"https://www.linkedin.com/in/roislyons/","team-roisin-lyons.jpg"),
+  ("Prof. Chris Exton",None,None,"team-chris-exton.jpg"),
+  ("Prof. Colin Venters",None,None,"team-colin-venters.jpg"),
   ("Prof. Salaheddin Alakkari",None,"https://www.linkedin.com/in/salaheddin-alakkari-7147a269/","team-salaheddin-alakkari.jpg"),
   ("Dr Marie Travers",None,None,"team-marie-travers.jpg"),
   ("Dr James Patten",None,"https://www.linkedin.com/in/jamesvpatten/","team-james-patten.jpg"),
