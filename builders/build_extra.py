@@ -157,7 +157,6 @@ _FACULTY=[
   ("Dr Birgit Penzenstadler",None,"https://www.linkedin.com/in/birgit-penzenstadler/","team-birgit-penzenstadler.jpg"),
   ("Dr Roisin Lyons",None,"https://www.linkedin.com/in/roislyons/","team-roisin-lyons.jpg"),
   ("Prof. Chris Exton",None,None,"team-chris-exton.jpg"),
-  ("Dr Colin Venters",None,None,"team-colin-venters.jpg"),
   ("Dr Salaheddin Alakkari",None,"https://www.linkedin.com/in/salaheddin-alakkari-7147a269/","team-salaheddin-alakkari.jpg"),
   ("Dr Marie Travers",None,None,"team-marie-travers.jpg"),
   ("Dr James Patten",None,"https://www.linkedin.com/in/jamesvpatten/","team-james-patten.jpg"),
