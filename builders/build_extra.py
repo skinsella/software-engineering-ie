@@ -146,7 +146,7 @@ team_hero=S.hero("The team","Meet the ISE team",
 # Photos live in assets/photos as team-<slug>.jpg; a missing photo renders an
 # initials monogram until the headshot is supplied.
 _DIRECTOR=[
-  ("Prof Mark Burkley","Programme Director","https://www.linkedin.com/in/mark-burkley-a881925/","team-mark-burkley.jpg"),
+  ("Dr Mark Burkley","Programme Director","https://www.linkedin.com/in/mark-burkley-a881925/","team-mark-burkley.jpg"),
 ]
 _RESIDENCY=[
   ("Gillian (Bromell) Place","Public Engagement Officer","https://www.linkedin.com/in/gillian-place-0855549/","team-gillian-place.jpg"),
@@ -157,11 +157,10 @@ _FACULTY=[
   ("Dr Birgit Penzenstadler",None,"https://www.linkedin.com/in/birgit-penzenstadler/","team-birgit-penzenstadler.jpg"),
   ("Dr Roisin Lyons",None,"https://www.linkedin.com/in/roislyons/","team-roisin-lyons.jpg"),
   ("Prof. Chris Exton",None,None,"team-chris-exton.jpg"),
-  ("Dr Colin Venters",None,None,"team-colin-venters.jpg"),
   ("Dr Salaheddin Alakkari",None,"https://www.linkedin.com/in/salaheddin-alakkari-7147a269/","team-salaheddin-alakkari.jpg"),
   ("Dr Marie Travers",None,None,"team-marie-travers.jpg"),
   ("Dr James Patten",None,"https://www.linkedin.com/in/jamesvpatten/","team-james-patten.jpg"),
-  ("Prof. John Savage",None,"https://www.linkedin.com/in/johnsavage-softwarestrategist/","team-john-savage.jpg"),
+  ("John Savage",None,"https://www.linkedin.com/in/johnsavage-softwarestrategist/","team-john-savage.jpg"),
   ("Eoin O'Brien",None,"https://www.linkedin.com/in/eoin-obrien/","team-eoin-obrien.jpg"),
 ]
 _STAFF=[
